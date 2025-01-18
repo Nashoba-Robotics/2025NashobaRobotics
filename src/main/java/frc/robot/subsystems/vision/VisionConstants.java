@@ -15,13 +15,69 @@ package frc.robot.subsystems.vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
   // AprilTag layout
   public static AprilTagFieldLayout aprilTagLayout =
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+
+  // Reef tags #6-11 and #17-22
+  public static Pose2d[] reefTags =
+      new Pose2d[] {
+        new Pose2d(
+            Units.inchesToMeters(530.49),
+            Units.inchesToMeters(130.17),
+            Rotation2d.fromDegrees(300)), // 6
+        new Pose2d(
+            Units.inchesToMeters(546.87),
+            Units.inchesToMeters(158.50),
+            Rotation2d.fromDegrees(0)), // 7
+        new Pose2d(
+            Units.inchesToMeters(530.49),
+            Units.inchesToMeters(186.83),
+            Rotation2d.fromDegrees(60)), // 8
+        new Pose2d(
+            Units.inchesToMeters(497.77),
+            Units.inchesToMeters(186.83),
+            Rotation2d.fromDegrees(120)), // 9
+        new Pose2d(
+            Units.inchesToMeters(481.39),
+            Units.inchesToMeters(158.50),
+            Rotation2d.fromDegrees(180)), // 10
+        new Pose2d(
+            Units.inchesToMeters(497.77),
+            Units.inchesToMeters(130.17),
+            Rotation2d.fromDegrees(240)), // 11
+        new Pose2d(
+            Units.inchesToMeters(160.39),
+            Units.inchesToMeters(130.17),
+            Rotation2d.fromDegrees(240)), // 17
+        new Pose2d(
+            Units.inchesToMeters(144.00),
+            Units.inchesToMeters(158.50),
+            Rotation2d.fromDegrees(180)), // 18
+        new Pose2d(
+            Units.inchesToMeters(160.39),
+            Units.inchesToMeters(186.83),
+            Rotation2d.fromDegrees(120)), // 19
+        new Pose2d(
+            Units.inchesToMeters(193.10),
+            Units.inchesToMeters(186.83),
+            Rotation2d.fromDegrees(60)), // 20
+        new Pose2d(
+            Units.inchesToMeters(209.49),
+            Units.inchesToMeters(158.50),
+            Rotation2d.fromDegrees(0)), // 21
+        new Pose2d(
+            Units.inchesToMeters(193.10),
+            Units.inchesToMeters(130.17),
+            Rotation2d.fromDegrees(300)) // 22
+      };
 
   // Camera names, must match names configured on coprocessor
   public static String camera0Name = "camera_0";
