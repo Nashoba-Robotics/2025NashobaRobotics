@@ -32,6 +32,10 @@ public class DriveCommands {
   private static final double ANGLE_KD = 0.5;
   private static final double ANGLE_MAX_VELOCITY = 16.0;
   private static final double ANGLE_MAX_ACCELERATION = 30.0;
+  private static final double VELOCITY_KP = 2;
+  private static final double VELOCITY_KD = 0.5;
+  private static final double MAX_VELOCITY = 15.0;
+  private static final double MAX_ACCELERATION = 30.0;
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
@@ -257,7 +261,7 @@ public class DriveCommands {
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
 
-  public static Command driveAimAtReefCommand(Drive drive) {
+  public static Command driveGoToReefCommand(Drive drive) {
 
     // Create PID controller
     ProfiledPIDController angleController =
@@ -267,6 +271,13 @@ public class DriveCommands {
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
+
+    ProfiledPIDController velocityController =
+        new ProfiledPIDController(
+            VELOCITY_KP,
+            0.0,
+            VELOCITY_KD,
+            new TrapezoidProfile.Constraints(MAX_VELOCITY, MAX_ACCELERATION));
 
     // Construct command
     return Commands.run(
@@ -280,16 +291,11 @@ public class DriveCommands {
                       (closestTag.getRotation().getRadians() + Math.PI));
 
               double velocityX =
-                  Math.cos(
-                      Math.atan2(
-                          closestTag.getY() - drive.getPose().getY(),
-                          closestTag.getX() - drive.getPose().getX()));
+                  velocityController.calculate(drive.getPose().getX(), closestTag.getX());
 
               double velocityY =
-                  Math.sin(
-                      Math.atan2(
-                          closestTag.getY() - drive.getPose().getY(),
-                          closestTag.getX() - drive.getPose().getX()));
+                  velocityController.calculate(drive.getPose().getY(), closestTag.getY());
+
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds = new ChassisSpeeds(velocityX, velocityY, omega);
               boolean isFlipped =
