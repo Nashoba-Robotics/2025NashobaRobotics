@@ -77,7 +77,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   public void setPosition(double meters) {
     leader.setPosition(meters);
   }
-  
+
   @Override
   public void setkV(double kV) {
     config.Slot0.kV = kV;
@@ -98,6 +98,6 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void stop() {
-      leader.setControl(new NeutralOut());
+    leader.setControl(new NeutralOut());
   }
 }

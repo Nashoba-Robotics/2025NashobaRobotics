@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
     io.setkD(kD);
   }
 
-  public void stop(){
+  public void stop() {
     io.stop();
   }
 }

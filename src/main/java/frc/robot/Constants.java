@@ -56,6 +56,23 @@ public final class Constants {
             .withGravityType(GravityTypeValue.Elevator_Static);
   }
 
+  public static final class Manipulator {
+    public static final String CANBUS = "";
+    public static final int MANIPULATOR_ID = 0;
+
+    public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
+
+    public static final double STATOR_LIMIT = 0;
+    public static final double SUPPLY_LIMIT = 0;
+
+    public static final double GEAR_RATIO = 0;
+
+    public static final double MOTION_MAGIC_ACCELERATION = 0.0;
+
+    public static final Slot0Configs PID =
+        new Slot0Configs().withKS(0.0).withKV(0.0).withKA(0.0).withKP(0.0).withKI(0.0).withKD(0.0);
+  }
+
   public static final class Climber {
     public static final String CANBUS = "";
     public static final int PIVOT_ID = 0;
@@ -90,18 +107,24 @@ public final class Constants {
     public static final double GRABBER_GEAR_RATIO = 0;
   }
 
-  public static final class Manipulator {
+  public static final class Wrist {
     public static final String CANBUS = "";
-    public static final int MANIPULATOR_ID = 0;
+    public static final int WRIST_ID = 0;
+    public static final int ENCODER_ID = 0;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 
     public static final double STATOR_LIMIT = 0;
     public static final double SUPPLY_LIMIT = 0;
 
-    public static final double GEAR_RATIO = 0;
+    public static final double SENSOR_TO_MECHANISM_GEAR_RATIO = 0;
+    public static final double ROTOR_TO_MECHANISM_GEAR_RATIO = 0;
 
+    public static final double MOTION_MAGIC_CRUISE_VELOCITY = 0.0;
     public static final double MOTION_MAGIC_ACCELERATION = 0.0;
+
+    public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
+    public static final Rotation2d REVERSE_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
 
     public static final Slot0Configs PID =
         new Slot0Configs().withKS(0.0).withKV(0.0).withKA(0.0).withKP(0.0).withKI(0.0).withKD(0.0);
