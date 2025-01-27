@@ -1,7 +1,9 @@
 package frc.robot.subsystems.wrist;
 
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -10,13 +12,25 @@ import frc.robot.Constants;
 
 public class WristIOTalonFX implements WristIO {
   private final TalonFX wrist;
+  private final CANcoder encoder;
+
   private final TalonFXConfiguration config;
+  private final CANcoderConfiguration encoderConfig;
 
   private final MotionMagicDutyCycle motionMagic = new MotionMagicDutyCycle(0);
 
   public WristIOTalonFX() {
     wrist = new TalonFX(Constants.Wrist.WRIST_ID, Constants.Wrist.CANBUS);
+    encoder = new CANcoder(Constants.Wrist.ENCODER_ID, Constants.Wrist.CANBUS);
+
     config = new TalonFXConfiguration();
+    encoderConfig = new CANcoderConfiguration();
+
+    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+    encoderConfig.MagnetSensor.SensorDirection = Constants.Wrist.ENCODER_INVERTED;
+    encoderConfig.MagnetSensor.MagnetOffset =
+        Units.radiansToRotations(Constants.Wrist.ENCODER_OFFSET_RADIANS);
+    encoder.getConfigurator().apply(encoderConfig);
 
     config.Slot0 = Constants.Wrist.PID;
 
@@ -49,7 +63,9 @@ public class WristIOTalonFX implements WristIO {
   @Override
   public void updateInputs(WristIOInputs inputs) {
     inputs.connected = wrist.isConnected();
-    inputs.positionRad = Units.rotationsToRadians(wrist.getPosition().getValueAsDouble());
+    inputs.rotorPositionRad = Units.rotationsToRadians(wrist.getPosition().getValueAsDouble());
+    inputs.absolutePositionRad =
+        Units.rotationsToRadians(encoder.getAbsolutePosition().getValueAsDouble());
     inputs.velocityRadPerSec = Units.rotationsToRadians(wrist.getVelocity().getValueAsDouble());
     inputs.appliedVolts = wrist.getMotorVoltage().getValueAsDouble();
     inputs.supplyCurrentAmps = wrist.getSupplyCurrent().getValueAsDouble();

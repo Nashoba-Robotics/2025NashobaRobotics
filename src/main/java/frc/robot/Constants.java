@@ -3,6 +3,7 @@ package frc.robot;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -111,6 +112,10 @@ public final class Constants {
     public static final String CANBUS = "";
     public static final int WRIST_ID = 0;
     public static final int ENCODER_ID = 0;
+
+    public static final SensorDirectionValue ENCODER_INVERTED =
+        SensorDirectionValue.Clockwise_Positive;
+    public static final double ENCODER_OFFSET_RADIANS = 0;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 

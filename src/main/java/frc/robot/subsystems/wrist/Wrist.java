@@ -16,11 +16,11 @@ public class Wrist extends SubsystemBase {
     io.updateInputs(inputs);
   }
 
-  public void setSetpoint(double setpointRads){
+  public void setSetpoint(double setpointRads) {
     io.setSetpoint(setpointRads);
   }
 
-  public void setPID(double kV, double kP, double kD){
+  public void setPID(double kV, double kP, double kD) {
     io.setkV(kV);
     io.setkP(kP);
     io.setkD(kD);
