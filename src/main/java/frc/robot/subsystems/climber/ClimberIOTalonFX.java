@@ -95,23 +95,11 @@ public class ClimberIOTalonFX implements ClimberIO {
   }
 
   @Override
-  public void setkS(double kS) {
-    pivotConfig.Slot0.kS = kS;
-    pivot.getConfigurator().apply(pivotConfig);
-  }
-
-  @Override
   public void setkV(double kV) {
     pivotConfig.Slot0.kV = kV;
     pivot.getConfigurator().apply(pivotConfig);
   }
-
-  @Override
-  public void setkG(double kG) {
-    pivotConfig.Slot0.kG = kG;
-    pivot.getConfigurator().apply(pivotConfig);
-  }
-
+  
   @Override
   public void setkP(double kP) {
     pivotConfig.Slot0.kP = kP;

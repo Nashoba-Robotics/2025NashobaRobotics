@@ -70,10 +70,4 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
     config.Slot0.kV = kV;
     manipulator.getConfigurator().apply(config);
   }
-
-  @Override
-  public void setkS(double kS) {
-    config.Slot0.kS = kS;
-    manipulator.getConfigurator().apply(config);
-  }
 }

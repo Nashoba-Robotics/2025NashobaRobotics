@@ -21,10 +21,9 @@ public class Manipulator extends SubsystemBase {
     io.setSetpoint(setpointRadsPerSec);
   }
 
-  public void setPID(double kP, double kD, double kS, double kV) {
+  public void setPID(double kV, double kP, double kD) {
+    io.setkV(kV);
     io.setkP(kP);
     io.setkD(kD);
-    io.setkS(kS);
-    io.setkV(kV);
   }
 }

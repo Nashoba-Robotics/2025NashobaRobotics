@@ -3,6 +3,7 @@ package frc.robot.subsystems.elevator;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -76,22 +77,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   public void setPosition(double meters) {
     leader.setPosition(meters);
   }
-
-  @Override
-  public void setkS(double kS) {
-    config.Slot0.kS = kS;
-    leader.getConfigurator().apply(config);
-  }
-
+  
   @Override
   public void setkV(double kV) {
     config.Slot0.kV = kV;
-    leader.getConfigurator().apply(config);
-  }
-
-  @Override
-  public void setkG(double kG) {
-    config.Slot0.kG = kG;
     leader.getConfigurator().apply(config);
   }
 
@@ -105,5 +94,10 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   public void setkD(double kD) {
     config.Slot0.kD = kD;
     leader.getConfigurator().apply(config);
+  }
+
+  @Override
+  public void stop() {
+      leader.setControl(new NeutralOut());
   }
 }

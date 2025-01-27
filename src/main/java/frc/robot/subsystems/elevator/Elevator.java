@@ -34,11 +34,13 @@ public class Elevator extends SubsystemBase {
     io.setPosition(0);
   }
 
-  public void setPID(double kP, double kD, double kS, double kG, double kV) {
+  public void setPID(double kV, double kP, double kD) {
+    io.setkV(kV);
     io.setkP(kP);
     io.setkD(kD);
-    io.setkS(kS);
-    io.setkG(kG);
-    io.setkV(kV);
+  }
+
+  public void stop(){
+    io.stop();
   }
 }

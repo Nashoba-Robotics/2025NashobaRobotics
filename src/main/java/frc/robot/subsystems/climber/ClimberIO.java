@@ -30,10 +30,6 @@ public interface ClimberIO {
 
   public default void setPivotPosition(double angle) {}
 
-  public default void setkS(double kS) {}
-
-  public default void setkG(double kG) {}
-
   public default void setkV(double kV) {}
 
   public default void setkP(double kP) {}

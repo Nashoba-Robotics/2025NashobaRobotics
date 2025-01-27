@@ -28,13 +28,11 @@ public interface ElevatorIO {
 
   public default void setPosition(double meters) {}
 
-  public default void setkS(double kS) {}
-
-  public default void setkG(double kG) {}
-
   public default void setkV(double kV) {}
 
   public default void setkP(double kP) {}
 
   public default void setkD(double kD) {}
+
+  public default void stop() {}
 }
