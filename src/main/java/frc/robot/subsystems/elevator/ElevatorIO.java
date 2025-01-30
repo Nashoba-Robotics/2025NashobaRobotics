@@ -6,6 +6,7 @@ public interface ElevatorIO {
 
   @AutoLog
   public static class ElevatorIOInputs {
+    public double positionRads = 0.0;
     public double positionMeters = 0.0;
     public double velocityMetersPerSec = 0.0;
 
@@ -24,9 +25,11 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public default void setSetpoint(double setpointMeters) {}
+  public default void setSetpoint(double setpointRotations) {}
 
   public default void setPosition(double meters) {}
+
+  public default void setVoltage(double volts) {}
 
   public default void setkV(double kV) {}
 

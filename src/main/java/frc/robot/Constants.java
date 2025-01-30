@@ -28,27 +28,28 @@ public final class Constants {
   }
 
   public static final class Elevator {
-    public static final String CANBUS = "";
+    public static final String CANBUS = "rio";
     public static final int LEADER_ID = 0;
-    public static final int FOLLOWER_ID = 0;
+    public static final int FOLLOWER_ID = 9;
 
-    public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
-    public static final double STATOR_LIMIT = 0;
-    public static final double SUPPLY_LIMIT = 0;
+    public static final double STATOR_LIMIT = 40;
+    public static final double SUPPLY_LIMIT = 40;
 
-    public static final double GEAR_RATIO = 0;
+    public static final double GEAR_RATIO = 3; // Motor to output on elevator is 3:1
+    public static final double PULLY_RAIDUS = (0.0175133); // meters
 
     public static final double MOTION_MAGIC_CRUISE_VELOCITY = 0.0;
     public static final double MOTION_MAGIC_ACCELERATION = 0.0;
 
-    public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
-    public static final Rotation2d REVERSE_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
+    public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(81);
+    public static final Rotation2d REVERSE_SOFT_LIMIT = Rotation2d.fromRadians(-0.5);
 
     public static final Slot0Configs PID =
         new Slot0Configs()
-            .withKS(0.0)
-            .withKG(0.0)
+            .withKS(0.25 / 12)
+            .withKG(0.3 / 12)
             .withKV(0.0)
             .withKA(0.0)
             .withKP(0.0)

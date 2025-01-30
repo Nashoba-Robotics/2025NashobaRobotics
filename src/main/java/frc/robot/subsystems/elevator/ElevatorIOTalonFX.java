@@ -2,20 +2,21 @@ package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
-import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
+import org.littletonrobotics.junction.Logger;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
 
   private final TalonFX leader;
   private final TalonFX follower;
   private final TalonFXConfiguration config;
-
-  private final MotionMagicDutyCycle motionMagic = new MotionMagicDutyCycle(0);
 
   public ElevatorIOTalonFX() {
     leader = new TalonFX(Constants.Elevator.LEADER_ID, Constants.Elevator.CANBUS);
@@ -52,8 +53,13 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {
-    inputs.positionMeters = leader.getPosition().getValueAsDouble();
-    inputs.velocityMetersPerSec = leader.getVelocity().getValueAsDouble();
+    inputs.positionRads = Units.rotationsToRadians(leader.getPosition().getValueAsDouble());
+    inputs.positionMeters =
+        Units.rotationsToRadians(leader.getPosition().getValueAsDouble())
+            * Constants.Elevator.PULLY_RAIDUS;
+    inputs.velocityMetersPerSec =
+        Units.rotationsToRadians(leader.getVelocity().getValueAsDouble())
+            * Constants.Elevator.PULLY_RAIDUS;
 
     inputs.leaderMotorConnected = leader.isConnected();
     inputs.leaderAppliedVolts = leader.getMotorVoltage().getValueAsDouble();
@@ -63,19 +69,25 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
     inputs.followerMotorConnected = follower.isConnected();
     inputs.followerAppliedVolts = follower.getMotorVoltage().getValueAsDouble();
-    inputs.followerSupplyCurrentAmps = leader.getSupplyCurrent().getValueAsDouble();
-    inputs.followerStatorCurrentAmps = leader.getStatorCurrent().getValueAsDouble();
-    inputs.followerTempCelsius = leader.getDeviceTemp().getValueAsDouble();
+    inputs.followerSupplyCurrentAmps = follower.getSupplyCurrent().getValueAsDouble();
+    inputs.followerStatorCurrentAmps = follower.getStatorCurrent().getValueAsDouble();
+    inputs.followerTempCelsius = follower.getDeviceTemp().getValueAsDouble();
   }
 
   @Override
-  public void setSetpoint(double setpointMeters) {
-    leader.setControl(motionMagic.withPosition(setpointMeters));
+  public void setSetpoint(double setpointRads) {
+    Logger.recordOutput("Elevator setpoint Radians", setpointRads);
+    leader.setControl(new PositionDutyCycle(Units.radiansToRotations(setpointRads)));
   }
 
   @Override
-  public void setPosition(double meters) {
-    leader.setPosition(meters);
+  public void setPosition(double rotations) {
+    leader.setPosition(rotations);
+  }
+
+  @Override
+  public void setVoltage(double voltage) {
+    leader.setControl(new VoltageOut(voltage));
   }
 
   @Override

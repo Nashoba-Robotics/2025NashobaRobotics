@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
@@ -18,8 +19,12 @@ public class Elevator extends SubsystemBase {
     Logger.processInputs("Elevator", inputs);
   }
 
-  public void setSetpoint(double setpointMeters) {
-    io.setSetpoint(setpointMeters);
+  public void setExtension(double setpointMeters) {
+    io.setSetpoint(setpointMeters / Constants.Elevator.PULLY_RAIDUS);
+  }
+
+  public void setVoltage(double voltage) {
+    io.setVoltage(voltage);
   }
 
   public double getLeaderStatorCurrent() {
@@ -31,7 +36,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void zeroElevator() {
-    io.setPosition(0);
+    io.setPosition(0 / Constants.Elevator.PULLY_RAIDUS);
   }
 
   public void setPID(double kV, double kP, double kD) {
