@@ -34,15 +34,15 @@ import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 
 public class RobotContainer {
   // Subsystems
-    private final Drive drive;
-    private final Vision vision;
+  private final Drive drive;
+  private final Vision vision;
   private final Elevator elevator;
 
   // // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
 
   //   // Dashboard inputs
-    private final LoggedDashboardChooser<Command> autoChooser;
+  private final LoggedDashboardChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -97,12 +97,12 @@ public class RobotContainer {
         break;
     }
 
-    // Set up auto routines
+    // // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    // Set up SysId routines
     autoChooser.addOption(
-        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+        "Drive Wheel Radius Characterization",
+    DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
     autoChooser.addOption("Simulation Test Auto", new PathPlannerAuto("Example Auto"));
@@ -122,7 +122,7 @@ public class RobotContainer {
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
 
-    // // Default command, normal field-relative drive
+    // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
@@ -164,7 +164,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return autoChooser.get();
-    return new WaitCommand(15);
+    return autoChooser.get();
   }
 }

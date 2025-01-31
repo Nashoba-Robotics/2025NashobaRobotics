@@ -5,6 +5,7 @@ import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -34,17 +35,18 @@ public final class Constants {
 
     public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
-    public static final double STATOR_LIMIT = 40;
-    public static final double SUPPLY_LIMIT = 40;
+    public static final double STATOR_LIMIT = 80;
+    public static final double SUPPLY_LIMIT = 80;
 
     public static final double GEAR_RATIO = 3; // Motor to output on elevator is 3:1
     public static final double PULLY_RAIDUS = (0.0175133); // meters
 
-    public static final double MOTION_MAGIC_CRUISE_VELOCITY = 0.0;
-    public static final double MOTION_MAGIC_ACCELERATION = 0.0;
+    public static final double MOTION_MAGIC_CRUISE_VELOCITY =
+        Units.radiansToRotations(2.5 / PULLY_RAIDUS);
+    public static final double MOTION_MAGIC_ACCELERATION =
+        Units.radiansToRotations(15 / PULLY_RAIDUS);
 
     public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(81);
-    public static final Rotation2d REVERSE_SOFT_LIMIT = Rotation2d.fromRadians(-0.5);
 
     public static final Slot0Configs PID =
         new Slot0Configs()
@@ -52,9 +54,9 @@ public final class Constants {
             .withKG(0.3 / 12)
             .withKV(0.0)
             .withKA(0.0)
-            .withKP(0.0)
+            .withKP(1.0)
             .withKI(0.0)
-            .withKD(0.0)
+            .withKD(0.05)
             .withGravityType(GravityTypeValue.Elevator_Static);
   }
 

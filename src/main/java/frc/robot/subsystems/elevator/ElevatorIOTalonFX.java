@@ -2,15 +2,14 @@ package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
-import org.littletonrobotics.junction.Logger;
 
 public class ElevatorIOTalonFX implements ElevatorIO {
 
@@ -42,13 +41,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
     config.MotionMagic.MotionMagicAcceleration = Constants.Elevator.MOTION_MAGIC_ACCELERATION;
 
     config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
     config.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
         Constants.Elevator.FORWARD_SOFT_LIMIT.getRotations();
-    config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
-        Constants.Elevator.REVERSE_SOFT_LIMIT.getRotations();
 
     leader.getConfigurator().apply(config);
+    follower.getConfigurator().apply(config);
   }
 
   @Override
@@ -76,8 +74,7 @@ public class ElevatorIOTalonFX implements ElevatorIO {
 
   @Override
   public void setSetpoint(double setpointRads) {
-    Logger.recordOutput("Elevator setpoint Radians", setpointRads);
-    leader.setControl(new PositionDutyCycle(Units.radiansToRotations(setpointRads)));
+    leader.setControl(new MotionMagicDutyCycle(Units.radiansToRotations(setpointRads)));
   }
 
   @Override
