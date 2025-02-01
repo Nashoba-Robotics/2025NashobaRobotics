@@ -30,7 +30,7 @@ public final class Constants {
 
   public static final class Elevator {
     public static final String CANBUS = "rio";
-    public static final int LEADER_ID = 0;
+    public static final int LEADER_ID = 8;
     public static final int FOLLOWER_ID = 9;
 
     public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;

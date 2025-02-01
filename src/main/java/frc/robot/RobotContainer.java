@@ -122,6 +122,7 @@ public class RobotContainer {
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
 
+    controller.y().whileTrue(elevator.setExtensionCommand());
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -137,10 +138,10 @@ public class RobotContainer {
             DriveCommands.driveAimAtReefCommand(
                 drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
 
-    // Switch to X pattern when X button is pressed
+    // // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to 0° when B button is pressed
+    // // Reset gyro to 0° when B button is pressed
     controller
         .b()
         .onTrue(
