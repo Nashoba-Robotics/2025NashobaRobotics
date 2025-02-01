@@ -2,11 +2,8 @@ package frc.robot;
 
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -14,7 +11,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
@@ -31,6 +27,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
   // Subsystems
@@ -101,8 +98,7 @@ public class RobotContainer {
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     autoChooser.addOption(
-        "Drive Wheel Radius Characterization",
-    DriveCommands.wheelRadiusCharacterization(drive));
+        "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
     autoChooser.addOption("Simulation Test Auto", new PathPlannerAuto("Example Auto"));
@@ -122,7 +118,6 @@ public class RobotContainer {
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
 
-    controller.y().whileTrue(elevator.setExtensionCommand());
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
