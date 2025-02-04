@@ -47,11 +47,12 @@ public final class Constants {
         Units.radiansToRotations(15 / PULLY_RAIDUS);
 
     public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(81);
+    public static final double ELEVATOR_TOLERANCE = 0.005; // meters
 
     public static final Slot0Configs PID =
         new Slot0Configs()
-            .withKS(0.25 / 12)
-            .withKG(0.3 / 12)
+            .withKS(0)
+            .withKG(0.48 / 12)
             .withKV(0.0)
             .withKA(0.0)
             .withKP(1.0)
