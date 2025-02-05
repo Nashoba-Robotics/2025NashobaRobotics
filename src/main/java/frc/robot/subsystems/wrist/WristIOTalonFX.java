@@ -3,6 +3,7 @@ package frc.robot.subsystems.wrist;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -34,28 +35,31 @@ public class WristIOTalonFX implements WristIO {
 
     config.Slot0 = Constants.Wrist.PID;
 
-    config.CurrentLimits.StatorCurrentLimitEnable = true;
-    config.CurrentLimits.SupplyCurrentLimitEnable = true;
+    config.CurrentLimits.StatorCurrentLimitEnable = false;
+    config.CurrentLimits.SupplyCurrentLimitEnable = false;
     config.CurrentLimits.StatorCurrentLimit = Constants.Wrist.STATOR_LIMIT;
     config.CurrentLimits.SupplyCurrentLimit = Constants.Wrist.SUPPLY_LIMIT;
 
     config.MotorOutput.Inverted = Constants.Wrist.INVERTED;
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    config.MotionMagic.MotionMagicCruiseVelocity = Constants.Wrist.MOTION_MAGIC_CRUISE_VELOCITY;
-    config.MotionMagic.MotionMagicAcceleration = Constants.Wrist.MOTION_MAGIC_ACCELERATION;
+    config.MotionMagic.MotionMagicCruiseVelocity =
+        Constants.Wrist.MOTION_MAGIC_CRUISE_VELOCITY.getRotations();
+    config.MotionMagic.MotionMagicAcceleration =
+        Constants.Wrist.MOTION_MAGIC_ACCELERATION.getRotations();
 
-    config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    config.SoftwareLimitSwitch.ForwardSoftLimitEnable = false;
+    config.SoftwareLimitSwitch.ReverseSoftLimitEnable = false;
     config.SoftwareLimitSwitch.ForwardSoftLimitThreshold =
         Constants.Wrist.FORWARD_SOFT_LIMIT.getRotations();
     config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
         Constants.Wrist.REVERSE_SOFT_LIMIT.getRotations();
 
-    config.Feedback.FeedbackRemoteSensorID = Constants.Wrist.ENCODER_ID;
-    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    // config.Feedback.FeedbackRemoteSensorID = Constants.Wrist.ENCODER_ID;
+    // config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     config.Feedback.SensorToMechanismRatio = Constants.Wrist.SENSOR_TO_MECHANISM_GEAR_RATIO;
-    config.Feedback.RotorToSensorRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
+    // config.Feedback.RotorToSensorRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
 
     wrist.getConfigurator().apply(config);
   }
@@ -76,6 +80,11 @@ public class WristIOTalonFX implements WristIO {
   @Override
   public void setSetpoint(double setpointRads) {
     wrist.setControl(motionMagic.withPosition(Units.radiansToRotations(setpointRads)));
+  }
+
+  @Override
+  public void stop() {
+    wrist.setControl(new NeutralOut());
   }
 
   @Override

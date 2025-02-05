@@ -4,6 +4,7 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.signals.StaticFeedforwardSignValue;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -53,9 +54,9 @@ public final class Constants {
         new Slot0Configs()
             .withKS(0)
             .withKG(0.48 / 12)
-            .withKV(0.0)
+            .withKV(0.0375)
             .withKA(0.0)
-            .withKP(1.0)
+            .withKP(0.5)
             .withKI(0.0)
             .withKD(0.05)
             .withGravityType(GravityTypeValue.Elevator_Static);
@@ -113,29 +114,38 @@ public final class Constants {
   }
 
   public static final class Wrist {
-    public static final String CANBUS = "";
-    public static final int WRIST_ID = 0;
+    public static final String CANBUS = "rio";
+    public static final int WRIST_ID = 12;
+
     public static final int ENCODER_ID = 0;
 
     public static final SensorDirectionValue ENCODER_INVERTED =
         SensorDirectionValue.Clockwise_Positive;
     public static final double ENCODER_OFFSET_RADIANS = 0;
 
-    public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
     public static final double STATOR_LIMIT = 0;
     public static final double SUPPLY_LIMIT = 0;
 
     public static final double SENSOR_TO_MECHANISM_GEAR_RATIO = 0;
-    public static final double ROTOR_TO_MECHANISM_GEAR_RATIO = 0;
+    public static final double ROTOR_TO_MECHANISM_GEAR_RATIO = 63.21;
 
-    public static final double MOTION_MAGIC_CRUISE_VELOCITY = 0.0;
-    public static final double MOTION_MAGIC_ACCELERATION = 0.0;
+    public static final Rotation2d MOTION_MAGIC_CRUISE_VELOCITY = Rotation2d.fromRadians(2);
+    public static final Rotation2d MOTION_MAGIC_ACCELERATION = Rotation2d.fromRadians(4);
 
     public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
     public static final Rotation2d REVERSE_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
 
     public static final Slot0Configs PID =
-        new Slot0Configs().withKS(0.0).withKV(0.0).withKA(0.0).withKP(0.0).withKI(0.0).withKD(0.0);
+        new Slot0Configs()
+            .withKS(0.0)
+            .withKV(0.0)
+            .withKA(0.0)
+            .withKP(0.0)
+            .withKI(0.0)
+            .withKD(0.0)
+            .withGravityType(GravityTypeValue.Arm_Cosine)
+            .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
   }
 }

@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
+import frc.robot.commands.test.TuneWristCommand;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.subsystems.wrist.Wrist;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -34,6 +36,7 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
   private final Elevator elevator;
+  private final Wrist wrist;
 
   // // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -45,6 +48,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     elevator = new Elevator();
+    wrist = new Wrist();
 
     switch (Constants.currentMode) {
       case REAL:
@@ -117,7 +121,10 @@ public class RobotContainer {
 
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
+    SmartDashboard.putData(new TuneWristCommand(wrist));
 
+    controller.y().whileTrue(elevator.setExtensionCommand(1.25));
+    controller.a().whileTrue((elevator.setExtensionCommand(0)));
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -127,11 +134,11 @@ public class RobotContainer {
             () -> -controller.getRightX()));
 
     // Square up to reef
-    controller
-        .rightStick()
-        .whileTrue(
-            DriveCommands.driveAimAtReefCommand(
-                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+    // controller
+    //     .rightStick()
+    //     .whileTrue(
+    //         DriveCommands.driveAimAtReefCommand(
+    //             drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
 
     // // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -143,15 +150,15 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
                     drive)
                 .ignoringDisable(true));
 
-    controller
-        .leftTrigger(0.45)
-        .whileTrue(
-            DriveCommands.driveAimAtSourceCommand(
-                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+    // controller
+    //     .leftTrigger(0.45)
+    //     .whileTrue(
+    //         DriveCommands.driveAimAtSourceCommand(
+    //             drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
   }
 
   /**
