@@ -1,7 +1,7 @@
 package frc.robot.subsystems.manipulator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -12,13 +12,9 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
   private final TalonFX manipulator;
   private final TalonFXConfiguration config;
 
-  private final VelocityDutyCycle velocityControl = new VelocityDutyCycle(0);
-
   public ManipulatorIOTalonFX() {
     manipulator = new TalonFX(Constants.Manipulator.MANIPULATOR_ID, Constants.Manipulator.CANBUS);
     config = new TalonFXConfiguration();
-
-    config.Slot0 = Constants.Manipulator.PID;
 
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -30,8 +26,6 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
 
     config.MotorOutput.Inverted = Constants.Manipulator.INVERTED;
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-    config.MotionMagic.MotionMagicAcceleration = Constants.Manipulator.MOTION_MAGIC_ACCELERATION;
 
     manipulator.getConfigurator().apply(config);
   }
@@ -48,26 +42,7 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
   }
 
   @Override
-  public void setSetpoint(double setpointRadsPerSec) {
-    manipulator.setControl(
-        velocityControl.withVelocity(Units.radiansToRotations(setpointRadsPerSec)));
-  }
-
-  @Override
-  public void setkP(double kP) {
-    config.Slot0.kP = kP;
-    manipulator.getConfigurator().apply(config);
-  }
-
-  @Override
-  public void setkD(double kD) {
-    config.Slot0.kD = kD;
-    manipulator.getConfigurator().apply(config);
-  }
-
-  @Override
-  public void setkV(double kV) {
-    config.Slot0.kV = kV;
-    manipulator.getConfigurator().apply(config);
+  public void setVoltage(double setpointVolts) {
+    manipulator.setControl(new VoltageOut(setpointVolts));
   }
 }

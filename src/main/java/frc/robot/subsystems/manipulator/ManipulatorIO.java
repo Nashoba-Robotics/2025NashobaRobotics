@@ -16,11 +16,5 @@ public interface ManipulatorIO {
 
   public default void updateInputs(ManipulatorIOInputs inputs) {}
 
-  public default void setSetpoint(double setpointRadsPerSec) {}
-
-  public default void setkV(double kV) {}
-
-  public default void setkP(double kP) {}
-
-  public default void setkD(double kD) {}
+  public default void setVoltage(double setpointVolts) {}
 }

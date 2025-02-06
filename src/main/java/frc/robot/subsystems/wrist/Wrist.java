@@ -1,6 +1,10 @@
 package frc.robot.subsystems.wrist;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.util.Util;
+import org.littletonrobotics.junction.Logger;
 
 public class Wrist extends SubsystemBase {
 
@@ -14,10 +18,25 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+    Logger.processInputs("Wrist", inputs);
   }
 
   public void setSetpoint(double setpointRads) {
     io.setSetpoint(setpointRads);
+  }
+
+  public Command setAngleCommand(double setpointRads) {
+    return run(() -> setSetpoint(setpointRads))
+        .until(
+            () ->
+                Util.epsilonEquals(
+                    getPositionRadians(),
+                    setpointRads,
+                    Constants.Wrist.WRIST_TOLERANCE.getRadians()));
+  }
+
+  public double getPositionRadians() {
+    return inputs.rotorPositionRad;
   }
 
   public void stop() {

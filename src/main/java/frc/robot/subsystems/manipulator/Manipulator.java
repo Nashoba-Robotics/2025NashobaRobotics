@@ -1,5 +1,6 @@
 package frc.robot.subsystems.manipulator;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -17,13 +18,11 @@ public class Manipulator extends SubsystemBase {
     Logger.processInputs("Manipulator", inputs);
   }
 
-  public void setSetpoint(double setpointRadsPerSec) {
-    io.setSetpoint(setpointRadsPerSec);
+  public void setVoltage(double setpointVolts) {
+    io.setVoltage(setpointVolts);
   }
 
-  public void setPID(double kV, double kP, double kD) {
-    io.setkV(kV);
-    io.setkP(kP);
-    io.setkD(kD);
+  public Command setVoltageCommand(double setpointVolts) {
+    return run(() -> setVoltage(setpointVolts));
   }
 }

@@ -35,8 +35,8 @@ public class WristIOTalonFX implements WristIO {
 
     config.Slot0 = Constants.Wrist.PID;
 
-    config.CurrentLimits.StatorCurrentLimitEnable = false;
-    config.CurrentLimits.SupplyCurrentLimitEnable = false;
+    config.CurrentLimits.StatorCurrentLimitEnable = true;
+    config.CurrentLimits.SupplyCurrentLimitEnable = true;
     config.CurrentLimits.StatorCurrentLimit = Constants.Wrist.STATOR_LIMIT;
     config.CurrentLimits.SupplyCurrentLimit = Constants.Wrist.SUPPLY_LIMIT;
 
@@ -58,7 +58,8 @@ public class WristIOTalonFX implements WristIO {
     // config.Feedback.FeedbackRemoteSensorID = Constants.Wrist.ENCODER_ID;
     // config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
     config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-    config.Feedback.SensorToMechanismRatio = Constants.Wrist.SENSOR_TO_MECHANISM_GEAR_RATIO;
+    // config.Feedback.SensorToMechanismRatio = Constants.Wrist.SENSOR_TO_MECHANISM_GEAR_RATIO;
+    config.Feedback.SensorToMechanismRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
     // config.Feedback.RotorToSensorRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
 
     wrist.getConfigurator().apply(config);
