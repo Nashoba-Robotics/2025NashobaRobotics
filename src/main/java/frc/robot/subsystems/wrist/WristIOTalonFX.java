@@ -55,12 +55,10 @@ public class WristIOTalonFX implements WristIO {
     config.SoftwareLimitSwitch.ReverseSoftLimitThreshold =
         Constants.Wrist.REVERSE_SOFT_LIMIT.getRotations();
 
-    // config.Feedback.FeedbackRemoteSensorID = Constants.Wrist.ENCODER_ID;
-    // config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-    // config.Feedback.SensorToMechanismRatio = Constants.Wrist.SENSOR_TO_MECHANISM_GEAR_RATIO;
-    config.Feedback.SensorToMechanismRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
-    // config.Feedback.RotorToSensorRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
+    config.Feedback.FeedbackRemoteSensorID = Constants.Wrist.ENCODER_ID;
+    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    config.Feedback.SensorToMechanismRatio = Constants.Wrist.SENSOR_TO_MECHANISM_GEAR_RATIO;
+    config.Feedback.RotorToSensorRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
 
     wrist.getConfigurator().apply(config);
   }

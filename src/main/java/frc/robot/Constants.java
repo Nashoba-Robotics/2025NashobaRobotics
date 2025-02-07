@@ -112,18 +112,18 @@ public final class Constants {
     public static final String CANBUS = "rio";
     public static final int WRIST_ID = 11;
 
-    public static final int ENCODER_ID = 0;
+    public static final int ENCODER_ID = 4;
 
     public static final SensorDirectionValue ENCODER_INVERTED =
-        SensorDirectionValue.Clockwise_Positive;
-    public static final double ENCODER_OFFSET_RADIANS = 0;
+        SensorDirectionValue.CounterClockwise_Positive;
+    public static final double ENCODER_OFFSET_RADIANS = 2.4420974143;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 
     public static final double STATOR_LIMIT = 10;
     public static final double SUPPLY_LIMIT = 10;
 
-    // public static final double SENSOR_TO_MECHANISM_GEAR_RATIO = 0;
+    public static final double SENSOR_TO_MECHANISM_GEAR_RATIO = 1;
     public static final double ROTOR_TO_MECHANISM_GEAR_RATIO = 63.21;
 
     public static final Rotation2d MOTION_MAGIC_CRUISE_VELOCITY = Rotation2d.fromRadians(625);
