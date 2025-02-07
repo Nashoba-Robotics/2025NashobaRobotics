@@ -16,5 +16,5 @@ public interface ManipulatorIO {
 
   public default void updateInputs(ManipulatorIOInputs inputs) {}
 
-  public default void setVoltage(double setpointVolts) {}
+  public default void setPercentOutput(double setpointPercent) {}
 }

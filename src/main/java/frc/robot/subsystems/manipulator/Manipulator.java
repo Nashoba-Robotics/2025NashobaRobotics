@@ -1,7 +1,9 @@
 package frc.robot.subsystems.manipulator;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.SuppliedWaitCommand;
 import org.littletonrobotics.junction.Logger;
 
 public class Manipulator extends SubsystemBase {
@@ -18,11 +20,22 @@ public class Manipulator extends SubsystemBase {
     Logger.processInputs("Manipulator", inputs);
   }
 
-  public void setVoltage(double setpointVolts) {
-    io.setVoltage(setpointVolts);
+  public void setPercentOutput(double setpointPercent) {
+    io.setPercentOutput(setpointPercent);
   }
 
-  public Command setVoltageCommand(double setpointVolts) {
-    return run(() -> setVoltage(setpointVolts));
+  public Command intakeCommand() {
+    return run(() -> setPercentOutput(-0.8))
+        .raceWith(new SuppliedWaitCommand(() -> 0.200))
+        .andThen(
+            Commands.waitUntil(() -> inputs.velocityRadPerSec > -35.0),
+            new SuppliedWaitCommand(() -> 0.050))
+        .finallyDo(() -> setPercentOutput(-0.1));
+  }
+
+  public Command ejectCommand() {
+    return run(() -> setPercentOutput(1.0))
+        .andThen(new SuppliedWaitCommand(() -> 0.25))
+        .finallyDo(() -> setPercentOutput(0));
   }
 }

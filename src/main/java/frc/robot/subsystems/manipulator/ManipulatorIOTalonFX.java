@@ -1,7 +1,7 @@
 package frc.robot.subsystems.manipulator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -42,7 +42,7 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
   }
 
   @Override
-  public void setVoltage(double setpointVolts) {
-    manipulator.setControl(new VoltageOut(setpointVolts));
+  public void setPercentOutput(double setpointPercent) {
+    manipulator.setControl(new DutyCycleOut(setpointPercent));
   }
 }

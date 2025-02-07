@@ -56,7 +56,7 @@ public class WristIOTalonFX implements WristIO {
         Constants.Wrist.REVERSE_SOFT_LIMIT.getRotations();
 
     config.Feedback.FeedbackRemoteSensorID = Constants.Wrist.ENCODER_ID;
-    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
     config.Feedback.SensorToMechanismRatio = Constants.Wrist.SENSOR_TO_MECHANISM_GEAR_RATIO;
     config.Feedback.RotorToSensorRatio = Constants.Wrist.ROTOR_TO_MECHANISM_GEAR_RATIO;
 

@@ -16,6 +16,8 @@ import frc.robot.commands.DriveCommands;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
+import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -39,6 +41,9 @@ public class RobotContainer {
   private final Elevator elevator;
   private final Wrist wrist;
   private final Manipulator manipulator;
+  private final Climber climber;
+
+  private final Superstructure superstructure;
 
   // // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -52,6 +57,9 @@ public class RobotContainer {
     elevator = new Elevator();
     wrist = new Wrist();
     manipulator = new Manipulator();
+    climber = new Climber();
+
+    superstructure = new Superstructure(elevator, wrist, manipulator, climber);
 
     switch (Constants.currentMode) {
       case REAL:
@@ -126,13 +134,10 @@ public class RobotContainer {
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
 
-    controller.y().onTrue(elevator.setExtensionCommand(1.25).andThen(wrist.setAngleCommand(2.3)));
-
-    controller.a().onTrue(wrist.setAngleCommand(0).andThen(elevator.setExtensionCommand(0)));
-    controller.leftBumper().whileTrue(manipulator.setVoltageCommand(-4));
-    controller.leftBumper().onFalse(manipulator.setVoltageCommand(0));
-    controller.rightBumper().whileTrue(manipulator.setVoltageCommand(4));
-    controller.rightBumper().onFalse(manipulator.setVoltageCommand(0));
+    controller.y().onTrue(superstructure.scoreL4Coral());
+    controller.a().onTrue(superstructure.setNeutral());
+    controller.leftBumper().whileTrue(manipulator.intakeCommand());
+    controller.rightBumper().whileTrue(manipulator.ejectCommand());
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
