@@ -42,6 +42,14 @@ public class Elevator extends SubsystemBase {
     io.setPosition(0 / Constants.Elevator.PULLY_RAIDUS);
   }
 
+  public boolean isNearL4() {
+    return getPositionMeters() > 0.90;
+  }
+
+  public boolean isNearL3() {
+    return getPositionMeters() > 0.50;
+  }
+
   public Command setExtensionCommand(double setpointMeters) {
     return run(() -> setExtension(setpointMeters))
         .until(

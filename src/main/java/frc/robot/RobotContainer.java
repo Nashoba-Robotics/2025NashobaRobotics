@@ -135,7 +135,8 @@ public class RobotContainer {
     controller.y().onTrue(superstructure.scoreL4Coral());
     controller.x().onTrue(superstructure.scoreL3Coral());
     controller.a().onTrue(superstructure.scoreL2Coral());
-    controller.leftBumper().onTrue(superstructure.setNeutral());
+    controller.back().onTrue(superstructure.setNeutral());
+    controller.leftBumper().onTrue(superstructure.setIntake());
     controller.leftBumper().whileTrue(manipulator.intakeCommand());
     controller.rightBumper().whileTrue(manipulator.ejectCommand());
 
