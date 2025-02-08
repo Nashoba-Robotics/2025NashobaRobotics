@@ -3,7 +3,6 @@ package frc.robot;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -116,7 +115,6 @@ public class RobotContainer {
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption("Simulation Test Auto", new PathPlannerAuto("Example Auto"));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -140,6 +138,7 @@ public class RobotContainer {
     controller.leftBumper().onTrue(superstructure.setNeutral());
     controller.leftBumper().whileTrue(manipulator.intakeCommand());
     controller.rightBumper().whileTrue(manipulator.ejectCommand());
+
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
@@ -149,14 +148,14 @@ public class RobotContainer {
             () -> -controller.getRightX()));
 
     // Square up to reef
-    // controller
-    //     .rightStick()
-    //     .whileTrue(
-    //         DriveCommands.driveAimAtReefCommand(
-    //             drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+    controller
+        .rightTrigger(0.75)
+        .whileTrue(
+            DriveCommands.driveAimAtReefCommand(
+                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
 
-    // // Switch to X pattern when X button is pressed
-    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // // Switch to X pattern when start button is pressed
+    controller.start().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // // Reset gyro to 0° when B button is pressed
     controller
@@ -169,11 +168,11 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    // controller
-    //     .leftTrigger(0.45)
-    //     .whileTrue(
-    //         DriveCommands.driveAimAtSourceCommand(
-    //             drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+    controller
+        .leftTrigger(0.75)
+        .whileTrue(
+            DriveCommands.driveAimAtSourceCommand(
+                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
   }
 
   /**
