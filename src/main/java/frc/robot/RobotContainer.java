@@ -135,7 +135,9 @@ public class RobotContainer {
     SmartDashboard.putData(new TuneWristCommand(wrist));
 
     controller.y().onTrue(superstructure.scoreL4Coral());
-    controller.a().onTrue(superstructure.setNeutral());
+    controller.x().onTrue(superstructure.scoreL3Coral());
+    controller.a().onTrue(superstructure.scoreL2Coral());
+    controller.leftBumper().onTrue(superstructure.setNeutral());
     controller.leftBumper().whileTrue(manipulator.intakeCommand());
     controller.rightBumper().whileTrue(manipulator.ejectCommand());
     // // // Default command, normal field-relative drive
@@ -154,7 +156,7 @@ public class RobotContainer {
     //             drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
 
     // // Switch to X pattern when X button is pressed
-    controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // // Reset gyro to 0° when B button is pressed
     controller
