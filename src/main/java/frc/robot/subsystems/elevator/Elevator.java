@@ -50,7 +50,7 @@ public class Elevator extends SubsystemBase {
     return getPositionMeters() > 0.50;
   }
 
-  public Command setExtensionCommand(double setpointMeters) {
+  public Command setSetpointCommand(double setpointMeters) {
     return run(() -> setExtension(setpointMeters))
         .until(
             () ->

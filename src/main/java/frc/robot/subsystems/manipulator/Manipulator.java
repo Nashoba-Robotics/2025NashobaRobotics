@@ -35,7 +35,7 @@ public class Manipulator extends SubsystemBase {
 
   public Command ejectCommand() {
     return run(() -> setPercentOutput(1.0))
-        .andThen(new SuppliedWaitCommand(() -> 0.25))
+        .raceWith(new SuppliedWaitCommand(() -> 0.3))
         .finallyDo(() -> setPercentOutput(0));
   }
 }

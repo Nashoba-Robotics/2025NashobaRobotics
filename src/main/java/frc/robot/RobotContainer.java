@@ -3,6 +3,7 @@ package frc.robot;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -10,6 +11,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
@@ -36,11 +38,10 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Vision vision;
+//   private final Vision vision;
   private final Elevator elevator;
   private final Wrist wrist;
   private final Manipulator manipulator;
-  private final Climber climber;
 
   private final Superstructure superstructure;
 
@@ -56,9 +57,8 @@ public class RobotContainer {
     elevator = new Elevator();
     wrist = new Wrist();
     manipulator = new Manipulator();
-    climber = new Climber();
 
-    superstructure = new Superstructure(elevator, wrist, manipulator, climber);
+    superstructure = new Superstructure(elevator, wrist);
 
     switch (Constants.currentMode) {
       case REAL:
@@ -71,11 +71,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVision(camera0Name, robotToCamera0),
-                new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOPhotonVision(camera0Name, robotToCamera0),
+        //         new VisionIOPhotonVision(camera1Name, robotToCamera1));
         break;
 
       case SIM:
@@ -88,10 +88,10 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
 
-        vision =
-            new Vision(
-                drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose));
+        // vision =
+        //     new Vision(
+        //         drive::addVisionMeasurement,
+        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose));
         break;
 
       default:
@@ -104,7 +104,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        // vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
 
@@ -115,6 +115,7 @@ public class RobotContainer {
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
+    autoChooser.addOption("Test Pathplanner", new PathPlannerAuto("Test"));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -135,10 +136,17 @@ public class RobotContainer {
     controller.y().onTrue(superstructure.scoreL4Coral());
     controller.x().onTrue(superstructure.scoreL3Coral());
     controller.a().onTrue(superstructure.scoreL2Coral());
+
+    controller.povUp().onTrue(superstructure.setL2Algae().andThen(manipulator.intakeCommand()));
     controller.back().onTrue(superstructure.setNeutral());
     controller.leftBumper().onTrue(superstructure.setIntake());
     controller.leftBumper().whileTrue(manipulator.intakeCommand());
-    controller.rightBumper().whileTrue(manipulator.ejectCommand());
+    controller
+        .rightBumper()
+        .onTrue(
+            manipulator
+                .ejectCommand()
+                .andThen(new WaitCommand(0.25).andThen(superstructure.setNeutral())));
 
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
