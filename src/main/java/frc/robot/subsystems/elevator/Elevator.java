@@ -58,6 +58,16 @@ public class Elevator extends SubsystemBase {
                     getPositionMeters(), setpointMeters, Constants.Elevator.ELEVATOR_TOLERANCE));
   }
 
+  public Command setExtensionCommand(double setpointMeters, double thresholdMeters) {
+    return run(() -> setExtension(setpointMeters))
+        .until(() -> getPositionMeters() >= thresholdMeters);
+  }
+
+  public Command setTuckCommand(double setpointMeters, double thresholdMeters) {
+    return run(() -> setExtension(setpointMeters))
+        .until(() -> getPositionMeters() <= thresholdMeters);
+  }
+
   public void setPID(double kV, double kP, double kD) {
     io.setkV(kV);
     io.setkP(kP);

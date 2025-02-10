@@ -26,6 +26,10 @@ public class Wrist extends SubsystemBase {
     io.setSetpoint(setpointRads);
   }
 
+  public double getAngleRads(){
+    return inputs.absolutePositionRad;
+  }
+
   public Command setAngleCommand(double setpointRads) {
     return run(() -> setSetpoint(setpointRads))
         .until(
@@ -36,8 +40,14 @@ public class Wrist extends SubsystemBase {
                     Constants.Wrist.WRIST_TOLERANCE.getRadians()));
   }
 
-  public Command setL4TuckCommand() {
-    return new InstantCommand(() -> setSetpoint(Math.PI / 2));
+  public Command setExtensionCommand(double setpointRads, double thresholdRads) {
+    return run(() -> setSetpoint(setpointRads))
+        .until(() -> getPositionRadians() >= thresholdRads);
+  }
+
+  public Command setTuckCommand(double setpointRads, double thresholdRads) {
+    return run(() -> setSetpoint(setpointRads))
+        .until(() -> getPositionRadians() <= thresholdRads);
   }
 
   public double getPositionRadians() {

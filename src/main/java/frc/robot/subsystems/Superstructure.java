@@ -5,9 +5,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.manipulator.Manipulator;
 import frc.robot.subsystems.wrist.Wrist;
 
 public class Superstructure extends SubsystemBase {
@@ -78,7 +76,7 @@ public class Superstructure extends SubsystemBase {
             wrist.setAngleCommand(goal.angleRads)),
         new SequentialCommandGroup(
             new ParallelCommandGroup(
-                wrist.setL4TuckCommand(),
+                wrist.setAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
                 elevator.setSetpointCommand(goal.extensionMeters)),
             wrist.setAngleCommand(goal.angleRads)),
         () -> elevator.isNearL3());
