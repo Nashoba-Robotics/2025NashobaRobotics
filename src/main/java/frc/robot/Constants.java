@@ -75,7 +75,7 @@ public final class Constants {
   }
 
   public static final class Climber {
-    public static final String CANBUS = "";
+    public static final String CANBUS = "rio";
     public static final int PIVOT_ID = 0;
     public static final int GRABBER_ID = 0;
 
@@ -120,8 +120,8 @@ public final class Constants {
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 
-    public static final double STATOR_LIMIT = 10;
-    public static final double SUPPLY_LIMIT = 10;
+    public static final double STATOR_LIMIT = 45;
+    public static final double SUPPLY_LIMIT = 45;
 
     public static final double SENSOR_TO_MECHANISM_GEAR_RATIO = 1;
     public static final double ROTOR_TO_MECHANISM_GEAR_RATIO = 63.21;
@@ -135,11 +135,11 @@ public final class Constants {
 
     public static final Slot0Configs PID =
         new Slot0Configs()
-            .withKS(0.1 / 12)
-            .withKG(0.01)
-            .withKV(5.0)
+            .withKS(0.0)
+            .withKG(0.0)
+            .withKV(0.0)
             .withKA(0.0)
-            .withKP(2.75)
+            .withKP(0.0)
             .withKI(0.0)
             .withKD(0.0)
             .withGravityType(GravityTypeValue.Arm_Cosine)
