@@ -41,7 +41,8 @@ public class RobotContainer {
   private final Superstructure superstructure;
 
   // // Controller
-  private final CommandXboxController controller = new CommandXboxController(0);
+  private final CommandXboxController driver = new CommandXboxController(0);
+  private final CommandXboxController operator = new CommandXboxController(1);
 
   //   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -110,7 +111,7 @@ public class RobotContainer {
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption("Test Pathplanner", new PathPlannerAuto("Test"));
+    autoChooser.addOption("Test Pathplanner", new PathPlannerAuto("Test", true));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -128,15 +129,15 @@ public class RobotContainer {
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
 
-    controller.y().onTrue(superstructure.scoreL4Coral());
-    controller.x().onTrue(superstructure.scoreL3Coral());
-    controller.a().onTrue(superstructure.scoreL2Coral());
+    driver.y().onTrue(superstructure.scoreL4Coral());
+    driver.x().onTrue(superstructure.scoreL3Coral());
+    driver.a().onTrue(superstructure.scoreL2Coral());
 
-    controller.povUp().onTrue(superstructure.setL2Algae().andThen(manipulator.intakeCommand()));
-    controller.back().onTrue(superstructure.setNeutral());
-    controller.leftBumper().onTrue(superstructure.setIntake());
-    controller.leftBumper().whileTrue(manipulator.intakeCommand());
-    controller
+    driver.povUp().onTrue(superstructure.setL2Algae().andThen(manipulator.intakeCommand()));
+    driver.back().onTrue(superstructure.setNeutral());
+    driver.leftBumper().onTrue(superstructure.setIntake());
+    driver.leftBumper().whileTrue(manipulator.intakeCommand());
+    driver
         .rightBumper()
         .onTrue(
             manipulator
@@ -146,23 +147,20 @@ public class RobotContainer {
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX()));
+            drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
 
     // Square up to reef
-    controller
+    driver
         .rightTrigger(0.75)
         .whileTrue(
             DriveCommands.driveAimAtReefCommand(
-                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+                drive, () -> -driver.getLeftY(), () -> -driver.getLeftX()));
 
     // // Switch to X pattern when start button is pressed
-    controller.start().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driver.start().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // // Reset gyro to 0° when B button is pressed
-    controller
+    driver
         .b()
         .onTrue(
             Commands.runOnce(
@@ -172,11 +170,11 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    controller
+    driver
         .leftTrigger(0.75)
         .whileTrue(
             DriveCommands.driveAimAtSourceCommand(
-                drive, () -> -controller.getLeftY(), () -> -controller.getLeftX()));
+                drive, () -> -driver.getLeftY(), () -> -driver.getLeftX()));
   }
 
   /**

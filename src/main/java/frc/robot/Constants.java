@@ -116,7 +116,7 @@ public final class Constants {
 
     public static final SensorDirectionValue ENCODER_INVERTED =
         SensorDirectionValue.CounterClockwise_Positive;
-    public static final double ENCODER_OFFSET_RADIANS = 2.4420974143;
+    public static final double ENCODER_OFFSET_RADIANS = 1.3744467;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 
@@ -139,7 +139,7 @@ public final class Constants {
             .withKG(0.0)
             .withKV(0.0)
             .withKA(0.0)
-            .withKP(0.0)
+            .withKP(3.5)
             .withKI(0.0)
             .withKD(0.0)
             .withGravityType(GravityTypeValue.Arm_Cosine)
