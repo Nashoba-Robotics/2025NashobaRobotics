@@ -30,7 +30,7 @@ public class Manipulator extends SubsystemBase {
         .andThen(
             Commands.waitUntil(() -> inputs.velocityRadPerSec > -35.0),
             new SuppliedWaitCommand(() -> 0.050))
-        .finallyDo(() -> setPercentOutput(-0.1));
+        .finallyDo(() -> setPercentOutput(-0.035));
   }
 
   public Command ejectCommand() {

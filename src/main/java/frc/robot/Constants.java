@@ -53,12 +53,12 @@ public final class Constants {
     public static final Slot0Configs PID =
         new Slot0Configs()
             .withKS(0)
-            .withKG(0.48 / 12)
+            .withKG(0.375 / 12)
             .withKV(0.0375)
             .withKA(0.0)
-            .withKP(0.5)
+            .withKP(2.5)
             .withKI(0.0)
-            .withKD(0.05)
+            .withKD(0.025)
             .withGravityType(GravityTypeValue.Elevator_Static);
   }
 
@@ -135,11 +135,11 @@ public final class Constants {
 
     public static final Slot0Configs PID =
         new Slot0Configs()
-            .withKS(0.0)
+            .withKS(0.15 / 12)
             .withKG(0.0)
             .withKV(0.0)
             .withKA(0.0)
-            .withKP(3.5)
+            .withKP(7.5)
             .withKI(0.0)
             .withKD(0.0)
             .withGravityType(GravityTypeValue.Arm_Cosine)

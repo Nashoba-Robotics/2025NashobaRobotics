@@ -11,7 +11,7 @@ import frc.robot.subsystems.wrist.Wrist;
 public class Superstructure extends SubsystemBase {
   public enum SuperstructureGoal {
     NEUTRAL(0, 0),
-    INTAKE(0, -0.55),
+    INTAKE(0, -0.45),
 
     L4CORALPREP(1.2, Math.PI / 2),
     L4CORAL(1.2, 2.15),
