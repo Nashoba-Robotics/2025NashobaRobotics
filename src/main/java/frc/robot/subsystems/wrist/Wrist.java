@@ -11,6 +11,8 @@ public class Wrist extends SubsystemBase {
   private final WristIO io;
   private final WristIOInputsAutoLogged inputs = new WristIOInputsAutoLogged();
 
+  public double setpoint;
+
   public Wrist() {
     io = new WristIOTalonFX();
   }
@@ -22,11 +24,16 @@ public class Wrist extends SubsystemBase {
   }
 
   public void setSetpoint(double setpointRads) {
+    this.setpoint = setpointRads;
     io.setSetpoint(setpointRads);
   }
 
   public double getAngleRads() {
     return inputs.absolutePositionRad;
+  }
+
+  public double getSetpointRads() {
+    return setpoint;
   }
 
   public Command setAngleCommand(double setpointRads) {

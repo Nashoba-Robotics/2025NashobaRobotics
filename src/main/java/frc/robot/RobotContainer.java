@@ -6,13 +6,15 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
@@ -43,6 +45,10 @@ public class RobotContainer {
   // // Controller
   private final CommandXboxController driver = new CommandXboxController(0);
   private final CommandXboxController operator = new CommandXboxController(1);
+
+  private Trigger algae = operator.rightTrigger(0.65);
+  private Trigger coral = operator.leftTrigger(0.65);
+  private Trigger prepHeight = driver.rightBumper();
 
   //   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -111,7 +117,7 @@ public class RobotContainer {
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption("Test Pathplanner", new PathPlannerAuto("Test", true));
+    autoChooser.addOption("Test Pathplanner", new PathPlannerAuto("Score 1", true));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -129,32 +135,34 @@ public class RobotContainer {
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
 
-    driver.y().onTrue(superstructure.scoreL4Coral());
-    driver.x().onTrue(superstructure.scoreL3Coral());
-    driver.a().onTrue(superstructure.scoreL2Coral());
+    driver.leftTrigger(0.65).onTrue(superstructure.setIntake());
+    driver.leftTrigger(0.65).whileTrue(manipulator.intakeCommand());
+    driver.rightTrigger(0.65).onTrue(manipulator.ejectCommand());
+    driver.leftBumper().onTrue(superstructure.setNeutral());
+    driver.y().onTrue(manipulator.L1ejectCommand());
 
-    driver.povUp().onTrue(superstructure.setL2Algae().andThen(manipulator.intakeCommand()));
-    driver.back().onTrue(superstructure.setNeutral());
-    driver.leftBumper().onTrue(superstructure.setIntake());
-    driver.leftBumper().whileTrue(manipulator.intakeCommand());
-    driver
-        .rightBumper()
-        .onTrue(
-            manipulator
-                .ejectCommand()
-                .andThen(new WaitCommand(0.25).andThen(superstructure.setNeutral())));
+    algae
+        .and(prepHeight)
+        .and(operator.a())
+        .onTrue(superstructure.setL2Algae().andThen(manipulator.intakeCommand()));
+    algae
+        .and(prepHeight)
+        .and(operator.b())
+        .onTrue(superstructure.setL3Algae().andThen(manipulator.intakeCommand()));
+    algae
+        .and(prepHeight)
+        .and(operator.y())
+        .onTrue(superstructure.setBargeAlgae().andThen(manipulator.intakeCommand()));
+
+    coral.and(prepHeight).and(operator.a()).onTrue(superstructure.scoreL2Coral());
+    coral.and(prepHeight).and(operator.b()).onTrue(superstructure.scoreL3Coral());
+    coral.and(prepHeight).and(operator.y()).onTrue(superstructure.scoreL4Coral());
+    coral.and(prepHeight).and(operator.x()).onTrue(superstructure.scoreL1Coral());
 
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
-
-    // Square up to reef
-    driver
-        .rightTrigger(0.75)
-        .whileTrue(
-            DriveCommands.driveAimAtReefCommand(
-                drive, () -> -driver.getLeftY(), () -> -driver.getLeftX()));
 
     // // Switch to X pattern when start button is pressed
     driver.start().onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -166,15 +174,15 @@ public class RobotContainer {
             Commands.runOnce(
                     () ->
                         drive.setPose(
-                            new Pose2d(drive.getPose().getTranslation(), new Rotation2d(Math.PI))),
+                            new Pose2d(
+                                drive.getPose().getTranslation(),
+                                new Rotation2d(
+                                    DriverStation.getAlliance().orElse(Alliance.Blue)
+                                            == Alliance.Blue
+                                        ? 0
+                                        : Math.PI))),
                     drive)
                 .ignoringDisable(true));
-
-    driver
-        .leftTrigger(0.75)
-        .whileTrue(
-            DriveCommands.driveAimAtSourceCommand(
-                drive, () -> -driver.getLeftY(), () -> -driver.getLeftX()));
   }
 
   /**

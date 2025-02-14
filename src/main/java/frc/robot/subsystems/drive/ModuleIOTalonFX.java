@@ -128,8 +128,8 @@ public class ModuleIOTalonFX implements ModuleIO {
           case RemoteCANcoder -> FeedbackSensorSourceValue.RemoteCANcoder;
           case FusedCANcoder -> FeedbackSensorSourceValue.FusedCANcoder;
           case SyncCANcoder -> FeedbackSensorSourceValue.SyncCANcoder;
-          default -> throw new RuntimeException(
-              "You are using an unsupported swerve configuration");
+          default ->
+              throw new RuntimeException("You are using an unsupported swerve configuration");
         };
     turnConfig.Feedback.RotorToSensorRatio = constants.SteerMotorGearRatio;
     turnConfig.MotionMagic.MotionMagicCruiseVelocity = 100.0 / constants.SteerMotorGearRatio;
@@ -261,8 +261,8 @@ public class ModuleIOTalonFX implements ModuleIO {
     turnTalon.setControl(
         switch (constants.SteerMotorClosedLoopOutput) {
           case Voltage -> positionVoltageRequest.withPosition(rotation.getRotations());
-          case TorqueCurrentFOC -> positionTorqueCurrentRequest.withPosition(
-              rotation.getRotations());
+          case TorqueCurrentFOC ->
+              positionTorqueCurrentRequest.withPosition(rotation.getRotations());
         });
   }
 }

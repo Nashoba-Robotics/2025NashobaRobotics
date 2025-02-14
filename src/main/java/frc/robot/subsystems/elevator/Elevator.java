@@ -34,6 +34,10 @@ public class Elevator extends SubsystemBase {
     return inputs.positionMeters;
   }
 
+  public double getSetpointMeters() {
+    return setpointMeters;
+  }
+
   public void setVoltage(double voltage) {
     io.setVoltage(voltage);
   }

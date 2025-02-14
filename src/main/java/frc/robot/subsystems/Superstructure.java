@@ -10,18 +10,18 @@ import frc.robot.subsystems.wrist.Wrist;
 
 public class Superstructure extends SubsystemBase {
   public enum SuperstructureGoal {
-    NEUTRAL(0, 0),
+    NEUTRAL(0, Math.PI / 2),
     INTAKE(0, -0.45),
 
-    L4CORALPREP(1.2, Math.PI / 2),
-    L4CORAL(1.2, 2.15),
-    L3CORAL(0.52, 2.5),
-    L2CORAL(0.13, 2.5),
-    L1CORAL(0, 0),
+    L4CORALPREP(1.25, Math.PI / 2),
+    L4CORAL(1.25, 2.15),
+    L3CORAL(0.515, 2.6),
+    L2CORAL(0.115, 2.6),
+    L1CORAL(0, 0.1),
 
-    BARGEALGAE(0, 0),
-    L3ALGAE(0, 0),
-    L2ALGAE(0.05, 3.55),
+    BARGEALGAE(1.34, 3.95),
+    L3ALGAE(0.4, 3.4),
+    L2ALGAE(0.05, 3.4),
     PROCESSORALGAE(0, 0);
 
     private double extensionMeters;
@@ -97,6 +97,38 @@ public class Superstructure extends SubsystemBase {
 
   public Command scoreL2Coral() {
     goal = SuperstructureGoal.L2CORAL;
+    return new ConditionalCommand(
+        new SequentialCommandGroup(
+            wrist.setAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
+            elevator.setSetpointCommand(goal.extensionMeters),
+            wrist.setAngleCommand(goal.angleRads)),
+        new ParallelCommandGroup(
+            elevator.setSetpointCommand(goal.extensionMeters),
+            wrist.setAngleCommand(goal.angleRads)),
+        () -> elevator.isNearL4());
+  }
+
+  public Command scoreL1Coral() {
+    goal = SuperstructureGoal.L1CORAL;
+    return new ConditionalCommand(
+        new SequentialCommandGroup(
+            wrist.setAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
+            elevator.setSetpointCommand(goal.extensionMeters),
+            wrist.setAngleCommand(goal.angleRads)),
+        new ParallelCommandGroup(
+            elevator.setSetpointCommand(goal.extensionMeters),
+            wrist.setAngleCommand(goal.angleRads)),
+        () -> elevator.isNearL4());
+  }
+
+  public Command setBargeAlgae() {
+    goal = SuperstructureGoal.BARGEALGAE;
+    return new ParallelCommandGroup(
+        wrist.setAngleCommand(goal.angleRads), elevator.setSetpointCommand(goal.extensionMeters));
+  }
+
+  public Command setL3Algae() {
+    goal = SuperstructureGoal.L3ALGAE;
     return new ConditionalCommand(
         new SequentialCommandGroup(
             wrist.setAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
