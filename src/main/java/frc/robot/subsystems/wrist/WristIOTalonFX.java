@@ -2,6 +2,7 @@ package frc.robot.subsystems.wrist;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -79,6 +80,11 @@ public class WristIOTalonFX implements WristIO {
   @Override
   public void setSetpoint(double setpointRads) {
     wrist.setControl(motionMagic.withPosition(Units.radiansToRotations(setpointRads)));
+  }
+
+  @Override
+  public void setDutyCycle(double percent) {
+    wrist.setControl(new DutyCycleOut(percent));
   }
 
   @Override

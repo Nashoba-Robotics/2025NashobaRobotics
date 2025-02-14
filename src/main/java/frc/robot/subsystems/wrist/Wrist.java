@@ -28,6 +28,10 @@ public class Wrist extends SubsystemBase {
     io.setSetpoint(setpointRads);
   }
 
+  public void setDutyCycle(double percent) {
+    io.setDutyCycle(percent);
+  }
+
   public double getAngleRads() {
     return inputs.absolutePositionRad;
   }

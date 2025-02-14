@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.NeutralOut;
@@ -80,6 +81,11 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   @Override
   public void setPosition(double rotations) {
     leader.setPosition(rotations);
+  }
+
+  @Override
+  public void setDutyCycle(double percent) {
+    leader.setControl(new DutyCycleOut(percent));
   }
 
   @Override

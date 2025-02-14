@@ -30,6 +30,10 @@ public class Elevator extends SubsystemBase {
     io.setSetpoint(setpointMeters / Constants.Elevator.PULLY_RAIDUS);
   }
 
+  public void setDutyCycle(double percent) {
+    io.setDutyCycle(percent);
+  }
+
   public double getPositionMeters() {
     return inputs.positionMeters;
   }
