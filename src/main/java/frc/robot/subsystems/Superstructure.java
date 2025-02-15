@@ -14,14 +14,14 @@ public class Superstructure extends SubsystemBase {
     INTAKE(0, -0.45),
 
     L4CORALPREP(1.25, Math.PI / 2),
-    L4CORAL(1.25, 2.15),
+    L4CORAL(1.25, 2.3),
     L3CORAL(0.515, 2.6),
     L2CORAL(0.115, 2.6),
     L1CORAL(0, 0.1),
 
     BARGEALGAE(1.34, 3.95),
-    L3ALGAE(0.4, 3.4),
-    L2ALGAE(0.05, 3.4),
+    L3ALGAE(0.4, 3.6),
+    L2ALGAE(0.05, 3.6),
     PROCESSORALGAE(0, 0);
 
     private double extensionMeters;

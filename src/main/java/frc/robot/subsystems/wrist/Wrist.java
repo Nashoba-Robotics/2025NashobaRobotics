@@ -21,6 +21,7 @@ public class Wrist extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Wrist", inputs);
+    Logger.recordOutput("Wristsetpoint", setpoint);
   }
 
   public void setSetpoint(double setpointRads) {
@@ -33,7 +34,7 @@ public class Wrist extends SubsystemBase {
   }
 
   public double getAngleRads() {
-    return inputs.absolutePositionRad;
+    return inputs.rotorPositionRad;
   }
 
   public double getSetpointRads() {

@@ -19,6 +19,8 @@ public interface WristIO {
 
   public default void setSetpoint(double setpointRads) {}
 
+  public default void setDutyCycle(double percent) {}
+
   public default void stop() {}
 
   public default void setkV(double kV) {}

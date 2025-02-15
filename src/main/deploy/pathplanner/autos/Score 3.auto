@@ -1,0 +1,121 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Start-Score1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2Prep"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score1-Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-Score2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2Prep"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralScore"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score2-Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-Score3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L2Prep"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralScore"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

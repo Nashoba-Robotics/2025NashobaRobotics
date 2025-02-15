@@ -3,6 +3,7 @@ package frc.robot;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ManualExtensionCommand;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
@@ -113,11 +115,20 @@ public class RobotContainer {
     // // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
+    NamedCommands.registerCommand("L2Prep", superstructure.scoreL2Coral());
+    NamedCommands.registerCommand("CoralScore", manipulator.ejectCommand());
+    NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
+    NamedCommands.registerCommand("Intake", manipulator.intakeCommand());
+
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption("Test Pathplanner", new PathPlannerAuto("Score 1", true));
+    autoChooser.addOption("Left side Score 1", new PathPlannerAuto("Score 1", true));
+    autoChooser.addOption("Right side Score 1", new PathPlannerAuto("Score 1", false));
+    autoChooser.addOption("Left side Score 2", new PathPlannerAuto("Score 2", true));
+    autoChooser.addOption("Right side Score 2", new PathPlannerAuto("Score 2", false));
+    autoChooser.addOption("Drive a foot", new PathPlannerAuto("Taxi"));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -134,6 +145,7 @@ public class RobotContainer {
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
+    SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
 
     driver.leftTrigger(0.65).onTrue(superstructure.setIntake());
     driver.leftTrigger(0.65).whileTrue(manipulator.intakeCommand());
@@ -144,20 +156,62 @@ public class RobotContainer {
     algae
         .and(prepHeight)
         .and(operator.a())
-        .onTrue(superstructure.setL2Algae().andThen(manipulator.intakeCommand()));
+        .onTrue(
+            superstructure
+                .setL2Algae()
+                .andThen(
+                    manipulator
+                        .intakeCommand()
+                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
     algae
         .and(prepHeight)
         .and(operator.b())
-        .onTrue(superstructure.setL3Algae().andThen(manipulator.intakeCommand()));
+        .onTrue(
+            superstructure
+                .setL3Algae()
+                .andThen(
+                    manipulator
+                        .intakeCommand()
+                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
     algae
         .and(prepHeight)
         .and(operator.y())
-        .onTrue(superstructure.setBargeAlgae().andThen(manipulator.intakeCommand()));
+        .onTrue(
+            superstructure
+                .setBargeAlgae()
+                .andThen(
+                    manipulator
+                        .intakeCommand()
+                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
 
-    coral.and(prepHeight).and(operator.a()).onTrue(superstructure.scoreL2Coral());
-    coral.and(prepHeight).and(operator.b()).onTrue(superstructure.scoreL3Coral());
-    coral.and(prepHeight).and(operator.y()).onTrue(superstructure.scoreL4Coral());
-    coral.and(prepHeight).and(operator.x()).onTrue(superstructure.scoreL1Coral());
+    coral
+        .and(prepHeight)
+        .and(operator.a())
+        .onTrue(
+            superstructure
+                .scoreL2Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    coral
+        .and(prepHeight)
+        .and(operator.b())
+        .onTrue(
+            superstructure
+                .scoreL3Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    coral
+        .and(prepHeight)
+        .and(operator.y())
+        .onTrue(
+            superstructure
+                .scoreL4Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    coral
+        .and(prepHeight)
+        .and(operator.x())
+        .onTrue(
+            superstructure
+                .scoreL1Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
