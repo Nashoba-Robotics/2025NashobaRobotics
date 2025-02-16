@@ -34,6 +34,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
@@ -102,6 +103,9 @@ public class Drive extends SubsystemBase {
       };
   private SwerveDrivePoseEstimator poseEstimator =
       new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+
+  private SwerveDriveOdometry swerveDriveOdometry =
+      new SwerveDriveOdometry(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
   public Drive(
       GyroIO gyroIO,
@@ -197,6 +201,7 @@ public class Drive extends SubsystemBase {
 
       // Apply update
       poseEstimator.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+      swerveDriveOdometry.update(rawGyroRotation, modulePositions);
     }
 
     // Update gyro alert
@@ -295,6 +300,10 @@ public class Drive extends SubsystemBase {
     return output;
   }
 
+  //
+  // Pose Estimator Methods
+  //
+
   /** Returns the current odometry pose. */
   @AutoLogOutput(key = "Odometry/Robot")
   public Pose2d getPose() {
@@ -318,6 +327,26 @@ public class Drive extends SubsystemBase {
       Matrix<N3, N1> visionMeasurementStdDevs) {
     poseEstimator.addVisionMeasurement(
         visionRobotPoseMeters, timestampSeconds, visionMeasurementStdDevs);
+  }
+
+  ///
+  // Odometry Methods
+  //
+
+  /** Returns the current odometry pose. */
+  @AutoLogOutput(key = "SwerveDriveOdometry/Robot")
+  public Pose2d getSwerveDriveOdometryPose() {
+    return swerveDriveOdometry.getPoseMeters();
+  }
+
+  /** Returns the current odometry rotation. */
+  public Rotation2d getOdometryRotation() {
+    return getSwerveDriveOdometryPose().getRotation();
+  }
+
+  /** Resets the current odometry pose. */
+  public void setOdometryPose(Pose2d pose) {
+    swerveDriveOdometry.resetPosition(rawGyroRotation, getModulePositions(), pose);
   }
 
   /** Returns the maximum linear speed in meters per sec. */
