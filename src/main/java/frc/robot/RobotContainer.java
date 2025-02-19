@@ -31,13 +31,16 @@ import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.drive.generated.TunerConstants;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.manipulator.Manipulator;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.wrist.Wrist;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  //   private final Vision vision;
+  private final Vision vision;
   private final Elevator elevator;
   private final Wrist wrist;
   private final Manipulator manipulator;
@@ -57,7 +60,6 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
     elevator = new Elevator();
     wrist = new Wrist();
     manipulator = new Manipulator();
@@ -75,11 +77,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVision(camera0Name, robotToCamera0),
-        //         new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                new VisionIOPhotonVision(camera1Name, robotToCamera1));
         break;
 
       case SIM:
@@ -92,10 +94,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose));
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
 
       default:
@@ -108,7 +107,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        // vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
 
@@ -143,6 +142,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
+    driver.leftStick().whileTrue(DriveCommands.autoAlignToReefCommand(drive));
 
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));

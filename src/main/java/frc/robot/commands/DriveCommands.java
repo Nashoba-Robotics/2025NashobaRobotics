@@ -25,13 +25,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+import org.littletonrobotics.junction.Logger;
 
 public class DriveCommands {
   private static final double DEADBAND = 0.1;
+
   private static final double ANGLE_KP = 6;
   private static final double ANGLE_KD = 0.5;
   private static final double ANGLE_MAX_VELOCITY = 16.0;
   private static final double ANGLE_MAX_ACCELERATION = 30.0;
+
+  private static final double DRIVE_KP = 5;
+  private static final double DRIVE_KD = 0.5;
+  private static final double DRIVE_MAX_VELOCITY = 4;
+  private static final double DRIVE_MAX_ACCELERATION = 4;
+
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
   private static final double WHEEL_RADIUS_MAX_VELOCITY = 0.25; // Rad/Sec
@@ -92,6 +100,70 @@ public class DriveCommands {
         drive);
   }
 
+  // *Auto Aligns to the nearest reef pole */
+  public static Command autoAlignToReefCommand(Drive drive) {
+    // Create PID controller
+    ProfiledPIDController angleController =
+        new ProfiledPIDController(
+            ANGLE_KP,
+            0.0,
+            ANGLE_KD,
+            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+    angleController.enableContinuousInput(-Math.PI, Math.PI);
+
+    ProfiledPIDController driveXController =
+        new ProfiledPIDController(
+            DRIVE_KP,
+            0.0,
+            DRIVE_KD,
+            new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+
+    ProfiledPIDController driveYController =
+        new ProfiledPIDController(
+            DRIVE_KP,
+            0.0,
+            DRIVE_KD,
+            new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+
+    // Construct command
+    return Commands.run(
+            () -> {
+              Pose2d closestReef = drive.getPose().nearest(Arrays.asList(coralScoringLocations));
+              Logger.recordOutput("closestReef", closestReef);
+              // Calculate angular speed
+              double omega =
+                  angleController.calculate(
+                      drive.getRotation().getRadians(), (closestReef.getRotation().getRadians()));
+
+              double driveX =
+                  driveXController.calculate(drive.getPose().getX(), closestReef.getX());
+
+              double driveY =
+                  driveYController.calculate(drive.getPose().getY(), closestReef.getY());
+
+              // Convert to field relative speeds & send command
+              ChassisSpeeds speeds = new ChassisSpeeds(driveX, driveY, omega);
+              boolean isFlipped =
+                  DriverStation.getAlliance().isPresent()
+                      && DriverStation.getAlliance().get() == Alliance.Red;
+              drive.runVelocity(
+                  ChassisSpeeds.fromFieldRelativeSpeeds(
+                      speeds,
+                      isFlipped
+                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
+                          : drive.getRotation()));
+            },
+            drive)
+
+        // Reset PID controller when command starts
+        .beforeStarting(
+            () -> {
+              angleController.reset(drive.getRotation().getRadians());
+              driveXController.reset(drive.getRotation().getRadians());
+              driveYController.reset(drive.getRotation().getRadians());
+            });
+  }
+
   /**
    * Field relative drive command using joystick for linear control and PID for angular control.
    * Possible use cases include snapping to an angle, aiming at a vision target, or controlling
@@ -123,117 +195,6 @@ public class DriveCommands {
               double omega =
                   angleController.calculate(
                       drive.getRotation().getRadians(), rotationSupplier.get().getRadians());
-
-              // Convert to field relative speeds & send command
-              ChassisSpeeds speeds =
-                  new ChassisSpeeds(
-                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                      omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
-              drive.runVelocity(
-                  ChassisSpeeds.fromFieldRelativeSpeeds(
-                      speeds,
-                      isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                          : drive.getRotation()));
-            },
-            drive)
-
-        // Reset PID controller when command starts
-        .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
-  }
-
-  public static Command driveAimAtReefCommand(
-      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
-
-    // Create PID controller
-    ProfiledPIDController angleController =
-        new ProfiledPIDController(
-            ANGLE_KP,
-            0.0,
-            ANGLE_KD,
-            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
-    angleController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // Construct command
-    return Commands.run(
-            () -> {
-              // Get linear velocity
-              Translation2d linearVelocity =
-                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-
-              Pose2d closestTag = drive.getPose().nearest(Arrays.asList(reefTags));
-
-              // Calculate angular speed
-              double omega =
-                  angleController.calculate(
-                      drive.getRotation().getRadians(),
-                      (closestTag.getRotation().getRadians() + Math.PI));
-
-              // Convert to field relative speeds & send command
-              ChassisSpeeds speeds =
-                  new ChassisSpeeds(
-                      linearVelocity.getX() * drive.getMaxLinearSpeedMetersPerSec(),
-                      linearVelocity.getY() * drive.getMaxLinearSpeedMetersPerSec(),
-                      omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
-              drive.runVelocity(
-                  ChassisSpeeds.fromFieldRelativeSpeeds(
-                      speeds,
-                      isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                          : drive.getRotation()));
-            },
-            drive)
-
-        // Reset PID controller when command starts
-        .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
-  }
-
-  public static Command driveAimAtSourceCommand(
-      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier) {
-
-    // Create PID controller
-    ProfiledPIDController angleController =
-        new ProfiledPIDController(
-            ANGLE_KP,
-            0.0,
-            ANGLE_KD,
-            new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
-    angleController.enableContinuousInput(-Math.PI, Math.PI);
-
-    // Construct command
-    return Commands.run(
-            () -> {
-              // Get linear velocity
-              Translation2d linearVelocity =
-                  getLinearVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
-
-              Rotation2d sourceAngle = Rotation2d.fromDegrees(0);
-
-              if (drive.getPose().getY() >= Units.inchesToMeters(158.5)) {
-                if (drive.getPose().getX() <= Units.inchesToMeters(345.44)) {
-                  sourceAngle = Rotation2d.fromDegrees(306);
-                } else if (drive.getPose().getX() >= Units.inchesToMeters(345.44)) {
-                  sourceAngle = Rotation2d.fromDegrees(234);
-                }
-              } else if (drive.getPose().getY() < Units.inchesToMeters(158.5)) {
-                if (drive.getPose().getX() < Units.inchesToMeters(345.44)) {
-                  sourceAngle = Rotation2d.fromDegrees(54);
-                } else if (drive.getPose().getX() > Units.inchesToMeters(345.44)) {
-                  sourceAngle = Rotation2d.fromDegrees(126);
-                }
-              }
-
-              // Calculate angular speed
-              double omega =
-                  angleController.calculate(
-                      drive.getRotation().getRadians(), (sourceAngle.getRadians()));
 
               // Convert to field relative speeds & send command
               ChassisSpeeds speeds =
