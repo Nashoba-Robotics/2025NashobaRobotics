@@ -128,6 +128,8 @@ public class RobotContainer {
     autoChooser.addOption("Right side Score 1", new PathPlannerAuto("Score 1", false));
     autoChooser.addOption("Left side Score 2", new PathPlannerAuto("Score 2", true));
     autoChooser.addOption("Right side Score 2", new PathPlannerAuto("Score 2", false));
+    autoChooser.addOption("Left side Score 3", new PathPlannerAuto("Score 3", true));
+    autoChooser.addOption("right side Score 3", new PathPlannerAuto("Score 3", false));
     autoChooser.addOption("Drive a foot", new PathPlannerAuto("Taxi"));
 
     // Configure the button bindings

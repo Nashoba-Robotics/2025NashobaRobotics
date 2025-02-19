@@ -28,7 +28,7 @@ public class Manipulator extends SubsystemBase {
     return run(() -> setPercentOutput(-0.8))
         .raceWith(new SuppliedWaitCommand(() -> 0.200))
         .andThen(
-            Commands.waitUntil(() -> inputs.velocityRadPerSec > -35.0),
+            Commands.waitUntil(() -> inputs.velocityRadPerSec > -375.0),
             new SuppliedWaitCommand(() -> 0.050))
         .finallyDo(() -> setPercentOutput(-0.05));
   }
