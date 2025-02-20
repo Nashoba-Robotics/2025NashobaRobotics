@@ -35,6 +35,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.wrist.Wrist;
+import java.util.Arrays;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -143,7 +144,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    driver.leftStick().whileTrue(DriveCommands.autoAlignToReefCommand(drive));
+    driver
+        .leftStick()
+        .whileTrue(
+            DriveCommands.autoAlignToReefCommand(
+                drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations))));
 
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));

@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.drive.Drive;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.DoubleSupplier;
@@ -100,88 +99,7 @@ public class DriveCommands {
         drive);
   }
 
-  // *Auto Aligns to the nearest reef pole */
-  // public static Command driveToPose(Drive drive, Supplier<Pose2d> pose) {
-
-  //   ProfiledPIDController angleController =
-  //       new ProfiledPIDController(
-  //           ANGLE_KP,
-  //           0.0,
-  //           ANGLE_KD,
-  //           new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
-
-  //   angleController.enableContinuousInput(-Math.PI, Math.PI);
-
-  //   ProfiledPIDController driveXController =
-  //       new ProfiledPIDController(
-  //           DRIVE_KP,
-  //           0.0,
-  //           DRIVE_KD,
-  //           new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
-
-  //   ProfiledPIDController driveYController =
-  //       new ProfiledPIDController(
-  //           DRIVE_KP,
-  //           0.0,
-  //           DRIVE_KD,
-  //           new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
-
-  //   angleController.setTolerance(0.05);
-
-  //   driveXController.setTolerance(0.03);
-  //   driveYController.setTolerance(0.03);
-
-  //   // Construct command
-  //   return Commands.run(
-  //           () -> {
-  //             Logger.recordOutput("setPose", pose.get());
-  //             // Calculate angular speed
-  //             double omega =
-  //                 angleController.calculate(
-  //                     drive.getRotation().getRadians(), (pose.get().getRotation().getRadians()));
-
-  //             double driveX = 0;
-  //             double driveY = 0;
-
-  //             double deltaX = pose.get().getX() - drive.getPose().getX();
-  //             double deltaY = pose.get().getY() - drive.getPose().getY();
-
-  //             // Rotate into reef coordinate frame
-  //             double x =
-  //                 deltaX * Math.cos(pose.get().getRotation().getRadians())
-  //                     + deltaY * Math.sin(pose.get().getRotation().getRadians());
-  //             double y =
-  //                 -deltaX * Math.sin(pose.get().getRotation().getRadians())
-  //                     + deltaY * Math.cos(pose.get().getRotation().getRadians());
-
-  //             if (!driveXController.atSetpoint()) driveX = driveXController.calculate(0, x);
-  //             else driveXController.reset(x);
-  //             if (!driveYController.atSetpoint()) driveY = driveYController.calculate(0, y);
-  //             else driveYController.reset(y);
-
-  //             // Rotate back into field relative coordinate frame
-  //             double fieldX =
-  //                 driveX * Math.cos(pose.get().getRotation().getRadians())
-  //                     - driveY * Math.sin(pose.get().getRotation().getRadians());
-  //             double fieldY =
-  //                 driveX * Math.sin(pose.get().getRotation().getRadians())
-  //                     + driveY * Math.cos(pose.get().getRotation().getRadians());
-  //             // Convert to field relative speeds & send command
-  //             ChassisSpeeds speeds = new ChassisSpeeds(fieldX, fieldY, omega);
-  //             drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
-  // drive.getRotation()));
-  //           },
-  //           drive)
-
-  //       // Reset PID controller when command starts
-  //       .beforeStarting(
-  //           () -> {
-  //             angleController.reset(drive.getRotation().getRadians());
-  //             driveXController.reset(drive.getPose().getX());
-  //             driveYController.reset(drive.getPose().getY());
-  //           });
-  // }
-  public static Command autoAlignToReefCommand(Drive drive) {
+  public static Command autoAlignToReefCommand(Drive drive, Supplier<Pose2d> pose) {
     // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(
@@ -208,32 +126,20 @@ public class DriveCommands {
     // Construct command
     return Commands.run(
             () -> {
-              Pose2d closestReef = drive.getPose().nearest(Arrays.asList(coralScoringLocations));
-
-              Logger.recordOutput("closestReef", closestReef);
+              Logger.recordOutput("setPoint", pose.get());
 
               // Calculate angular speed
               double omega =
                   angleController.calculate(
-                      drive.getRotation().getRadians(), (closestReef.getRotation().getRadians()));
+                      drive.getRotation().getRadians(), (pose.get().getRotation().getRadians()));
 
-              double driveX =
-                  driveXController.calculate(drive.getPose().getX(), closestReef.getX());
+              double driveX = driveXController.calculate(drive.getPose().getX(), pose.get().getX());
 
-              double driveY =
-                  driveYController.calculate(drive.getPose().getY(), closestReef.getY());
+              double driveY = driveYController.calculate(drive.getPose().getY(), pose.get().getY());
 
               // Convert to field relative speeds & send command
-              ChassisSpeeds speeds = new ChassisSpeeds(-driveX, -driveY, omega);
-              boolean isFlipped =
-                  DriverStation.getAlliance().isPresent()
-                      && DriverStation.getAlliance().get() == Alliance.Red;
-              drive.runVelocity(
-                  ChassisSpeeds.fromFieldRelativeSpeeds(
-                      speeds,
-                      isFlipped
-                          ? drive.getRotation().plus(new Rotation2d(Math.PI))
-                          : drive.getRotation()));
+              ChassisSpeeds speeds = new ChassisSpeeds(driveX, driveY, omega);
+              drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, drive.getRotation()));
             },
             drive)
 
