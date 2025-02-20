@@ -35,10 +35,10 @@ public class DriveCommands {
   private static final double ANGLE_MAX_VELOCITY = 16.0;
   private static final double ANGLE_MAX_ACCELERATION = 30.0;
 
-  private static final double DRIVE_KP = 5;
+  private static final double DRIVE_KP = 6;
   private static final double DRIVE_KD = 0.5;
   private static final double DRIVE_MAX_VELOCITY = 4;
-  private static final double DRIVE_MAX_ACCELERATION = 4;
+  private static final double DRIVE_MAX_ACCELERATION = 10;
 
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
@@ -101,6 +101,86 @@ public class DriveCommands {
   }
 
   // *Auto Aligns to the nearest reef pole */
+  // public static Command driveToPose(Drive drive, Supplier<Pose2d> pose) {
+
+  //   ProfiledPIDController angleController =
+  //       new ProfiledPIDController(
+  //           ANGLE_KP,
+  //           0.0,
+  //           ANGLE_KD,
+  //           new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+
+  //   angleController.enableContinuousInput(-Math.PI, Math.PI);
+
+  //   ProfiledPIDController driveXController =
+  //       new ProfiledPIDController(
+  //           DRIVE_KP,
+  //           0.0,
+  //           DRIVE_KD,
+  //           new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+
+  //   ProfiledPIDController driveYController =
+  //       new ProfiledPIDController(
+  //           DRIVE_KP,
+  //           0.0,
+  //           DRIVE_KD,
+  //           new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+
+  //   angleController.setTolerance(0.05);
+
+  //   driveXController.setTolerance(0.03);
+  //   driveYController.setTolerance(0.03);
+
+  //   // Construct command
+  //   return Commands.run(
+  //           () -> {
+  //             Logger.recordOutput("setPose", pose.get());
+  //             // Calculate angular speed
+  //             double omega =
+  //                 angleController.calculate(
+  //                     drive.getRotation().getRadians(), (pose.get().getRotation().getRadians()));
+
+  //             double driveX = 0;
+  //             double driveY = 0;
+
+  //             double deltaX = pose.get().getX() - drive.getPose().getX();
+  //             double deltaY = pose.get().getY() - drive.getPose().getY();
+
+  //             // Rotate into reef coordinate frame
+  //             double x =
+  //                 deltaX * Math.cos(pose.get().getRotation().getRadians())
+  //                     + deltaY * Math.sin(pose.get().getRotation().getRadians());
+  //             double y =
+  //                 -deltaX * Math.sin(pose.get().getRotation().getRadians())
+  //                     + deltaY * Math.cos(pose.get().getRotation().getRadians());
+
+  //             if (!driveXController.atSetpoint()) driveX = driveXController.calculate(0, x);
+  //             else driveXController.reset(x);
+  //             if (!driveYController.atSetpoint()) driveY = driveYController.calculate(0, y);
+  //             else driveYController.reset(y);
+
+  //             // Rotate back into field relative coordinate frame
+  //             double fieldX =
+  //                 driveX * Math.cos(pose.get().getRotation().getRadians())
+  //                     - driveY * Math.sin(pose.get().getRotation().getRadians());
+  //             double fieldY =
+  //                 driveX * Math.sin(pose.get().getRotation().getRadians())
+  //                     + driveY * Math.cos(pose.get().getRotation().getRadians());
+  //             // Convert to field relative speeds & send command
+  //             ChassisSpeeds speeds = new ChassisSpeeds(fieldX, fieldY, omega);
+  //             drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds,
+  // drive.getRotation()));
+  //           },
+  //           drive)
+
+  //       // Reset PID controller when command starts
+  //       .beforeStarting(
+  //           () -> {
+  //             angleController.reset(drive.getRotation().getRadians());
+  //             driveXController.reset(drive.getPose().getX());
+  //             driveYController.reset(drive.getPose().getY());
+  //           });
+  // }
   public static Command autoAlignToReefCommand(Drive drive) {
     // Create PID controller
     ProfiledPIDController angleController =
@@ -129,7 +209,9 @@ public class DriveCommands {
     return Commands.run(
             () -> {
               Pose2d closestReef = drive.getPose().nearest(Arrays.asList(coralScoringLocations));
+
               Logger.recordOutput("closestReef", closestReef);
+
               // Calculate angular speed
               double omega =
                   angleController.calculate(
@@ -142,7 +224,7 @@ public class DriveCommands {
                   driveYController.calculate(drive.getPose().getY(), closestReef.getY());
 
               // Convert to field relative speeds & send command
-              ChassisSpeeds speeds = new ChassisSpeeds(driveX, driveY, omega);
+              ChassisSpeeds speeds = new ChassisSpeeds(-driveX, -driveY, omega);
               boolean isFlipped =
                   DriverStation.getAlliance().isPresent()
                       && DriverStation.getAlliance().get() == Alliance.Red;
@@ -159,8 +241,8 @@ public class DriveCommands {
         .beforeStarting(
             () -> {
               angleController.reset(drive.getRotation().getRadians());
-              driveXController.reset(drive.getRotation().getRadians());
-              driveYController.reset(drive.getRotation().getRadians());
+              driveXController.reset(drive.getPose().getX());
+              driveYController.reset(drive.getPose().getY());
             });
   }
 
@@ -175,13 +257,13 @@ public class DriveCommands {
       DoubleSupplier ySupplier,
       Supplier<Rotation2d> rotationSupplier) {
 
-    // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(
             ANGLE_KP,
             0.0,
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
+
     angleController.enableContinuousInput(-Math.PI, Math.PI);
 
     // Construct command
