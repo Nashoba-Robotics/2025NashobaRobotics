@@ -25,13 +25,17 @@ public class Elevator extends SubsystemBase {
     Logger.recordOutput("Elevator setpoint", setpointMeters);
   }
 
-  public void setExtension(double setpointMeters) {
+  public void runExtension(double setpointMeters) {
     this.setpointMeters = setpointMeters;
-    io.setSetpoint(setpointMeters / Constants.Elevator.PULLY_RAIDUS);
+    io.runPosition(setpointMeters / Constants.Elevator.PULLY_RAIDUS);
   }
 
-  public void setDutyCycle(double percent) {
-    io.setDutyCycle(percent);
+  public void runDutyCycle(double percent) {
+    io.runDutyCycle(percent);
+  }
+
+  public void runVoltage(double voltage) {
+    io.runVoltage(voltage);
   }
 
   public double getPositionMeters() {
@@ -40,10 +44,6 @@ public class Elevator extends SubsystemBase {
 
   public double getSetpointMeters() {
     return setpointMeters;
-  }
-
-  public void setVoltage(double voltage) {
-    io.setVoltage(voltage);
   }
 
   public void zeroElevator() {
@@ -58,21 +58,21 @@ public class Elevator extends SubsystemBase {
     return getPositionMeters() > 0.50;
   }
 
-  public Command setSetpointCommand(double setpointMeters) {
-    return run(() -> setExtension(setpointMeters))
+  public Command runSetpointCommand(double setpointMeters) {
+    return run(() -> runExtension(setpointMeters))
         .until(
             () ->
                 Util.epsilonEquals(
                     getPositionMeters(), setpointMeters, Constants.Elevator.ELEVATOR_TOLERANCE));
   }
 
-  public Command setExtensionCommand(double setpointMeters, double thresholdMeters) {
-    return run(() -> setExtension(setpointMeters))
+  public Command runExtensionCommand(double setpointMeters, double thresholdMeters) {
+    return run(() -> runExtension(setpointMeters))
         .until(() -> getPositionMeters() >= thresholdMeters);
   }
 
-  public Command setTuckCommand(double setpointMeters, double thresholdMeters) {
-    return run(() -> setExtension(setpointMeters))
+  public Command runTuckCommand(double setpointMeters, double thresholdMeters) {
+    return run(() -> runExtension(setpointMeters))
         .until(() -> getPositionMeters() <= thresholdMeters);
   }
 

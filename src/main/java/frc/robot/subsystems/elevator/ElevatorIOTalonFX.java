@@ -74,8 +74,8 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   }
 
   @Override
-  public void setSetpoint(double setpointRads) {
-    leader.setControl(new MotionMagicDutyCycle(Units.radiansToRotations(setpointRads)));
+  public void runPosition(double positionRads) {
+    leader.setControl(new MotionMagicDutyCycle(Units.radiansToRotations(positionRads)));
   }
 
   @Override
@@ -84,12 +84,12 @@ public class ElevatorIOTalonFX implements ElevatorIO {
   }
 
   @Override
-  public void setDutyCycle(double percent) {
+  public void runDutyCycle(double percent) {
     leader.setControl(new DutyCycleOut(percent));
   }
 
   @Override
-  public void setVoltage(double voltage) {
+  public void runVoltage(double voltage) {
     leader.setControl(new VoltageOut(voltage));
   }
 

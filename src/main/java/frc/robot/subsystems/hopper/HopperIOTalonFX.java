@@ -1,4 +1,4 @@
-package frc.robot.subsystems.manipulator;
+package frc.robot.subsystems.hopper;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -8,12 +8,12 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
-public class ManipulatorIOTalonFX implements ManipulatorIO {
-  private final TalonFX manipulator;
+public class HopperIOTalonFX implements HopperIO {
+  private final TalonFX hopper;
   private final TalonFXConfiguration config;
 
-  public ManipulatorIOTalonFX() {
-    manipulator = new TalonFX(Constants.Manipulator.MANIPULATOR_ID, Constants.Manipulator.CANBUS);
+  public HopperIOTalonFX() {
+    hopper = new TalonFX(Constants.Hopper.HOPPER_ID, Constants.Hopper.CANBUS);
     config = new TalonFXConfiguration();
 
     config.CurrentLimits.StatorCurrentLimitEnable = true;
@@ -25,24 +25,23 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
     config.Feedback.SensorToMechanismRatio = Constants.Manipulator.GEAR_RATIO;
 
     config.MotorOutput.Inverted = Constants.Manipulator.INVERTED;
-    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-    manipulator.getConfigurator().apply(config);
+    hopper.getConfigurator().apply(config);
   }
 
   @Override
-  public void updateInputs(ManipulatorIOInputs inputs) {
-    inputs.connected = manipulator.isConnected();
-    inputs.velocityRadPerSec =
-        Units.rotationsToRadians(manipulator.getVelocity().getValueAsDouble());
-    inputs.appliedVolts = manipulator.getMotorVoltage().getValueAsDouble();
-    inputs.supplyCurrentAmps = manipulator.getSupplyCurrent().getValueAsDouble();
-    inputs.statorCurrentAmps = manipulator.getStatorCurrent().getValueAsDouble();
-    inputs.tempCelsius = manipulator.getDeviceTemp().getValueAsDouble();
+  public void updateInputs(HopperIOInputs inputs) {
+    inputs.connected = hopper.isConnected();
+    inputs.velocityRadPerSec = Units.rotationsToRadians(hopper.getVelocity().getValueAsDouble());
+    inputs.appliedVolts = hopper.getMotorVoltage().getValueAsDouble();
+    inputs.supplyCurrentAmps = hopper.getSupplyCurrent().getValueAsDouble();
+    inputs.statorCurrentAmps = hopper.getStatorCurrent().getValueAsDouble();
+    inputs.tempCelsius = hopper.getDeviceTemp().getValueAsDouble();
   }
 
   @Override
   public void runPercentOutput(double percent) {
-    manipulator.setControl(new DutyCycleOut(percent));
+    hopper.setControl(new DutyCycleOut(percent));
   }
 }

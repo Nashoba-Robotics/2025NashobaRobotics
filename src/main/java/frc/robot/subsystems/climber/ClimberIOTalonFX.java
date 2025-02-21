@@ -2,7 +2,6 @@ package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -16,7 +15,6 @@ public class ClimberIOTalonFX implements ClimberIO {
   private final TalonFXConfiguration grabberConfig;
 
   private final MotionMagicDutyCycle angleControl = new MotionMagicDutyCycle(0);
-  private final VoltageOut voltageControl = new VoltageOut(0);
 
   public ClimberIOTalonFX() {
     pivot = new TalonFX(Constants.Climber.PIVOT_ID, Constants.Climber.CANBUS);
@@ -80,18 +78,13 @@ public class ClimberIOTalonFX implements ClimberIO {
   }
 
   @Override
-  public void setPivotSetpoint(double setpointRads) {
+  public void runSetpoint(double setpointRads) {
     pivot.setControl(angleControl.withPosition(Units.radiansToRotations(setpointRads)));
   }
 
   @Override
-  public void setGrabberVoltage(double setpointVoltage) {
-    grabber.setControl(voltageControl.withOutput(setpointVoltage));
-  }
-
-  @Override
-  public void setPivotPosition(double rads) {
-    pivot.setPosition(Units.radiansToRotations(rads));
+  public void setPosition(double angleRads) {
+    pivot.setPosition(Units.radiansToRotations(angleRads));
   }
 
   @Override

@@ -20,28 +20,28 @@ public class Manipulator extends SubsystemBase {
     Logger.processInputs("Manipulator", inputs);
   }
 
-  public void setPercentOutput(double setpointPercent) {
-    io.setPercentOutput(setpointPercent);
+  public void runPercentOutput(double setpointPercent) {
+    io.runPercentOutput(setpointPercent);
   }
 
   public Command intakeCommand() {
-    return run(() -> setPercentOutput(-0.8))
+    return run(() -> runPercentOutput(-0.8))
         .raceWith(new SuppliedWaitCommand(() -> 0.200))
         .andThen(
             Commands.waitUntil(() -> inputs.velocityRadPerSec > -375.0),
             new SuppliedWaitCommand(() -> 0.050))
-        .finallyDo(() -> setPercentOutput(-0.05));
+        .finallyDo(() -> runPercentOutput(-0.05));
   }
 
   public Command ejectCommand() {
-    return run(() -> setPercentOutput(1.0))
+    return run(() -> runPercentOutput(1.0))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
-        .finallyDo(() -> setPercentOutput(0));
+        .finallyDo(() -> runPercentOutput(0));
   }
 
   public Command L1ejectCommand() {
-    return run(() -> setPercentOutput(0.75))
+    return run(() -> runPercentOutput(0.75))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
-        .finallyDo(() -> setPercentOutput(0));
+        .finallyDo(() -> runPercentOutput(0));
   }
 }

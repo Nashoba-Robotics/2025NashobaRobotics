@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import static frc.robot.subsystems.vision.VisionConstants.*;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -99,7 +97,7 @@ public class DriveCommands {
         drive);
   }
 
-  public static Command autoAlignToReefCommand(Drive drive, Supplier<Pose2d> pose) {
+  public static Command driveToPose(Drive drive, Supplier<Pose2d> pose) {
     // Create PID controller
     ProfiledPIDController angleController =
         new ProfiledPIDController(

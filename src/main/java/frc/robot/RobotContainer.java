@@ -115,7 +115,7 @@ public class RobotContainer {
     // // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    NamedCommands.registerCommand("L2Prep", superstructure.scoreL2Coral());
+    NamedCommands.registerCommand("L2Prep", superstructure.setL2Coral());
     NamedCommands.registerCommand("CoralScore", manipulator.ejectCommand());
     NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
     NamedCommands.registerCommand("Intake", manipulator.intakeCommand());
@@ -147,7 +147,7 @@ public class RobotContainer {
     driver
         .leftStick()
         .whileTrue(
-            DriveCommands.autoAlignToReefCommand(
+            DriveCommands.driveToPose(
                 drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations))));
 
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
@@ -191,34 +191,34 @@ public class RobotContainer {
                     manipulator
                         .intakeCommand()
                         .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
+    coral
+        .and(prepHeight)
+        .and(operator.x())
+        .onTrue(
+            superstructure
+                .setL1Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
     coral
         .and(prepHeight)
         .and(operator.a())
         .onTrue(
             superstructure
-                .scoreL2Coral()
+                .setL2Coral()
                 .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
     coral
         .and(prepHeight)
         .and(operator.b())
         .onTrue(
             superstructure
-                .scoreL3Coral()
+                .setL3Coral()
                 .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
     coral
         .and(prepHeight)
         .and(operator.y())
         .onTrue(
             superstructure
-                .scoreL4Coral()
-                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
-    coral
-        .and(prepHeight)
-        .and(operator.x())
-        .onTrue(
-            superstructure
-                .scoreL1Coral()
+                .setL4Coral()
                 .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
     // // // Default command, normal field-relative drive

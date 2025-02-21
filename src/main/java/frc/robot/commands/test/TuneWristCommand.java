@@ -35,7 +35,7 @@ public class TuneWristCommand extends Command {
       lastkD = kD.get();
     }
 
-    wrist.setSetpoint(positionRad.get());
+    wrist.runSetpoint(positionRad.get());
   }
 
   @Override

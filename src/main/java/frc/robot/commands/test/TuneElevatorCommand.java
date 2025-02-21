@@ -36,7 +36,7 @@ public class TuneElevatorCommand extends Command {
       lastkD = kD.get();
     }
 
-    elevator.setExtension(ExtensionMeters.get());
+    elevator.runExtension(ExtensionMeters.get());
   }
 
   @Override

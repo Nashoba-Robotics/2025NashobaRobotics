@@ -78,12 +78,12 @@ public class WristIOTalonFX implements WristIO {
   }
 
   @Override
-  public void setSetpoint(double setpointRads) {
+  public void runSetpoint(double setpointRads) {
     wrist.setControl(motionMagic.withPosition(Units.radiansToRotations(setpointRads)));
   }
 
   @Override
-  public void setDutyCycle(double percent) {
+  public void runDutyCycle(double percent) {
     wrist.setControl(new DutyCycleOut(percent));
   }
 
