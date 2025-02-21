@@ -22,6 +22,7 @@ import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -30,6 +31,7 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.drive.generated.TunerConstants;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.manipulator.Manipulator;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
@@ -45,12 +47,15 @@ public class RobotContainer {
   private final Elevator elevator;
   private final Wrist wrist;
   private final Manipulator manipulator;
+  private final Hopper hopper;
+  private final Climber climber;
+
 
   private final Superstructure superstructure;
 
   // // Controller
-  public final CommandXboxController driver = new CommandXboxController(0);
-  public final CommandXboxController operator = new CommandXboxController(1);
+  public static final CommandXboxController driver = new CommandXboxController(0);
+  public static final CommandXboxController operator = new CommandXboxController(1);
 
   private Trigger algae = operator.rightTrigger(0.65);
   private Trigger coral = operator.leftTrigger(0.65);
@@ -64,8 +69,10 @@ public class RobotContainer {
     elevator = new Elevator();
     wrist = new Wrist();
     manipulator = new Manipulator();
+    hopper = new Hopper();
+    climber = new Climber();
 
-    superstructure = new Superstructure(elevator, wrist);
+    superstructure = new Superstructure(elevator, wrist, manipulator, hopper, climber);
 
     switch (Constants.currentMode) {
       case REAL:
