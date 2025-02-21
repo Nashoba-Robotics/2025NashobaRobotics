@@ -65,6 +65,9 @@ public final class Constants {
   public static final class Manipulator {
     public static final String CANBUS = "rio";
     public static final int MANIPULATOR_ID = 12;
+    public static final int SENSOR_ID = 0;
+
+    public static final double SENSOR_DISTANCE_THRESHOLD = 0.0;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 

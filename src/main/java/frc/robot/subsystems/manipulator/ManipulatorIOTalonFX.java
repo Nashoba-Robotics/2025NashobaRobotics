@@ -5,6 +5,9 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
@@ -12,9 +15,20 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
   private final TalonFX manipulator;
   private final TalonFXConfiguration config;
 
+  private final LaserCan sensor;
+
   public ManipulatorIOTalonFX() {
     manipulator = new TalonFX(Constants.Manipulator.MANIPULATOR_ID, Constants.Manipulator.CANBUS);
     config = new TalonFXConfiguration();
+
+    sensor = new LaserCan(Constants.Manipulator.SENSOR_ID);
+    try {
+      sensor.setRangingMode(LaserCan.RangingMode.SHORT);
+      sensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+      sensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
+    } catch (ConfigurationFailedException e) {
+      System.out.println("Configuration failed! " + e);
+    }
 
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -28,6 +42,7 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     manipulator.getConfigurator().apply(config);
+
   }
 
   @Override
@@ -39,6 +54,8 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
     inputs.supplyCurrentAmps = manipulator.getSupplyCurrent().getValueAsDouble();
     inputs.statorCurrentAmps = manipulator.getStatorCurrent().getValueAsDouble();
     inputs.tempCelsius = manipulator.getDeviceTemp().getValueAsDouble();
+
+    inputs.coralPresent = (sensor.getMeasurement() != null && sensor.getMeasurement().distance_mm <= Constants.Manipulator.SENSOR_DISTANCE_THRESHOLD);
   }
 
   @Override

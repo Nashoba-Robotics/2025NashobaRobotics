@@ -159,7 +159,6 @@ public class RobotContainer {
     driver.leftTrigger(0.65).whileTrue(manipulator.intakeCommand());
     driver.rightTrigger(0.65).onTrue(manipulator.ejectCommand());
     driver.leftBumper().onTrue(superstructure.setNeutral());
-    driver.y().onTrue(manipulator.L1ejectCommand());
 
     algae
         .and(prepHeight)
