@@ -24,11 +24,9 @@ public interface ClimberIO {
 
   public default void updateInputs(ClimberIOInputs inputs) {}
 
-  public default void setPivotSetpoint(double setpointRads) {}
+  public default void runSetpoint(double setpointRads) {}
 
-  public default void setGrabberVoltage(double setpointVoltage) {}
-
-  public default void setPivotPosition(double angle) {}
+  public default void setPosition(double angleRads) {}
 
   public default void setkV(double kV) {}
 

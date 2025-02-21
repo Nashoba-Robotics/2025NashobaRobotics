@@ -1,22 +1,20 @@
-package frc.robot.subsystems.manipulator;
+package frc.robot.subsystems.hopper;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ManipulatorIO {
+public interface HopperIO {
 
   @AutoLog
-  public static class ManipulatorIOInputs {
+  public static class HopperIOInputs {
     public boolean connected = false;
     public double velocityRadPerSec = 0.0;
     public double appliedVolts = 0.0;
     public double supplyCurrentAmps = 0.0;
     public double statorCurrentAmps = 0.0;
     public double tempCelsius = 0.0;
-
-    public boolean coralPresent = false;
   }
 
-  public default void updateInputs(ManipulatorIOInputs inputs) {}
+  public default void updateInputs(HopperIOInputs inputs) {}
 
   public default void runPercentOutput(double percent) {}
 }

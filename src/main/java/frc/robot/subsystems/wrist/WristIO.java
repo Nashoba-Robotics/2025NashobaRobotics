@@ -17,7 +17,9 @@ public interface WristIO {
 
   public default void updateInputs(WristIOInputs inputs) {}
 
-  public default void setSetpoint(double setpointRads) {}
+  public default void runSetpoint(double setpointRads) {}
+
+  public default void runDutyCycle(double percent) {}
 
   public default void stop() {}
 

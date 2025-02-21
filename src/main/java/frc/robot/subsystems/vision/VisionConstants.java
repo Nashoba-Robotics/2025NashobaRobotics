@@ -19,76 +19,24 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
   // AprilTag layout
   public static AprilTagFieldLayout aprilTagLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-
-  // Reef tags #6-11 and #17-22
-  public static Pose2d[] reefTags =
-      new Pose2d[] {
-        new Pose2d(
-            Units.inchesToMeters(530.49),
-            Units.inchesToMeters(130.17),
-            Rotation2d.fromDegrees(300)), // 6
-        new Pose2d(
-            Units.inchesToMeters(546.87),
-            Units.inchesToMeters(158.50),
-            Rotation2d.fromDegrees(0)), // 7
-        new Pose2d(
-            Units.inchesToMeters(530.49),
-            Units.inchesToMeters(186.83),
-            Rotation2d.fromDegrees(60)), // 8
-        new Pose2d(
-            Units.inchesToMeters(497.77),
-            Units.inchesToMeters(186.83),
-            Rotation2d.fromDegrees(120)), // 9
-        new Pose2d(
-            Units.inchesToMeters(481.39),
-            Units.inchesToMeters(158.50),
-            Rotation2d.fromDegrees(180)), // 10
-        new Pose2d(
-            Units.inchesToMeters(497.77),
-            Units.inchesToMeters(130.17),
-            Rotation2d.fromDegrees(240)), // 11
-        new Pose2d(
-            Units.inchesToMeters(160.39),
-            Units.inchesToMeters(130.17),
-            Rotation2d.fromDegrees(240)), // 17
-        new Pose2d(
-            Units.inchesToMeters(144.00),
-            Units.inchesToMeters(158.50),
-            Rotation2d.fromDegrees(180)), // 18
-        new Pose2d(
-            Units.inchesToMeters(160.39),
-            Units.inchesToMeters(186.83),
-            Rotation2d.fromDegrees(120)), // 19
-        new Pose2d(
-            Units.inchesToMeters(193.10),
-            Units.inchesToMeters(186.83),
-            Rotation2d.fromDegrees(60)), // 20
-        new Pose2d(
-            Units.inchesToMeters(209.49),
-            Units.inchesToMeters(158.50),
-            Rotation2d.fromDegrees(0)), // 21
-        new Pose2d(
-            Units.inchesToMeters(193.10),
-            Units.inchesToMeters(130.17),
-            Rotation2d.fromDegrees(300)) // 22
-      };
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
   // Camera names, must match names configured on coprocessor
-  public static String camera0Name = "camera_0";
-  public static String camera1Name = "camera_1";
+  public static String camera0Name = "FrontLeft";
+  public static String camera1Name = "FrontRight";
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
   public static Transform3d robotToCamera0 =
-      new Transform3d(0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, 0.0));
+      new Transform3d(-0.1524, 0.3429, 0.34925, new Rotation3d(0.0, 0.0, 0.0));
   public static Transform3d robotToCamera1 =
-      new Transform3d(-0.2, 0.0, 0.2, new Rotation3d(0.0, -0.4, Math.PI));
+      new Transform3d(0.1524, 0.3429, 0.34925, new Rotation3d(0.0, 0.0, 0.0));
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.3;
@@ -107,8 +55,41 @@ public class VisionConstants {
         1.0 // Camera 1
       };
 
-  // Multipliers to apply for MegaTag 2 observations
-  public static double linearStdDevMegatag2Factor = 0.5; // More stable than full 3D solve
-  public static double angularStdDevMegatag2Factor =
-      Double.POSITIVE_INFINITY; // No rotation data available
+  public static final Translation2d centerBlue =
+      new Translation2d(Units.inchesToMeters(176.746), aprilTagLayout.getFieldWidth() / 2.0);
+  public static final Pose2d rightBlueBranch = new Pose2d(3.20, 3.86, Rotation2d.fromDegrees(0));
+  public static final Pose2d leftBlueBranch = new Pose2d(3.20, 4.19, Rotation2d.fromDegrees(0));
+
+  public static final Translation2d centerRed =
+      new Translation2d(Units.inchesToMeters(514.129), aprilTagLayout.getFieldWidth() / 2);
+  public static final Pose2d rightRedBranch = new Pose2d(11.77, 3.86, Rotation2d.fromDegrees(0));
+  public static final Pose2d leftRedBranch = new Pose2d(11.77, 4.19, Rotation2d.fromDegrees(0));
+
+  public static Pose2d[] coralScoringLocations =
+      new Pose2d[] {
+        rightBlueBranch,
+        leftBlueBranch,
+        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(60)),
+        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(60)),
+        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(120)),
+        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(120)),
+        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(180)),
+        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(180)),
+        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(240)),
+        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(240)),
+        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(300)),
+        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(300)),
+        rightRedBranch,
+        leftRedBranch,
+        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(60)),
+        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(60)),
+        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(120)),
+        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(120)),
+        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(180)),
+        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(180)),
+        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(240)),
+        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(240)),
+        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(300)),
+        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(300)),
+      };
 }

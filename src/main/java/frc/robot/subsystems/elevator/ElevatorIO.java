@@ -25,13 +25,13 @@ public interface ElevatorIO {
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public default void setSetpoint(double setpointRotations) {}
+  public default void runPosition(double positionRads) {}
+
+  public default void runDutyCycle(double percent) {}
+
+  public default void runVoltage(double volts) {}
 
   public default void setPosition(double meters) {}
-
-  public default void setDutyCycle(double percent) {}
-
-  public default void setVoltage(double volts) {}
 
   public default void setkV(double kV) {}
 

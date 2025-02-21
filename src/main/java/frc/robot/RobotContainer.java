@@ -3,6 +3,7 @@ package frc.robot;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,10 +17,12 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ManualExtensionCommand;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
@@ -28,23 +31,31 @@ import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
 import frc.robot.subsystems.drive.generated.TunerConstants;
 import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.hopper.Hopper;
 import frc.robot.subsystems.manipulator.Manipulator;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.wrist.Wrist;
+import java.util.Arrays;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  //   private final Vision vision;
+  private final Vision vision;
   private final Elevator elevator;
   private final Wrist wrist;
   private final Manipulator manipulator;
+  private final Hopper hopper;
+  private final Climber climber;
+
 
   private final Superstructure superstructure;
 
   // // Controller
-  public final CommandXboxController driver = new CommandXboxController(0);
-  public final CommandXboxController operator = new CommandXboxController(1);
+  public static final CommandXboxController driver = new CommandXboxController(0);
+  public static final CommandXboxController operator = new CommandXboxController(1);
 
   private Trigger algae = operator.rightTrigger(0.65);
   private Trigger coral = operator.leftTrigger(0.65);
@@ -55,12 +66,13 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
     elevator = new Elevator();
     wrist = new Wrist();
     manipulator = new Manipulator();
+    hopper = new Hopper();
+    climber = new Climber();
 
-    superstructure = new Superstructure(elevator, wrist);
+    superstructure = new Superstructure(elevator, wrist, manipulator, hopper, climber);
 
     switch (Constants.currentMode) {
       case REAL:
@@ -73,11 +85,11 @@ public class RobotContainer {
                 new ModuleIOTalonFX(TunerConstants.BackLeft),
                 new ModuleIOTalonFX(TunerConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVision(camera0Name, robotToCamera0),
-        //         new VisionIOPhotonVision(camera1Name, robotToCamera1));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                new VisionIOPhotonVision(camera1Name, robotToCamera1));
         break;
 
       case SIM:
@@ -90,10 +102,7 @@ public class RobotContainer {
                 new ModuleIOSim(TunerConstants.BackLeft),
                 new ModuleIOSim(TunerConstants.BackRight));
 
-        // vision =
-        //     new Vision(
-        //         drive::addVisionMeasurement,
-        //         new VisionIOPhotonVisionSim(camera0Name, robotToCamera0, drive::getPose));
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
 
       default:
@@ -106,18 +115,29 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
 
-        // vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {}, new VisionIO() {});
         break;
     }
 
     // // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
+    NamedCommands.registerCommand("L2Prep", superstructure.setL2Coral());
+    NamedCommands.registerCommand("CoralScore", manipulator.ejectCommand());
+    NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
+    NamedCommands.registerCommand("Intake", manipulator.intakeCommand());
+
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption("Test Pathplanner", new PathPlannerAuto("Score 1", true));
+    autoChooser.addOption("Left side Score 1", new PathPlannerAuto("Score 1", true));
+    autoChooser.addOption("Right side Score 1", new PathPlannerAuto("Score 1", false));
+    autoChooser.addOption("Left side Score 2", new PathPlannerAuto("Score 2", true));
+    autoChooser.addOption("Right side Score 2", new PathPlannerAuto("Score 2", false));
+    autoChooser.addOption("Left side Score 3", new PathPlannerAuto("Score 3", true));
+    autoChooser.addOption("right side Score 3", new PathPlannerAuto("Score 3", false));
+    autoChooser.addOption("Drive a foot", new PathPlannerAuto("Taxi"));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -131,33 +151,81 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    driver
+        .leftStick()
+        .whileTrue(
+            DriveCommands.driveToPose(
+                drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations))));
+
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
+    SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
 
     driver.leftTrigger(0.65).onTrue(superstructure.setIntake());
     driver.leftTrigger(0.65).whileTrue(manipulator.intakeCommand());
     driver.rightTrigger(0.65).onTrue(manipulator.ejectCommand());
     driver.leftBumper().onTrue(superstructure.setNeutral());
-    driver.y().onTrue(manipulator.L1ejectCommand());
 
     algae
         .and(prepHeight)
         .and(operator.a())
-        .onTrue(superstructure.setL2Algae().andThen(manipulator.intakeCommand()));
+        .onTrue(
+            superstructure
+                .setL2Algae()
+                .andThen(
+                    manipulator
+                        .intakeCommand()
+                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
     algae
         .and(prepHeight)
         .and(operator.b())
-        .onTrue(superstructure.setL3Algae().andThen(manipulator.intakeCommand()));
+        .onTrue(
+            superstructure
+                .setL3Algae()
+                .andThen(
+                    manipulator
+                        .intakeCommand()
+                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
     algae
         .and(prepHeight)
         .and(operator.y())
-        .onTrue(superstructure.setBargeAlgae().andThen(manipulator.intakeCommand()));
+        .onTrue(
+            superstructure
+                .setBargeAlgae()
+                .andThen(
+                    manipulator
+                        .intakeCommand()
+                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
+    coral
+        .and(prepHeight)
+        .and(operator.x())
+        .onTrue(
+            superstructure
+                .setL1Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
-    coral.and(prepHeight).and(operator.a()).onTrue(superstructure.scoreL2Coral());
-    coral.and(prepHeight).and(operator.b()).onTrue(superstructure.scoreL3Coral());
-    coral.and(prepHeight).and(operator.y()).onTrue(superstructure.scoreL4Coral());
-    coral.and(prepHeight).and(operator.x()).onTrue(superstructure.scoreL1Coral());
+    coral
+        .and(prepHeight)
+        .and(operator.a())
+        .onTrue(
+            superstructure
+                .setL2Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    coral
+        .and(prepHeight)
+        .and(operator.b())
+        .onTrue(
+            superstructure
+                .setL3Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    coral
+        .and(prepHeight)
+        .and(operator.y())
+        .onTrue(
+            superstructure
+                .setL4Coral()
+                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(

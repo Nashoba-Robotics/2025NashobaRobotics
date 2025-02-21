@@ -18,16 +18,12 @@ public class Climber extends SubsystemBase {
     Logger.processInputs("Climber", inputs);
   }
 
-  public void setPivotSetpoint(double setpointRads) {
-    io.setPivotSetpoint(setpointRads);
-  }
-
-  public void setGrabberVoltage(double setpointVoltage) {
-    io.setGrabberVoltage(setpointVoltage);
+  public void runSetpoint(double setpointRads) {
+    io.runSetpoint(setpointRads);
   }
 
   public void zeroClimber() {
-    io.setPivotPosition(0);
+    io.setPosition(0);
   }
 
   public void setPID(double kV, double kP, double kD) {

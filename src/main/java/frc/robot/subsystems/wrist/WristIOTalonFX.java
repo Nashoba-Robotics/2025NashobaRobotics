@@ -28,7 +28,7 @@ public class WristIOTalonFX implements WristIO {
     config = new TalonFXConfiguration();
     encoderConfig = new CANcoderConfiguration();
 
-    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+    encoderConfig.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.85;
     encoderConfig.MagnetSensor.SensorDirection = Constants.Wrist.ENCODER_INVERTED;
     encoderConfig.MagnetSensor.MagnetOffset =
         Units.radiansToRotations(Constants.Wrist.ENCODER_OFFSET_RADIANS);
@@ -78,12 +78,12 @@ public class WristIOTalonFX implements WristIO {
   }
 
   @Override
-  public void setSetpoint(double setpointRads) {
+  public void runSetpoint(double setpointRads) {
     wrist.setControl(motionMagic.withPosition(Units.radiansToRotations(setpointRads)));
   }
 
   @Override
-  public void setDutyCycle(double percent) {
+  public void runDutyCycle(double percent) {
     wrist.setControl(new DutyCycleOut(percent));
   }
 

@@ -15,7 +15,7 @@ public class ElevatorDutyCycleCommand extends Command {
 
   @Override
   public void execute() {
-    elevator.setVoltage(voltage.get());
+    elevator.runVoltage(voltage.get());
   }
 
   @Override

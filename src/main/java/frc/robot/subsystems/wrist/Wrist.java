@@ -21,15 +21,16 @@ public class Wrist extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Wrist", inputs);
+    Logger.recordOutput("Wristsetpoint", setpoint);
   }
 
-  public void setSetpoint(double setpointRads) {
+  public void runSetpoint(double setpointRads) {
     this.setpoint = setpointRads;
-    io.setSetpoint(setpointRads);
+    io.runSetpoint(setpointRads);
   }
 
-  public void setDutyCycle(double percent) {
-    io.setDutyCycle(percent);
+  public void runDutyCycle(double percent) {
+    io.runDutyCycle(percent);
   }
 
   public double getAngleRads() {
@@ -40,8 +41,8 @@ public class Wrist extends SubsystemBase {
     return setpoint;
   }
 
-  public Command setAngleCommand(double setpointRads) {
-    return run(() -> setSetpoint(setpointRads))
+  public Command runAngleCommand(double setpointRads) {
+    return run(() -> runSetpoint(setpointRads))
         .until(
             () ->
                 Util.epsilonEquals(
@@ -50,12 +51,12 @@ public class Wrist extends SubsystemBase {
                     Constants.Wrist.WRIST_TOLERANCE.getRadians()));
   }
 
-  public Command setExtensionCommand(double setpointRads, double thresholdRads) {
-    return run(() -> setSetpoint(setpointRads)).until(() -> getPositionRadians() >= thresholdRads);
+  public Command runExtensionCommand(double setpointRads, double thresholdRads) {
+    return run(() -> runSetpoint(setpointRads)).until(() -> getPositionRadians() >= thresholdRads);
   }
 
-  public Command setTuckCommand(double setpointRads, double thresholdRads) {
-    return run(() -> setSetpoint(setpointRads)).until(() -> getPositionRadians() <= thresholdRads);
+  public Command runTuckCommand(double setpointRads, double thresholdRads) {
+    return run(() -> runSetpoint(setpointRads)).until(() -> getPositionRadians() <= thresholdRads);
   }
 
   public double getPositionRadians() {
