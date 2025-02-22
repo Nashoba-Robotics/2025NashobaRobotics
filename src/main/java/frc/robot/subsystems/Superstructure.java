@@ -16,8 +16,8 @@ import frc.robot.subsystems.wrist.Wrist;
 
 public class Superstructure extends SubsystemBase {
   public enum SuperstructureGoal {
-    NEUTRAL(0, 0),
-    INTAKE(0, 0),
+    NEUTRAL(0, 0.05),
+    INTAKE(0, 0.05),
 
     L4CORALPREP(0, 0),
     L4CORAL(0, 0),
@@ -49,7 +49,8 @@ public class Superstructure extends SubsystemBase {
 
   private final CommandXboxController driver = RobotContainer.driver;
 
-  public Superstructure(Elevator elevator, Wrist wrist, Manipulator manipulator, Hopper hopper, Climber climber) {
+  public Superstructure(
+      Elevator elevator, Wrist wrist, Manipulator manipulator, Hopper hopper, Climber climber) {
     this.elevator = elevator;
     this.wrist = wrist;
     this.manipulator = manipulator;

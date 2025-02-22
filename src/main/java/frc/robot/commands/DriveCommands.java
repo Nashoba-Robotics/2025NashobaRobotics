@@ -31,11 +31,13 @@ public class DriveCommands {
   private static final double ANGLE_KD = 0.5;
   private static final double ANGLE_MAX_VELOCITY = 16.0;
   private static final double ANGLE_MAX_ACCELERATION = 30.0;
+  private static final double ANGLE_TOLERANCE = 0.05; // radians
 
   private static final double DRIVE_KP = 6;
   private static final double DRIVE_KD = 0.5;
-  private static final double DRIVE_MAX_VELOCITY = 4;
-  private static final double DRIVE_MAX_ACCELERATION = 10;
+  private static final double DRIVE_MAX_VELOCITY = 3;
+  private static final double DRIVE_MAX_ACCELERATION = 3;
+  private static final double DRIVE_TOLERANCE = 0.03; // meters
 
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
@@ -106,6 +108,7 @@ public class DriveCommands {
             ANGLE_KD,
             new TrapezoidProfile.Constraints(ANGLE_MAX_VELOCITY, ANGLE_MAX_ACCELERATION));
     angleController.enableContinuousInput(-Math.PI, Math.PI);
+    angleController.setTolerance(ANGLE_TOLERANCE);
 
     ProfiledPIDController driveXController =
         new ProfiledPIDController(
@@ -113,6 +116,7 @@ public class DriveCommands {
             0.0,
             DRIVE_KD,
             new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+    driveXController.setTolerance(DRIVE_TOLERANCE);
 
     ProfiledPIDController driveYController =
         new ProfiledPIDController(
@@ -120,6 +124,7 @@ public class DriveCommands {
             0.0,
             DRIVE_KD,
             new TrapezoidProfile.Constraints(DRIVE_MAX_VELOCITY, DRIVE_MAX_ACCELERATION));
+    driveYController.setTolerance(DRIVE_TOLERANCE);
 
     // Construct command
     return Commands.run(
@@ -140,6 +145,11 @@ public class DriveCommands {
               drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, drive.getRotation()));
             },
             drive)
+        .until(
+            () ->
+                (angleController.atSetpoint()
+                    && driveXController.atSetpoint()
+                    && driveYController.atSetpoint()))
 
         // Reset PID controller when command starts
         .beforeStarting(

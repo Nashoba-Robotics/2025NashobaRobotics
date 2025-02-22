@@ -12,14 +12,6 @@ public interface ClimberIO {
     public double pivotSupplyCurrentAmps = 0.0;
     public double pivotStatorCurrentAmps = 0.0;
     public double pivotTempCelsius = 0.0;
-
-    public boolean grabberConnected = false;
-    public double grabberPositionRad = 0.0;
-    public double grabberVelocityRadPerSec = 0.0;
-    public double grabberAppliedVolts = 0.0;
-    public double grabberSupplyCurrentAmps = 0.0;
-    public double grabberStatorCurrentAmps = 0.0;
-    public double grabberTempCelsius = 0.0;
   }
 
   public default void updateInputs(ClimberIOInputs inputs) {}

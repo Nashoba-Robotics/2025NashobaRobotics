@@ -50,7 +50,6 @@ public class RobotContainer {
   private final Hopper hopper;
   private final Climber climber;
 
-
   private final Superstructure superstructure;
 
   // // Controller
@@ -162,8 +161,7 @@ public class RobotContainer {
     SmartDashboard.putData(new TuneWristCommand(wrist));
     SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
 
-    driver.leftTrigger(0.65).onTrue(superstructure.setIntake());
-    driver.leftTrigger(0.65).whileTrue(manipulator.intakeCommand());
+    driver.leftTrigger(0.65).whileTrue(superstructure.setIntake());
     driver.rightTrigger(0.65).onTrue(manipulator.ejectCommand());
     driver.leftBumper().onTrue(superstructure.setNeutral());
 

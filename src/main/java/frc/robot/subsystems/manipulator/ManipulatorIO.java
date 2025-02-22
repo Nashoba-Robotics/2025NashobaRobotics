@@ -19,4 +19,6 @@ public interface ManipulatorIO {
   public default void updateInputs(ManipulatorIOInputs inputs) {}
 
   public default void runPercentOutput(double percent) {}
+
+  public default void stop() {}
 }

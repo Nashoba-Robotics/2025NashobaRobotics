@@ -1,13 +1,13 @@
 package frc.robot.subsystems.manipulator;
 
+import au.grapplerobotics.ConfigurationFailedException;
+import au.grapplerobotics.LaserCan;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
-import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.LaserCan;
 import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
@@ -16,6 +16,9 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
   private final TalonFXConfiguration config;
 
   private final LaserCan sensor;
+
+  private DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
+  private NeutralOut neutralOut = new NeutralOut();
 
   public ManipulatorIOTalonFX() {
     manipulator = new TalonFX(Constants.Manipulator.MANIPULATOR_ID, Constants.Manipulator.CANBUS);
@@ -42,7 +45,6 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
     config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
     manipulator.getConfigurator().apply(config);
-
   }
 
   @Override
@@ -55,11 +57,19 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
     inputs.statorCurrentAmps = manipulator.getStatorCurrent().getValueAsDouble();
     inputs.tempCelsius = manipulator.getDeviceTemp().getValueAsDouble();
 
-    inputs.coralPresent = (sensor.getMeasurement() != null && sensor.getMeasurement().distance_mm <= Constants.Manipulator.SENSOR_DISTANCE_THRESHOLD);
+    inputs.coralPresent =
+        (sensor.getMeasurement() != null
+            && sensor.getMeasurement().distance_mm
+                <= Constants.Manipulator.SENSOR_DISTANCE_THRESHOLD);
   }
 
   @Override
   public void runPercentOutput(double percent) {
-    manipulator.setControl(new DutyCycleOut(percent));
+    manipulator.setControl(dutyCycleOut.withOutput(percent));
+  }
+
+  @Override
+  public void stop() {
+    manipulator.setControl(neutralOut);
   }
 }

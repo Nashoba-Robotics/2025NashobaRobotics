@@ -2,7 +2,6 @@ package frc.robot.subsystems.hopper;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import org.littletonrobotics.junction.Logger;
 
 public class Hopper extends SubsystemBase {
@@ -16,7 +15,7 @@ public class Hopper extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Manipulator", inputs);
+    Logger.processInputs("Hopper", inputs);
   }
 
   public void runPercentOutput(double setpointPercent) {
@@ -24,6 +23,6 @@ public class Hopper extends SubsystemBase {
   }
 
   public Command intakeCommand() {
-    return run(() -> runPercentOutput(0.8)).finallyDo(() -> runPercentOutput(0));
+    return run(() -> runPercentOutput(0.4)).finallyDo(() -> runPercentOutput(0));
   }
 }

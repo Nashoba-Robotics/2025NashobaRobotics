@@ -10,18 +10,14 @@ import frc.robot.Constants;
 
 public class ClimberIOTalonFX implements ClimberIO {
   private final TalonFX pivot;
-  private final TalonFX grabber;
   private final TalonFXConfiguration pivotConfig;
-  private final TalonFXConfiguration grabberConfig;
 
   private final MotionMagicDutyCycle angleControl = new MotionMagicDutyCycle(0);
 
   public ClimberIOTalonFX() {
     pivot = new TalonFX(Constants.Climber.PIVOT_ID, Constants.Climber.CANBUS);
-    grabber = new TalonFX(Constants.Climber.GRABBER_ID, Constants.Climber.CANBUS);
 
     pivotConfig = new TalonFXConfiguration();
-    grabberConfig = new TalonFXConfiguration();
 
     pivotConfig.Slot0 = Constants.Climber.PID;
 
@@ -41,19 +37,7 @@ public class ClimberIOTalonFX implements ClimberIO {
     pivotConfig.MotionMagic.MotionMagicAcceleration =
         Constants.Climber.PIVOT_MOTION_MAGIC_ACCELERATION;
 
-    grabberConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    grabberConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    grabberConfig.CurrentLimits.StatorCurrentLimit = Constants.Climber.PIVOT_STATOR_LIMIT;
-    grabberConfig.CurrentLimits.SupplyCurrentLimit = Constants.Climber.PIVOT_SUPPLY_LIMIT;
-
-    grabberConfig.MotorOutput.Inverted = Constants.Climber.GRABBER_INVERTED;
-    grabberConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-    grabberConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-    grabberConfig.Feedback.SensorToMechanismRatio = Constants.Climber.GRABBER_GEAR_RATIO;
-
     pivot.getConfigurator().apply(pivotConfig);
-    grabber.getConfigurator().apply(grabberConfig);
   }
 
   @Override
@@ -66,15 +50,6 @@ public class ClimberIOTalonFX implements ClimberIO {
     inputs.pivotSupplyCurrentAmps = pivot.getSupplyCurrent().getValueAsDouble();
     inputs.pivotStatorCurrentAmps = pivot.getStatorCurrent().getValueAsDouble();
     inputs.pivotTempCelsius = pivot.getDeviceTemp().getValueAsDouble();
-
-    inputs.grabberConnected = grabber.isConnected();
-    inputs.grabberPositionRad = Units.rotationsToRadians(pivot.getPosition().getValueAsDouble());
-    inputs.grabberVelocityRadPerSec =
-        Units.rotationsToRadians(pivot.getPosition().getValueAsDouble());
-    inputs.grabberAppliedVolts = grabber.getMotorVoltage().getValueAsDouble();
-    inputs.grabberSupplyCurrentAmps = grabber.getSupplyCurrent().getValueAsDouble();
-    inputs.grabberStatorCurrentAmps = grabber.getStatorCurrent().getValueAsDouble();
-    inputs.grabberTempCelsius = grabber.getDeviceTemp().getValueAsDouble();
   }
 
   @Override

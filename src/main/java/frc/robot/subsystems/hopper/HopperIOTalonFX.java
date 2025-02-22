@@ -18,13 +18,13 @@ public class HopperIOTalonFX implements HopperIO {
 
     config.CurrentLimits.StatorCurrentLimitEnable = true;
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
-    config.CurrentLimits.StatorCurrentLimit = Constants.Manipulator.STATOR_LIMIT;
-    config.CurrentLimits.SupplyCurrentLimit = Constants.Manipulator.SUPPLY_LIMIT;
+    config.CurrentLimits.StatorCurrentLimit = Constants.Hopper.STATOR_LIMIT;
+    config.CurrentLimits.SupplyCurrentLimit = Constants.Hopper.SUPPLY_LIMIT;
 
     config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
     config.Feedback.SensorToMechanismRatio = Constants.Manipulator.GEAR_RATIO;
 
-    config.MotorOutput.Inverted = Constants.Manipulator.INVERTED;
+    config.MotorOutput.Inverted = Constants.Hopper.INVERTED;
     config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
     hopper.getConfigurator().apply(config);

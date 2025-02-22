@@ -43,7 +43,7 @@ public final class Constants {
     public static final double PULLY_RAIDUS = (0.0175133); // meters
 
     public static final double MOTION_MAGIC_CRUISE_VELOCITY =
-        Units.radiansToRotations(2.5 / PULLY_RAIDUS);
+        Units.radiansToRotations(3.5 / PULLY_RAIDUS);
     public static final double MOTION_MAGIC_ACCELERATION =
         Units.radiansToRotations(15 / PULLY_RAIDUS);
 
@@ -53,10 +53,10 @@ public final class Constants {
     public static final Slot0Configs PID =
         new Slot0Configs()
             .withKS(0)
-            .withKG(0.375 / 12)
+            .withKG(0.4 / 12)
             .withKV(0.0375)
             .withKA(0.0)
-            .withKP(2.5)
+            .withKP(1.75)
             .withKI(0.0)
             .withKD(0.025)
             .withGravityType(GravityTypeValue.Elevator_Static);
@@ -69,7 +69,7 @@ public final class Constants {
 
     public static final double SENSOR_DISTANCE_THRESHOLD = 0.0;
 
-    public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
     public static final double STATOR_LIMIT = 60;
     public static final double SUPPLY_LIMIT = 60;
@@ -79,9 +79,9 @@ public final class Constants {
 
   public static final class Hopper {
     public static final String CANBUS = "rio";
-    public static final int HOPPER_ID = 0;
+    public static final int HOPPER_ID = 13;
 
-    public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
     public static final double STATOR_LIMIT = 30;
     public static final double SUPPLY_LIMIT = 30;
@@ -91,8 +91,7 @@ public final class Constants {
 
   public static final class Climber {
     public static final String CANBUS = "rio";
-    public static final int PIVOT_ID = 0;
-    public static final int GRABBER_ID = 0;
+    public static final int PIVOT_ID = 14;
 
     public static final InvertedValue PIVOT_INVERTED = InvertedValue.Clockwise_Positive;
 
@@ -114,13 +113,6 @@ public final class Constants {
             .withKI(0.0)
             .withKD(0.0)
             .withGravityType(GravityTypeValue.Arm_Cosine);
-
-    public static final InvertedValue GRABBER_INVERTED = InvertedValue.Clockwise_Positive;
-
-    public static final double GRABBER_STATOR_LIMIT = 0;
-    public static final double GRABBER_SUPPLY_LIMIT = 0;
-
-    public static final double GRABBER_GEAR_RATIO = 0;
   }
 
   public static final class Wrist {
@@ -131,7 +123,7 @@ public final class Constants {
 
     public static final SensorDirectionValue ENCODER_INVERTED =
         SensorDirectionValue.CounterClockwise_Positive;
-    public static final double ENCODER_OFFSET_RADIANS = 1.3744467;
+    public static final double ENCODER_OFFSET_RADIANS = -0.2500388;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 

@@ -25,26 +25,30 @@ public class Manipulator extends SubsystemBase {
     io.runPercentOutput(setpointPercent);
   }
 
-  public boolean isCoralPresent(){
+  public void stop() {
+    io.stop();
+  }
+
+  public boolean isCoralPresent() {
     return inputs.coralPresent;
   }
 
   public Command intakeCommand() {
     return new ConditionalCommand(
-      Commands.none(),
-      run(() -> runPercentOutput(0.8)).until(() -> isCoralPresent()).finallyDo(() ->runPercentOutput(0.0)),
-      () -> isCoralPresent());
+        Commands.none(),
+        run(() -> runPercentOutput(0.8)).until(() -> isCoralPresent()).finallyDo(() -> stop()),
+        () -> isCoralPresent());
   }
 
   public Command ejectCommand() {
     return run(() -> runPercentOutput(0.8))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
-        .finallyDo(() -> runPercentOutput(0.0));
+        .finallyDo(() -> stop());
   }
 
   public Command L4ejectCommand() {
     return run(() -> runPercentOutput(-0.8))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
-        .finallyDo(() -> runPercentOutput(0.0));
+        .finallyDo(() -> stop());
   }
 }
