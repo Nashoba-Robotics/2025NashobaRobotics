@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.util.Util;
@@ -74,6 +75,16 @@ public class Elevator extends SubsystemBase {
   public Command runTuckCommand(double setpointMeters, double thresholdMeters) {
     return run(() -> runExtension(setpointMeters))
         .until(() -> getPositionMeters() <= thresholdMeters);
+  }
+
+  public Command runNeutralPrep() {
+    return new InstantCommand(
+        () -> {
+          if (getPositionMeters() >= 0.1) {
+            runExtension(0.275);
+          }
+        },
+        this);
   }
 
   public void setPID(double kV, double kP, double kD) {

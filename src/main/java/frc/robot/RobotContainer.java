@@ -37,7 +37,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.wrist.Wrist;
-import java.util.Arrays;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -124,7 +123,6 @@ public class RobotContainer {
     NamedCommands.registerCommand("L2Prep", superstructure.setL2Coral());
     NamedCommands.registerCommand("CoralScore", manipulator.ejectCommand());
     NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
-    NamedCommands.registerCommand("Intake", manipulator.intakeCommand());
 
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
@@ -150,11 +148,21 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    driver
-        .leftStick()
-        .whileTrue(
-            DriveCommands.driveToPose(
-                drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations))));
+    // driver
+    // .leftStick()
+    // .whileTrue(
+    //     DriveCommands.driveToPose(
+    //         drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations))));
+
+    driver.y().onTrue(superstructure.setL4Coral());
+    driver.b().onTrue(superstructure.setL3Coral());
+    driver.a().onTrue(superstructure.setL2Coral());
+    driver.x().onTrue(superstructure.setL1Coral());
+
+    driver.povUp().onTrue(superstructure.setBargeAlgae());
+    driver.povRight().onTrue(superstructure.setL3Algae());
+    driver.povDown().onTrue(superstructure.setL2Algae());
+    driver.povLeft().onTrue(superstructure.setProcessor());
 
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
@@ -162,68 +170,67 @@ public class RobotContainer {
     SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
 
     driver.leftTrigger(0.65).whileTrue(superstructure.setIntake());
-    driver.rightTrigger(0.65).onTrue(manipulator.ejectCommand());
     driver.leftBumper().onTrue(superstructure.setNeutral());
 
-    algae
-        .and(prepHeight)
-        .and(operator.a())
-        .onTrue(
-            superstructure
-                .setL2Algae()
-                .andThen(
-                    manipulator
-                        .intakeCommand()
-                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
-    algae
-        .and(prepHeight)
-        .and(operator.b())
-        .onTrue(
-            superstructure
-                .setL3Algae()
-                .andThen(
-                    manipulator
-                        .intakeCommand()
-                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
-    algae
-        .and(prepHeight)
-        .and(operator.y())
-        .onTrue(
-            superstructure
-                .setBargeAlgae()
-                .andThen(
-                    manipulator
-                        .intakeCommand()
-                        .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
-    coral
-        .and(prepHeight)
-        .and(operator.x())
-        .onTrue(
-            superstructure
-                .setL1Coral()
-                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    // algae
+    //     .and(prepHeight)
+    //     .and(operator.a())
+    //     .onTrue(
+    //         superstructure
+    //             .setL2Algae()
+    //             .andThen(
+    //                 manipulator
+    //                     .intakeCommand()
+    //                     .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
+    // algae
+    //     .and(prepHeight)
+    //     .and(operator.b())
+    //     .onTrue(
+    //         superstructure
+    //             .setL3Algae()
+    //             .andThen(
+    //                 manipulator
+    //                     .intakeCommand()
+    //                     .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
+    // algae
+    //     .and(prepHeight)
+    //     .and(operator.y())
+    //     .onTrue(
+    //         superstructure
+    //             .setBargeAlgae()
+    //             .andThen(
+    //                 manipulator
+    //                     .intakeCommand()
+    //                     .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
+    // coral
+    //     .and(prepHeight)
+    //     .and(operator.x())
+    //     .onTrue(
+    //         superstructure
+    //             .setL1Coral()
+    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
-    coral
-        .and(prepHeight)
-        .and(operator.a())
-        .onTrue(
-            superstructure
-                .setL2Coral()
-                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
-    coral
-        .and(prepHeight)
-        .and(operator.b())
-        .onTrue(
-            superstructure
-                .setL3Coral()
-                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
-    coral
-        .and(prepHeight)
-        .and(operator.y())
-        .onTrue(
-            superstructure
-                .setL4Coral()
-                .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    // coral
+    //     .and(prepHeight)
+    //     .and(operator.a())
+    //     .onTrue(
+    //         superstructure
+    //             .setL2Coral()
+    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    // coral
+    //     .and(prepHeight)
+    //     .and(operator.b())
+    //     .onTrue(
+    //         superstructure
+    //             .setL3Coral()
+    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
+    // coral
+    //     .and(prepHeight)
+    //     .and(operator.y())
+    //     .onTrue(
+    //         superstructure
+    //             .setL4Coral()
+    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(
@@ -235,7 +242,7 @@ public class RobotContainer {
 
     // // Reset gyro to 0° when B button is pressed
     driver
-        .b()
+        .back()
         .onTrue(
             Commands.runOnce(
                     () ->

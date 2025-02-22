@@ -43,9 +43,9 @@ public final class Constants {
     public static final double PULLY_RAIDUS = (0.0175133); // meters
 
     public static final double MOTION_MAGIC_CRUISE_VELOCITY =
-        Units.radiansToRotations(3.5 / PULLY_RAIDUS);
+        Units.radiansToRotations(3 / PULLY_RAIDUS);
     public static final double MOTION_MAGIC_ACCELERATION =
-        Units.radiansToRotations(15 / PULLY_RAIDUS);
+        Units.radiansToRotations(20 / PULLY_RAIDUS);
 
     public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(81);
     public static final double ELEVATOR_TOLERANCE = 0.03; // meters
@@ -71,8 +71,8 @@ public final class Constants {
 
     public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
-    public static final double STATOR_LIMIT = 60;
-    public static final double SUPPLY_LIMIT = 60;
+    public static final double STATOR_LIMIT = 100;
+    public static final double SUPPLY_LIMIT = 100;
 
     public static final double GEAR_RATIO = 4;
   }
@@ -123,7 +123,7 @@ public final class Constants {
 
     public static final SensorDirectionValue ENCODER_INVERTED =
         SensorDirectionValue.CounterClockwise_Positive;
-    public static final double ENCODER_OFFSET_RADIANS = -0.2500388;
+    public static final double ENCODER_OFFSET_RADIANS = -0.24390294;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 

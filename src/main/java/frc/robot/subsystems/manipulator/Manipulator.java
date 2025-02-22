@@ -33,11 +33,20 @@ public class Manipulator extends SubsystemBase {
     return inputs.coralPresent;
   }
 
-  public Command intakeCommand() {
+  public Command coralIntakeCommand() {
     return new ConditionalCommand(
         Commands.none(),
         run(() -> runPercentOutput(0.8)).until(() -> isCoralPresent()).finallyDo(() -> stop()),
         () -> isCoralPresent());
+  }
+
+  public Command algaeIntakeCommand() {
+    return run(() -> runPercentOutput(-1))
+        .raceWith(new SuppliedWaitCommand(() -> 0.15))
+        .andThen(
+            Commands.waitUntil(() -> inputs.velocityRadPerSec >= -20),
+            new SuppliedWaitCommand(() -> 0.2))
+        .finallyDo(() -> runPercentOutput(-0.4));
   }
 
   public Command ejectCommand() {
@@ -50,5 +59,13 @@ public class Manipulator extends SubsystemBase {
     return run(() -> runPercentOutput(-0.8))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
         .finallyDo(() -> stop());
+  }
+
+  public Command toNeutralAid() {
+    return runOnce(() -> runPercentOutput(-0.05));
+  }
+
+  public Command stopCommand() {
+    return runOnce(() -> stop());
   }
 }

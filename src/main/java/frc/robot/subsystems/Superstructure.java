@@ -1,12 +1,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.elevator.Elevator;
@@ -19,16 +18,15 @@ public class Superstructure extends SubsystemBase {
     NEUTRAL(0, 0.05),
     INTAKE(0, 0.05),
 
-    L4CORALPREP(0, 0),
-    L4CORAL(0, 0),
-    L3CORAL(0, 0),
-    L2CORAL(0, 0),
-    L1CORAL(0, 0),
+    L4CORAL(1.4, -3.6),
+    L3CORAL(1.04, 0.05),
+    L2CORAL(0.635, 0.05),
+    L1CORAL(0.45, 0.05),
 
-    BARGEALGAE(0, 0),
-    L3ALGAE(0, 0),
-    L2ALGAE(0, 0),
-    PROCESSORALGAE(0, 0);
+    BARGEALGAE(1.4, 3.2),
+    L3ALGAE(0.85, 0.75),
+    L2ALGAE(0.45, 0.75),
+    PROCESSORALGAE(0.15, 0.05);
 
     private double extensionMeters;
     private double angleRads;
@@ -47,7 +45,7 @@ public class Superstructure extends SubsystemBase {
   private final Hopper hopper;
   private final Climber climber;
 
-  private final CommandXboxController driver = RobotContainer.driver;
+  private final Trigger score = RobotContainer.driver.rightTrigger(0.65);
 
   public Superstructure(
       Elevator elevator, Wrist wrist, Manipulator manipulator, Hopper hopper, Climber climber) {
@@ -60,146 +58,86 @@ public class Superstructure extends SubsystemBase {
 
   public Command setNeutral() {
     goal = SuperstructureGoal.NEUTRAL;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(goal.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters)),
-        new ParallelCommandGroup(
-            wrist.runAngleCommand(goal.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters)),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        new ParallelCommandGroup(elevator.runNeutralPrep(), wrist.runAngleCommand(goal.angleRads)),
+        elevator.runSetpointCommand(goal.extensionMeters));
   }
 
   public Command setIntake() {
     goal = SuperstructureGoal.INTAKE;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(goal.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            new ParallelCommandGroup(hopper.intakeCommand(), manipulator.intakeCommand())),
-        new ParallelCommandGroup(
-            wrist.runAngleCommand(goal.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            hopper.intakeCommand(),
-            manipulator.intakeCommand()),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        new ParallelCommandGroup(elevator.runNeutralPrep(), wrist.runAngleCommand(goal.angleRads)),
+        elevator.runSetpointCommand(goal.extensionMeters),
+        new ParallelCommandGroup(hopper.intakeCommand(), manipulator.coralIntakeCommand()));
   }
 
   public Command setL4Coral() {
     goal = SuperstructureGoal.L4CORAL;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads),
-            new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-            manipulator.L4ejectCommand()),
-        new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-                elevator.runSetpointCommand(goal.extensionMeters)),
-            wrist.runAngleCommand(goal.angleRads),
-            new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-            manipulator.L4ejectCommand()),
-        () -> elevator.isNearL3());
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        wrist.runAngleCommand(goal.angleRads),
+        new WaitUntilCommand(() -> score.getAsBoolean()),
+        manipulator.L4ejectCommand());
   }
 
   public Command setL3Coral() {
     goal = SuperstructureGoal.L3CORAL;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads),
-            new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-            manipulator.ejectCommand()),
-        new ParallelCommandGroup(
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads),
-            new SequentialCommandGroup(
-                new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-                manipulator.ejectCommand())),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        wrist.runAngleCommand(goal.angleRads),
+        new WaitUntilCommand(() -> score.getAsBoolean()),
+        manipulator.ejectCommand());
   }
 
   public Command setL2Coral() {
     goal = SuperstructureGoal.L2CORAL;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads),
-            new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-            manipulator.ejectCommand()),
-        new ParallelCommandGroup(
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads),
-            new SequentialCommandGroup(
-                new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-                manipulator.ejectCommand())),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        wrist.runAngleCommand(goal.angleRads),
+        new WaitUntilCommand(() -> score.getAsBoolean()),
+        manipulator.ejectCommand());
   }
 
   public Command setL1Coral() {
     goal = SuperstructureGoal.L1CORAL;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads),
-            new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-            manipulator.ejectCommand()),
-        new ParallelCommandGroup(
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads),
-            new SequentialCommandGroup(
-                new WaitUntilCommand(() -> driver.rightTrigger(0.6).getAsBoolean()),
-                manipulator.ejectCommand())),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        wrist.runAngleCommand(goal.angleRads),
+        new WaitUntilCommand(() -> score.getAsBoolean()),
+        manipulator.ejectCommand());
   }
 
   public Command setBargeAlgae() {
     goal = SuperstructureGoal.BARGEALGAE;
-    return new ParallelCommandGroup(
-        wrist.runAngleCommand(goal.angleRads), elevator.runSetpointCommand(goal.extensionMeters));
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        wrist.runAngleCommand(goal.angleRads),
+        new WaitUntilCommand(() -> score.getAsBoolean()),
+        manipulator.ejectCommand());
   }
 
   public Command setL3Algae() {
     goal = SuperstructureGoal.L3ALGAE;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads)),
-        new ParallelCommandGroup(
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads)),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.15),
+        wrist.runAngleCommand(goal.angleRads),
+        manipulator.algaeIntakeCommand());
   }
 
   public Command setL2Algae() {
     goal = SuperstructureGoal.L2ALGAE;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads)),
-        new ParallelCommandGroup(
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads)),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.15),
+        wrist.runAngleCommand(goal.angleRads),
+        manipulator.algaeIntakeCommand());
   }
 
   public Command setProcessor() {
     goal = SuperstructureGoal.PROCESSORALGAE;
-    return new ConditionalCommand(
-        new SequentialCommandGroup(
-            wrist.runAngleCommand(SuperstructureGoal.L4CORALPREP.angleRads),
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads)),
-        new ParallelCommandGroup(
-            elevator.runSetpointCommand(goal.extensionMeters),
-            wrist.runAngleCommand(goal.angleRads)),
-        () -> elevator.isNearL4());
+    return new SequentialCommandGroup(
+        elevator.runSetpointCommand(goal.extensionMeters),
+        wrist.runAngleCommand(goal.angleRads),
+        new WaitUntilCommand(() -> score.getAsBoolean()),
+        manipulator.ejectCommand());
   }
 }
