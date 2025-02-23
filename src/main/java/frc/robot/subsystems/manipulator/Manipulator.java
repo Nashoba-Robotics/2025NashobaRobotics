@@ -36,7 +36,7 @@ public class Manipulator extends SubsystemBase {
   public Command coralIntakeCommand() {
     return new ConditionalCommand(
         Commands.none(),
-        run(() -> runPercentOutput(0.8)).until(() -> isCoralPresent()).finallyDo(() -> stop()),
+        run(() -> runPercentOutput(0.3)).until(() -> isCoralPresent()).finallyDo(() -> stop()),
         () -> isCoralPresent());
   }
 

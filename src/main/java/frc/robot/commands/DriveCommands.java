@@ -28,13 +28,13 @@ public class DriveCommands {
   private static final double DEADBAND = 0.1;
 
   private static final double ANGLE_KP = 6;
-  private static final double ANGLE_KD = 0.5;
+  private static final double ANGLE_KD = 0;
   private static final double ANGLE_MAX_VELOCITY = 16.0;
   private static final double ANGLE_MAX_ACCELERATION = 30.0;
   private static final double ANGLE_TOLERANCE = 0.05; // radians
 
-  private static final double DRIVE_KP = 6;
-  private static final double DRIVE_KD = 0.5;
+  private static final double DRIVE_KP = 5;
+  private static final double DRIVE_KD = 0;
   private static final double DRIVE_MAX_VELOCITY = 3;
   private static final double DRIVE_MAX_ACCELERATION = 3;
   private static final double DRIVE_TOLERANCE = 0.03; // meters
@@ -140,23 +140,37 @@ public class DriveCommands {
 
               double driveY = driveYController.calculate(drive.getPose().getY(), pose.get().getY());
 
+              boolean nearX =
+                  Math.abs(drive.getPose().getX() - pose.get().getX()) <= DRIVE_TOLERANCE;
+              boolean nearY =
+                  Math.abs(drive.getPose().getY() - pose.get().getY()) <= DRIVE_TOLERANCE;
+              boolean nearTheta =
+                  Math.abs(
+                          drive.getPose().getRotation().getRadians()
+                              - pose.get().getRotation().getRadians())
+                      <= ANGLE_TOLERANCE;
               // Convert to field relative speeds & send command
+
+              if (nearX) driveX = 0;
+              if (nearY) driveY = 0;
+              if (nearTheta) omega = 0;
               ChassisSpeeds speeds = new ChassisSpeeds(driveX, driveY, omega);
               drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, drive.getRotation()));
             },
             drive)
-        .until(
-            () ->
-                (angleController.atSetpoint()
-                    && driveXController.atSetpoint()
-                    && driveYController.atSetpoint()))
-
         // Reset PID controller when command starts
         .beforeStarting(
             () -> {
               angleController.reset(drive.getRotation().getRadians());
               driveXController.reset(drive.getPose().getX());
               driveYController.reset(drive.getPose().getY());
+              // angleController.reset(
+              //     drive.getRotation().getRadians(),
+              // drive.getChassisSpeeds().omegaRadiansPerSecond);
+              // driveXController.reset(
+              //     drive.getPose().getX(), -drive.getChassisSpeeds().vxMetersPerSecond);
+              // driveYController.reset(
+              //     drive.getPose().getY(), -drive.getChassisSpeeds().vyMetersPerSecond);
             });
   }
 

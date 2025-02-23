@@ -34,12 +34,26 @@ public class VisionConstants {
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
   public static Transform3d robotToCamera0 =
-      new Transform3d(-0.1524, 0.3429, 0.34925, new Rotation3d(0.0, 0.0, 0.0));
+      new Transform3d(
+          0.1651,
+          0.1778,
+          0.19685,
+          new Rotation3d(
+              0.0,
+              Rotation2d.fromDegrees(-30).getRadians(),
+              Rotation2d.fromDegrees(-20).getRadians()));
   public static Transform3d robotToCamera1 =
-      new Transform3d(0.1524, 0.3429, 0.34925, new Rotation3d(0.0, 0.0, 0.0));
+      new Transform3d(
+          0.1651,
+          -0.1778,
+          0.19685,
+          new Rotation3d(
+              0.0,
+              Rotation2d.fromDegrees(-30).getRadians(),
+              Rotation2d.fromDegrees(20).getRadians()));
 
   // Basic filtering thresholds
-  public static double maxAmbiguity = 0.3;
+  public static double maxAmbiguity = 0.05;
   public static double maxZError = 0.75;
 
   // Standard deviation baselines, for 1 meter distance and 1 tag
@@ -57,13 +71,13 @@ public class VisionConstants {
 
   public static final Translation2d centerBlue =
       new Translation2d(Units.inchesToMeters(176.746), aprilTagLayout.getFieldWidth() / 2.0);
-  public static final Pose2d rightBlueBranch = new Pose2d(3.20, 3.86, Rotation2d.fromDegrees(0));
-  public static final Pose2d leftBlueBranch = new Pose2d(3.20, 4.19, Rotation2d.fromDegrees(0));
+  public static final Pose2d rightBlueBranch = new Pose2d(3.18, 3.86, Rotation2d.fromDegrees(0));
+  public static final Pose2d leftBlueBranch = new Pose2d(3.18, 4.19, Rotation2d.fromDegrees(0));
 
   public static final Translation2d centerRed =
       new Translation2d(Units.inchesToMeters(514.129), aprilTagLayout.getFieldWidth() / 2);
-  public static final Pose2d rightRedBranch = new Pose2d(11.77, 3.86, Rotation2d.fromDegrees(0));
-  public static final Pose2d leftRedBranch = new Pose2d(11.77, 4.19, Rotation2d.fromDegrees(0));
+  public static final Pose2d rightRedBranch = new Pose2d(11.75, 3.87, Rotation2d.fromDegrees(0));
+  public static final Pose2d leftRedBranch = new Pose2d(11.75, 4.17, Rotation2d.fromDegrees(0));
 
   public static Pose2d[] coralScoringLocations =
       new Pose2d[] {

@@ -37,6 +37,7 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.wrist.Wrist;
+import java.util.Arrays;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class RobotContainer {
@@ -147,19 +148,103 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    driver
+        .y()
+        .whileTrue(
+            DriveCommands.driveToPose(
+                    drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations)))
+                .alongWith(
+                    Commands.waitUntil(
+                            () ->
+                                Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getX()
+                                                - drive.getPose().getX())
+                                        <= 0.03
+                                    || Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getY()
+                                                - drive.getPose().getY())
+                                        <= 0.03
+                                    || Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getRotation()
+                                                    .getRadians()
+                                                - drive.getPose().getRotation().getRadians())
+                                        <= 0.05)
+                        .andThen(superstructure.setL4Coral())));
+    driver
+        .b()
+        .whileTrue(
+            DriveCommands.driveToPose(
+                    drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations)))
+                .alongWith(
+                    Commands.waitUntil(
+                            () ->
+                                Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getX()
+                                                - drive.getPose().getX())
+                                        <= 0.03
+                                    || Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getY()
+                                                - drive.getPose().getY())
+                                        <= 0.03
+                                    || Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getRotation()
+                                                    .getRadians()
+                                                - drive.getPose().getRotation().getRadians())
+                                        <= 0.05)
+                        .andThen(superstructure.setL3Coral())));
+    driver
+        .a()
+        .whileTrue(
+            DriveCommands.driveToPose(
+                    drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations)))
+                .alongWith(
+                    Commands.waitUntil(
+                            () ->
+                                Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getX()
+                                                - drive.getPose().getX())
+                                        <= 0.03
+                                    || Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getY()
+                                                - drive.getPose().getY())
+                                        <= 0.03
+                                    || Math.abs(
+                                            drive
+                                                    .getPose()
+                                                    .nearest(Arrays.asList(coralScoringLocations))
+                                                    .getRotation()
+                                                    .getRadians()
+                                                - drive.getPose().getRotation().getRadians())
+                                        <= 0.05)
+                        .andThen(superstructure.setL2Coral())));
 
-    // driver
-    // .leftStick()
-    // .whileTrue(
-    //     DriveCommands.driveToPose(
-    //         drive, () -> drive.getPose().nearest(Arrays.asList(coralScoringLocations))));
+    driver.x().whileTrue(superstructure.setL1Coral());
 
-    driver.y().onTrue(superstructure.setL4Coral());
-    driver.b().onTrue(superstructure.setL3Coral());
-    driver.a().onTrue(superstructure.setL2Coral());
-    driver.x().onTrue(superstructure.setL1Coral());
-
-    driver.povUp().onTrue(superstructure.setBargeAlgae());
+    // driver.povUp().onTrue(superstructure.setBargeAlgae());
     driver.povRight().onTrue(superstructure.setL3Algae());
     driver.povDown().onTrue(superstructure.setL2Algae());
     driver.povLeft().onTrue(superstructure.setProcessor());

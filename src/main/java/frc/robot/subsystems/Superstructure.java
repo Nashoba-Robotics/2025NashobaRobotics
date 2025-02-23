@@ -18,8 +18,8 @@ public class Superstructure extends SubsystemBase {
     NEUTRAL(0, 0.05),
     INTAKE(0, 0.05),
 
-    L4CORAL(1.4, -3.6),
-    L3CORAL(1.04, 0.05),
+    L4CORAL(1.3, -3.4),
+    L3CORAL(1.01, 0.05),
     L2CORAL(0.635, 0.05),
     L1CORAL(0.45, 0.05),
 

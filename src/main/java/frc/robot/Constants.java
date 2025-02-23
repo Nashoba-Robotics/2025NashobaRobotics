@@ -67,12 +67,12 @@ public final class Constants {
     public static final int MANIPULATOR_ID = 12;
     public static final int SENSOR_ID = 0;
 
-    public static final double SENSOR_DISTANCE_THRESHOLD = 0.0;
+    public static final double SENSOR_DISTANCE_THRESHOLD = 125;
 
     public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
-    public static final double STATOR_LIMIT = 100;
-    public static final double SUPPLY_LIMIT = 100;
+    public static final double STATOR_LIMIT = 60;
+    public static final double SUPPLY_LIMIT = 60;
 
     public static final double GEAR_RATIO = 4;
   }
