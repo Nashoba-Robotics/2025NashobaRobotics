@@ -244,7 +244,7 @@ public class RobotContainer {
 
     driver.x().whileTrue(superstructure.setL1Coral());
 
-    // driver.povUp().onTrue(superstructure.setBargeAlgae());
+    driver.povUp().onTrue(superstructure.setBargeAlgae());
     driver.povRight().onTrue(superstructure.setL3Algae());
     driver.povDown().onTrue(superstructure.setL2Algae());
     driver.povLeft().onTrue(superstructure.setProcessor());
