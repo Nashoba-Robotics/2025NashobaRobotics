@@ -18,6 +18,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
@@ -69,41 +70,52 @@ public class VisionConstants {
         1.0 // Camera 1
       };
 
-  public static final Translation2d centerBlue =
-      new Translation2d(Units.inchesToMeters(176.746), aprilTagLayout.getFieldWidth() / 2.0);
-  public static final Pose2d rightBlueBranch = new Pose2d(3.18, 3.86, Rotation2d.fromDegrees(0));
-  public static final Pose2d leftBlueBranch = new Pose2d(3.18, 4.19, Rotation2d.fromDegrees(0));
-
-  public static final Translation2d centerRed =
-      new Translation2d(Units.inchesToMeters(514.129), aprilTagLayout.getFieldWidth() / 2);
-  public static final Pose2d rightRedBranch = new Pose2d(11.75, 3.87, Rotation2d.fromDegrees(0));
-  public static final Pose2d leftRedBranch = new Pose2d(11.75, 4.17, Rotation2d.fromDegrees(0));
-
-  public static Pose2d[] coralScoringLocations =
+  public static final Pose2d[] centerFaces =
       new Pose2d[] {
-        rightBlueBranch,
-        leftBlueBranch,
-        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(60)),
-        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(60)),
-        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(120)),
-        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(120)),
-        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(180)),
-        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(180)),
-        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(240)),
-        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(240)),
-        rightBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(300)),
-        leftBlueBranch.rotateAround(centerBlue, Rotation2d.fromDegrees(300)),
-        rightRedBranch,
-        leftRedBranch,
-        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(60)),
-        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(60)),
-        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(120)),
-        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(120)),
-        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(180)),
-        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(180)),
-        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(240)),
-        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(240)),
-        rightRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(300)),
-        leftRedBranch.rotateAround(centerRed, Rotation2d.fromDegrees(300)),
+        aprilTagLayout.getTagPose(6).get().toPose2d(),
+        aprilTagLayout.getTagPose(7).get().toPose2d(),
+        aprilTagLayout.getTagPose(8).get().toPose2d(),
+        aprilTagLayout.getTagPose(9).get().toPose2d(),
+        aprilTagLayout.getTagPose(10).get().toPose2d(),
+        aprilTagLayout.getTagPose(11).get().toPose2d(),
+        aprilTagLayout.getTagPose(17).get().toPose2d(),
+        aprilTagLayout.getTagPose(18).get().toPose2d(),
+        aprilTagLayout.getTagPose(19).get().toPose2d(),
+        aprilTagLayout.getTagPose(20).get().toPose2d(),
+        aprilTagLayout.getTagPose(21).get().toPose2d(),
+        aprilTagLayout.getTagPose(22).get().toPose2d(),
+      };
+
+  public static double adjustY =
+      Units.inchesToMeters(6.469); // offset Y setpoint by distance from tag to reefpost
+  public static double adjustX =
+      Units.inchesToMeters(34 / 2); // offset X setpoint by center of robot to bumber
+
+  public static final Pose2d[] scoringPositions =
+      new Pose2d[] {
+        centerFaces[0].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[0].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[1].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[1].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[2].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[2].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[3].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[3].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[4].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[4].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[5].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[5].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[6].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[6].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[7].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[7].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[8].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[8].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[9].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[9].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[10].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[10].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
+        centerFaces[11].transformBy(new Transform2d(adjustX, adjustY, new Rotation2d())),
+        centerFaces[11].transformBy(new Transform2d(adjustX, -adjustY, new Rotation2d())),
       };
 }

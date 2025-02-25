@@ -23,10 +23,10 @@ public class Superstructure extends SubsystemBase {
     L2CORAL(0.635, 0.05),
     L1CORAL(0.45, 0.05),
 
-    BARGEALGAE(1.4, 2.7),
+    BARGEALGAE(1.4, 3.2),
     L3ALGAE(0.85, 0.75),
     L2ALGAE(0.45, 0.75),
-    PROCESSORALGAE(0.15, 0.05);
+    PROCESSORALGAE(0.15, 0.);
 
     private double extensionMeters;
     private double angleRads;
