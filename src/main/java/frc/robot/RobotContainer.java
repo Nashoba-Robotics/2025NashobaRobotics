@@ -55,7 +55,7 @@ public class RobotContainer {
   // // Controller
   public static final CommandXboxController driver = new CommandXboxController(0);
   public static final CommandXboxController operator = new CommandXboxController(1);
-  public static final CommandXboxController testController = new CommandXboxController(2);
+//   public static final CommandXboxController testController = new CommandXboxController(2);
 
   //   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -145,6 +145,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    SmartDashboard.putData(new TuneElevatorCommand(elevator));
+    SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
+    SmartDashboard.putData(new TuneWristCommand(wrist));
+    SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
+    // SmartDashboard.putData(new ClimberTestCommand(climber, testController));
+    
     driver
         .y()
         .whileTrue(
@@ -246,74 +252,8 @@ public class RobotContainer {
     driver.povDown().onTrue(superstructure.setL2Algae());
     driver.povLeft().onTrue(superstructure.setProcessor());
 
-    SmartDashboard.putData(new TuneElevatorCommand(elevator));
-    SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
-    SmartDashboard.putData(new TuneWristCommand(wrist));
-    SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
-    SmartDashboard.putData(new ClimberTestCommand(climber, testController));
-
     driver.leftTrigger(0.65).whileTrue(superstructure.setIntake());
     driver.leftBumper().onTrue(superstructure.setNeutral());
-
-    // algae
-    //     .and(prepHeight)
-    //     .and(operator.a())
-    //     .onTrue(
-    //         superstructure
-    //             .setL2Algae()
-    //             .andThen(
-    //                 manipulator
-    //                     .intakeCommand()
-    //                     .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
-    // algae
-    //     .and(prepHeight)
-    //     .and(operator.b())
-    //     .onTrue(
-    //         superstructure
-    //             .setL3Algae()
-    //             .andThen(
-    //                 manipulator
-    //                     .intakeCommand()
-    //                     .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
-    // algae
-    //     .and(prepHeight)
-    //     .and(operator.y())
-    //     .onTrue(
-    //         superstructure
-    //             .setBargeAlgae()
-    //             .andThen(
-    //                 manipulator
-    //                     .intakeCommand()
-    //                     .alongWith(new ManualExtensionCommand(operator, elevator, wrist))));
-    // coral
-    //     .and(prepHeight)
-    //     .and(operator.x())
-    //     .onTrue(
-    //         superstructure
-    //             .setL1Coral()
-    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
-
-    // coral
-    //     .and(prepHeight)
-    //     .and(operator.a())
-    //     .onTrue(
-    //         superstructure
-    //             .setL2Coral()
-    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
-    // coral
-    //     .and(prepHeight)
-    //     .and(operator.b())
-    //     .onTrue(
-    //         superstructure
-    //             .setL3Coral()
-    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
-    // coral
-    //     .and(prepHeight)
-    //     .and(operator.y())
-    //     .onTrue(
-    //         superstructure
-    //             .setL4Coral()
-    //             .andThen(new ManualExtensionCommand(operator, elevator, wrist)));
 
     // // // Default command, normal field-relative drive
     drive.setDefaultCommand(

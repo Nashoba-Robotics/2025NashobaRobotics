@@ -108,7 +108,7 @@ public class Drive extends SubsystemBase {
           lastModulePositions,
           new Pose2d(),
           VecBuilder.fill(0.01, 0.01, 0.01),
-          VecBuilder.fill(0.04, 0.04, 99999999));
+          VecBuilder.fill(0.04, 0.04, 0.06));
 
   public Drive(
       GyroIO gyroIO,

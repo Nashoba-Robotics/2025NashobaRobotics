@@ -104,7 +104,7 @@ public class Superstructure extends SubsystemBase {
         elevator.runExtensionCommand(goal.extensionMeters, 0.275),
         wrist.runAngleCommand(goal.angleRads),
         new WaitUntilCommand(() -> score.getAsBoolean()),
-        manipulator.ejectCommand());
+        manipulator.L1ejectCommand());
   }
 
   public Command setBargeAlgae() {
