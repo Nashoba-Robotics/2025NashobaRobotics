@@ -164,13 +164,6 @@ public class DriveCommands {
               angleController.reset(drive.getRotation().getRadians());
               driveXController.reset(drive.getPose().getX());
               driveYController.reset(drive.getPose().getY());
-              // angleController.reset(
-              //     drive.getRotation().getRadians(),
-              // drive.getChassisSpeeds().omegaRadiansPerSecond);
-              // driveXController.reset(
-              //     drive.getPose().getX(), -drive.getChassisSpeeds().vxMetersPerSecond);
-              // driveYController.reset(
-              //     drive.getPose().getY(), -drive.getChassisSpeeds().vyMetersPerSecond);
             });
   }
 
