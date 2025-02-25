@@ -1,7 +1,10 @@
 package frc.robot.subsystems.climber;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -9,74 +12,98 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class ClimberIOTalonFX implements ClimberIO {
-  private final TalonFX pivot;
-  private final TalonFXConfiguration pivotConfig;
+  private final TalonFX leader;
+  private final TalonFX follower;
+  private final TalonFXConfiguration config;
 
   private final MotionMagicDutyCycle angleControl = new MotionMagicDutyCycle(0);
+  private final DutyCycleOut dutyCycleOut = new DutyCycleOut(0);
 
   public ClimberIOTalonFX() {
-    pivot = new TalonFX(Constants.Climber.PIVOT_ID, Constants.Climber.CANBUS);
+    leader = new TalonFX(Constants.Climber.LEADER_ID, Constants.Climber.CANBUS);
+    follower = new TalonFX(Constants.Climber.FOLLOWER_ID, Constants.Climber.CANBUS);
+    follower.setControl(new Follower(Constants.Climber.LEADER_ID, true));
 
-    pivotConfig = new TalonFXConfiguration();
+    config = new TalonFXConfiguration();
 
-    pivotConfig.Slot0 = Constants.Climber.PID;
+    config.Slot0 = Constants.Climber.PID;
 
-    pivotConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    pivotConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
-    pivotConfig.CurrentLimits.StatorCurrentLimit = Constants.Climber.PIVOT_STATOR_LIMIT;
-    pivotConfig.CurrentLimits.SupplyCurrentLimit = Constants.Climber.PIVOT_SUPPLY_LIMIT;
+    config.CurrentLimits.StatorCurrentLimitEnable = false;
+    config.CurrentLimits.SupplyCurrentLimitEnable = false;
+    config.CurrentLimits.StatorCurrentLimit = Constants.Climber.PIVOT_STATOR_LIMIT;
+    config.CurrentLimits.SupplyCurrentLimit = Constants.Climber.PIVOT_SUPPLY_LIMIT;
 
-    pivotConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-    pivotConfig.Feedback.SensorToMechanismRatio = Constants.Climber.PIVOT_GEAR_RATIO;
+    config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+    config.Feedback.SensorToMechanismRatio = Constants.Climber.PIVOT_GEAR_RATIO;
 
-    pivotConfig.MotorOutput.Inverted = Constants.Climber.PIVOT_INVERTED;
-    pivotConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    config.MotorOutput.Inverted = Constants.Climber.PIVOT_INVERTED;
+    config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
-    pivotConfig.MotionMagic.MotionMagicCruiseVelocity =
+    config.MotionMagic.MotionMagicCruiseVelocity =
         Constants.Climber.PIVOT_MOTION_MAGIC_CRUISE_VELOCITY;
-    pivotConfig.MotionMagic.MotionMagicAcceleration =
-        Constants.Climber.PIVOT_MOTION_MAGIC_ACCELERATION;
+    config.MotionMagic.MotionMagicAcceleration = Constants.Climber.PIVOT_MOTION_MAGIC_ACCELERATION;
 
-    pivot.getConfigurator().apply(pivotConfig);
+    leader.getConfigurator().apply(config);
+    follower.getConfigurator().apply(config);
   }
 
   @Override
   public void updateInputs(ClimberIOInputs inputs) {
-    inputs.pivotConnected = pivot.isConnected();
-    inputs.pivotPositionRad = Units.rotationsToRadians(pivot.getPosition().getValueAsDouble());
-    inputs.pivotVelocityRadPerSec =
-        Units.rotationsToRadians(pivot.getPosition().getValueAsDouble());
-    inputs.pivotAppliedVolts = pivot.getMotorVoltage().getValueAsDouble();
-    inputs.pivotSupplyCurrentAmps = pivot.getSupplyCurrent().getValueAsDouble();
-    inputs.pivotStatorCurrentAmps = pivot.getStatorCurrent().getValueAsDouble();
-    inputs.pivotTempCelsius = pivot.getDeviceTemp().getValueAsDouble();
+    inputs.leaderConnected = leader.isConnected();
+    inputs.leaderPositionRad = Units.rotationsToRadians(leader.getPosition().getValueAsDouble());
+    inputs.leaderVelocityRadPerSec =
+        Units.rotationsToRadians(leader.getPosition().getValueAsDouble());
+    inputs.leaderAppliedVolts = leader.getMotorVoltage().getValueAsDouble();
+    inputs.leaderSupplyCurrentAmps = leader.getSupplyCurrent().getValueAsDouble();
+    inputs.leaderStatorCurrentAmps = leader.getStatorCurrent().getValueAsDouble();
+    inputs.leaderTempCelsius = leader.getDeviceTemp().getValueAsDouble();
+
+    inputs.followerConnected = follower.isConnected();
+    inputs.followerPositionRad =
+        Units.rotationsToRadians(follower.getPosition().getValueAsDouble());
+    inputs.followerVelocityRadPerSec =
+        Units.rotationsToRadians(follower.getPosition().getValueAsDouble());
+    inputs.followerAppliedVolts = follower.getMotorVoltage().getValueAsDouble();
+    inputs.followerSupplyCurrentAmps = follower.getSupplyCurrent().getValueAsDouble();
+    inputs.followerStatorCurrentAmps = follower.getStatorCurrent().getValueAsDouble();
+    inputs.followerTempCelsius = follower.getDeviceTemp().getValueAsDouble();
   }
 
   @Override
   public void runSetpoint(double setpointRads) {
-    pivot.setControl(angleControl.withPosition(Units.radiansToRotations(setpointRads)));
+    leader.setControl(angleControl.withPosition(Units.radiansToRotations(setpointRads)));
+  }
+
+  @Override
+  public void runDutyCycle(double percent) {
+    leader.setControl(dutyCycleOut.withOutput(percent));
+  }
+
+  @Override
+  public void stop() {
+    leader.setControl(new NeutralOut());
   }
 
   @Override
   public void setPosition(double angleRads) {
-    pivot.setPosition(Units.radiansToRotations(angleRads));
+    leader.setPosition(Units.radiansToRotations(angleRads));
   }
 
   @Override
   public void setkV(double kV) {
-    pivotConfig.Slot0.kV = kV;
-    pivot.getConfigurator().apply(pivotConfig);
+    config.Slot0.kV = kV;
+    leader.getConfigurator().apply(config);
   }
 
   @Override
   public void setkP(double kP) {
-    pivotConfig.Slot0.kP = kP;
-    pivot.getConfigurator().apply(pivotConfig);
+    config.Slot0.kP = kP;
+    leader.getConfigurator().apply(config);
   }
 
   @Override
   public void setkD(double kD) {
-    pivotConfig.Slot0.kD = kD;
-    pivot.getConfigurator().apply(pivotConfig);
+    config.Slot0.kD = kD;
+    leader.getConfigurator().apply(config);
   }
 }

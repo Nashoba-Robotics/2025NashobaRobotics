@@ -22,6 +22,14 @@ public class Climber extends SubsystemBase {
     io.runSetpoint(setpointRads);
   }
 
+  public void runDutyCycle(double percent) {
+    io.runDutyCycle(percent);
+  }
+
+  public void stop() {
+    io.stop();
+  }
+
   public void zeroClimber() {
     io.setPosition(0);
   }

@@ -90,18 +90,19 @@ public final class Constants {
   }
 
   public static final class Climber {
-    public static final String CANBUS = "rio";
-    public static final int PIVOT_ID = 14;
+    public static final String CANBUS = "CANivore";
+    public static final int LEADER_ID = 14;
+    public static final int FOLLOWER_ID = 15;
 
-    public static final InvertedValue PIVOT_INVERTED = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue PIVOT_INVERTED = InvertedValue.CounterClockwise_Positive;
 
     public static final double PIVOT_STATOR_LIMIT = 0;
     public static final double PIVOT_SUPPLY_LIMIT = 0;
 
     public static final double PIVOT_GEAR_RATIO = 0;
 
-    public static final double PIVOT_MOTION_MAGIC_CRUISE_VELOCITY = 0.0;
-    public static final double PIVOT_MOTION_MAGIC_ACCELERATION = 0.0;
+    public static final double PIVOT_MOTION_MAGIC_CRUISE_VELOCITY = 10000.0;
+    public static final double PIVOT_MOTION_MAGIC_ACCELERATION = 10000.0;
 
     public static final Slot0Configs PID =
         new Slot0Configs()
