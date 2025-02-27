@@ -37,7 +37,7 @@ public class VisionConstants {
       new Transform3d(
           0.1651,
           0.1778,
-          0.19685,
+          0.206375,
           new Rotation3d(
               0.0,
               Rotation2d.fromDegrees(-30).getRadians(),
@@ -46,7 +46,7 @@ public class VisionConstants {
       new Transform3d(
           0.1651,
           -0.1778,
-          0.19685,
+          0.206375,
           new Rotation3d(
               0.0,
               Rotation2d.fromDegrees(-30).getRadians(),
@@ -88,7 +88,7 @@ public class VisionConstants {
   public static double adjustY =
       Units.inchesToMeters(6.469); // offset Y setpoint by distance from tag to reefpost
   public static double adjustX =
-      Units.inchesToMeters(34 / 2); // offset X setpoint by center of robot to bumber
+      Units.inchesToMeters(34.5 / 2); // offset X setpoint by center of robot to bumber
 
   public static final Pose2d[] scoringPositions =
       new Pose2d[] {

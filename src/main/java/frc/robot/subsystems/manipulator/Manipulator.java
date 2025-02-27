@@ -36,7 +36,7 @@ public class Manipulator extends SubsystemBase {
   public Command coralIntakeCommand() {
     return new ConditionalCommand(
         Commands.none(),
-        run(() -> runPercentOutput(0.3)).until(() -> isCoralPresent()).finallyDo(() -> stop()),
+        run(() -> runPercentOutput(0.45)).until(() -> isCoralPresent()).finallyDo(() -> stop()),
         () -> isCoralPresent());
   }
 
@@ -62,7 +62,7 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Command L1ejectCommand() {
-    return run(() -> runPercentOutput(0.4))
+    return run(() -> runPercentOutput(0.8))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
         .finallyDo(() -> stop());
   }

@@ -35,8 +35,8 @@ public class DriveCommands {
 
   private static final double DRIVE_KP = 5;
   private static final double DRIVE_KD = 0;
-  private static final double DRIVE_MAX_VELOCITY = 3;
-  private static final double DRIVE_MAX_ACCELERATION = 3;
+  private static final double DRIVE_MAX_VELOCITY = 4.5;
+  private static final double DRIVE_MAX_ACCELERATION = 25;
   private static final double DRIVE_TOLERANCE = 0.03; // meters
 
   private static final double FF_START_DELAY = 2.0; // Secs
@@ -134,7 +134,8 @@ public class DriveCommands {
               // Calculate angular speed
               double omega =
                   angleController.calculate(
-                      drive.getRotation().getRadians(), (pose.get().getRotation().getRadians()));
+                      drive.getRotation().getRadians(),
+                      (pose.get().getRotation().getRadians() + Math.PI));
 
               double driveX = driveXController.calculate(drive.getPose().getX(), pose.get().getX());
 

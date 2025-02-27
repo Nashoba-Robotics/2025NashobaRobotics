@@ -23,6 +23,6 @@ public class Hopper extends SubsystemBase {
   }
 
   public Command intakeCommand() {
-    return run(() -> runPercentOutput(0.4)).finallyDo(() -> runPercentOutput(0));
+    return run(() -> runPercentOutput(0.75)).finallyDo(() -> runPercentOutput(0));
   }
 }

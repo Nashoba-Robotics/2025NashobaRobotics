@@ -21,7 +21,7 @@ public class Superstructure extends SubsystemBase {
     L4CORAL(1.3, -3.4),
     L3CORAL(1.01, 0.05),
     L2CORAL(0.635, 0.05),
-    L1CORAL(0.45, 0.05),
+    L1CORAL(0.4, 0.3),
 
     BARGEALGAE(1.4, 3.2),
     L3ALGAE(0.85, 0.75),
