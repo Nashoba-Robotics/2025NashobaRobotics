@@ -118,21 +118,17 @@ public class RobotContainer {
     // // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    NamedCommands.registerCommand("L2Prep", superstructure.setL2Coral());
-    NamedCommands.registerCommand("CoralScore", manipulator.ejectCommand());
+    NamedCommands.registerCommand("L4Prep", superstructure.setL2Coral());
+    NamedCommands.registerCommand("L4Score", manipulator.ejectCommand());
     NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
+    NamedCommands.registerCommand("SetNeutral", superstructure.setNeutral());
 
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
-    autoChooser.addOption("Left side Score 1", new PathPlannerAuto("Score 1", true));
-    autoChooser.addOption("Right side Score 1", new PathPlannerAuto("Score 1", false));
-    autoChooser.addOption("Left side Score 2", new PathPlannerAuto("Score 2", true));
-    autoChooser.addOption("Right side Score 2", new PathPlannerAuto("Score 2", false));
-    autoChooser.addOption("Left side Score 3", new PathPlannerAuto("Score 3", true));
-    autoChooser.addOption("right side Score 3", new PathPlannerAuto("Score 3", false));
     autoChooser.addOption("Drive a foot", new PathPlannerAuto("Taxi"));
+    autoChooser.addOption("L4 abcdef", new PathPlannerAuto("abcdef", false));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -245,7 +241,8 @@ public class RobotContainer {
                                         <= 0.05)
                         .andThen(superstructure.setL2Coral())));
 
-    driver.x().whileTrue(superstructure.setL1Coral());
+    driver.rightBumper().whileTrue(superstructure.setL1Coral());
+    driver.rightStick().onTrue(manipulator.spitCommand());
 
     driver.povUp().onTrue(superstructure.setBargeAlgae());
     driver.povRight().onTrue(superstructure.setL3Algae());

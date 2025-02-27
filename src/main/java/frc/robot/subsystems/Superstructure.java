@@ -19,11 +19,11 @@ public class Superstructure extends SubsystemBase {
     INTAKE(0, 0.05),
 
     L4CORAL(1.3, -3.4),
-    L3CORAL(1.01, 0.05),
+    L3CORAL(1.025, 0.05),
     L2CORAL(0.635, 0.05),
     L1CORAL(0.4, 0.3),
 
-    BARGEALGAE(1.4, 3.2),
+    BARGEALGAE(1.4, 2.5),
     L3ALGAE(0.85, 0.75),
     L2ALGAE(0.45, 0.75),
     PROCESSORALGAE(0.15, 0.);
@@ -139,5 +139,12 @@ public class Superstructure extends SubsystemBase {
         wrist.runAngleCommand(goal.angleRads),
         new WaitUntilCommand(() -> score.getAsBoolean()),
         manipulator.ejectCommand());
+  }
+
+  public Command autoSetL4Coral() {
+    goal = SuperstructureGoal.L4CORAL;
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        wrist.runAngleCommand(goal.angleRads));
   }
 }
