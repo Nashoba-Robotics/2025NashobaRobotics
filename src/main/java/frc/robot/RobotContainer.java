@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ManualExtensionCommand;
+import frc.robot.commands.test.CANdleTestCommand;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
@@ -253,6 +254,7 @@ public class RobotContainer {
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
     SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
+    SmartDashboard.putData(new CANdleTestCommand());
 
     driver.leftTrigger(0.65).whileTrue(superstructure.setIntake());
     driver.leftBumper().onTrue(superstructure.setNeutral());

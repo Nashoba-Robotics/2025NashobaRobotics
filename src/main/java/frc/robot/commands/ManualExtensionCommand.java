@@ -10,8 +10,6 @@ public class ManualExtensionCommand extends Command {
 
   Elevator elevator;
   Wrist wrist;
-  double lastWristPose;
-  double lastElevatorPose;
 
   public ManualExtensionCommand(CommandXboxController operator, Elevator elevator, Wrist wrist) {
     this.operator = operator;
@@ -21,28 +19,23 @@ public class ManualExtensionCommand extends Command {
   }
 
   @Override
-  public void initialize() {
-    lastWristPose = wrist.getAngleRads();
-    lastElevatorPose = elevator.getPositionMeters();
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
     double lefty = -operator.getLeftY();
     double righty = -operator.getRightY();
     lefty = Math.abs(lefty) < 0.1 ? 0 : (lefty - 0.1) / 0.9; // Put deadzone in Constants
-    righty = Math.abs(righty) < 0.1 ? 0 : (righty - 0.25) / 0.75;
+    righty = Math.abs(righty) < 0.1 ? 0 : (righty - 0.1) / 0.9;
     if (lefty == 0) { // If there isn't any input, maintain the position
-      elevator.runExtension(lastElevatorPose);
+      // elevator.setExtension(elevator.getPositionMeters());
     } else {
-      elevator.runDutyCycle(lefty * 0.1);
-      lastElevatorPose = elevator.getPositionMeters();
+      // elevator.setDutyCycle(lefty * 0.03);
     }
     if (righty == 0) { // If there isn't any input, maintain the position
-      wrist.runSetpoint(lastWristPose);
+      // wrist.setSetpoint(wrist.getAngleRads());
     } else {
-      wrist.runDutyCycle(righty * 0.075 + 0.01);
-      lastWristPose = wrist.getAngleRads();
+      // elevator.setDutyCycle(righty * 0.03);
     }
   }
 
