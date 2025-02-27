@@ -18,11 +18,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ManualExtensionCommand;
-import frc.robot.commands.test.CANdleTestCommand;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
 import frc.robot.subsystems.Superstructure;
+import frc.robot.subsystems.candle.Candle;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -52,6 +52,7 @@ public class RobotContainer {
   private final Climber climber;
 
   private final Superstructure superstructure;
+  private final Candle candle;
 
   // // Controller
   public static final CommandXboxController driver = new CommandXboxController(0);
@@ -73,6 +74,7 @@ public class RobotContainer {
     climber = new Climber();
 
     superstructure = new Superstructure(elevator, wrist, manipulator, hopper, climber);
+    candle = new Candle(superstructure);
 
     switch (Constants.currentMode) {
       case REAL:
@@ -254,7 +256,7 @@ public class RobotContainer {
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
     SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
-    SmartDashboard.putData(new CANdleTestCommand());
+    // SmartDashboard.putData(new CANdleTestCommand());
 
     driver.leftTrigger(0.65).whileTrue(superstructure.setIntake());
     driver.leftBumper().onTrue(superstructure.setNeutral());

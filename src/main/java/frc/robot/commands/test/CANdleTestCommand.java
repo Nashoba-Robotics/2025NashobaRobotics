@@ -1,15 +1,15 @@
 package frc.robot.commands.test;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.candle.candle;
+import frc.robot.subsystems.candle.Candle;
 
 public class CANdleTestCommand extends Command {
 
-  candle candleCommand;
+  Candle candleCommand;
 
-  public void CANdleTestCommand(int state) {
+  public CANdleTestCommand(int state) {
 
-    candleCommand = this.candleCommand;
+    this.candleCommand = candleCommand;
   }
 
   @Override

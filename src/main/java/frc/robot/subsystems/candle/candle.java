@@ -5,9 +5,11 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.FireAnimation;
 import com.ctre.phoenix.led.LarsonAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.Superstructure;
 
 /*
 Notes & ToDo:
@@ -15,17 +17,24 @@ Notes & ToDo:
 Need dedicated auto rainbow animation
 Set perameters for animations
 Figure out what a larson animation is
-Refine colors & cut clutter
-Impliment means for color use
-Discover Animation "numLED" perameter indexing: From zero?
+
+Impliment means for color use`
+Discover Animation "numLED" perameter indexing: From zero?Refine colors & cut clutter
 */
 
-public class candle extends SubsystemBase {
+public class Candle extends SubsystemBase {
 
-  private static CANdle candleLEDs;
+  private CANdle candleLEDs;
+  private Superstructure superStructure;
+  private boolean lastDisabledState;
+  private boolean lastAutoState;
 
-  private void candle() {
+  public Candle(Superstructure superStructure) {
     candleLEDs = new CANdle(0);
+    this.superStructure = superStructure;
+    lastDisabledState = true;
+    lastAutoState = false;
+    candleLEDs.animate(larsonFront);
   }
 
   // 2025 isn't a stated robot, prob to delete
@@ -61,6 +70,25 @@ public class candle extends SubsystemBase {
       new LarsonAnimation(155, 155, 155, 1, 0.75, 16, LarsonAnimation.BounceMode.Center, 3, 0);
   private Animation larsonFront =
       new LarsonAnimation(155, 155, 155, 1, 0.75, 16, LarsonAnimation.BounceMode.Front, 3, 0);
+
+  @Override
+  public void periodic() {
+    if (DriverStation.isDisabled() != lastDisabledState) {
+      candleLEDs.animate(fire);
+      lastDisabledState = DriverStation.isDisabled();
+    } else if (DriverStation.isDisabled() == false
+        && DriverStation.isAutonomous() != lastAutoState) {
+      candleLEDs.animate(rainbow);
+      lastAutoState = DriverStation.isAutonomous();
+    }
+    // manipulator was made public, problem?
+    else if (superStructure.manipulator.isCoralPresent() == true
+        && DriverStation.isAutonomous() == false) {
+      candleLEDs.setLEDs(0, 0, 255, 175, 0, 16);
+    } else if (DriverStation.isAutonomous() == false) {
+      candleLEDs.setLEDs(0, 0, 0, 0, 0, 16);
+    }
+  }
 
   public void setCANdle(int state) {
 

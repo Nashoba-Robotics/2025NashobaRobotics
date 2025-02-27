@@ -41,7 +41,7 @@ public class Superstructure extends SubsystemBase {
 
   private final Elevator elevator;
   private final Wrist wrist;
-  private final Manipulator manipulator;
+  public final Manipulator manipulator;
   private final Hopper hopper;
   private final Climber climber;
 
