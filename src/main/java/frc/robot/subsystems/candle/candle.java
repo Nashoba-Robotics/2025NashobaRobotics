@@ -73,21 +73,29 @@ public class Candle extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println("Start LED Periodic");
     if (DriverStation.isDisabled() != lastDisabledState) {
       candleLEDs.animate(fire);
       lastDisabledState = DriverStation.isDisabled();
+      System.out.println("End LED State");
     } else if (DriverStation.isDisabled() == false
         && DriverStation.isAutonomous() != lastAutoState) {
       candleLEDs.animate(rainbow);
       lastAutoState = DriverStation.isAutonomous();
+      System.out.println("Auto LED State");
     }
     // manipulator was made public, problem?
     else if (superStructure.manipulator.isCoralPresent() == true
         && DriverStation.isAutonomous() == false) {
       candleLEDs.setLEDs(0, 0, 255, 175, 0, 16);
+      System.out.println("Coral LED State");
     } else if (DriverStation.isAutonomous() == false) {
       candleLEDs.setLEDs(0, 0, 0, 0, 0, 16);
+      System.out.println("Defualt LED State");
+    } else {
+      System.out.println("Initial LED State (Probably)");
     }
+    System.out.println("End LED Periodic");
   }
 
   public void setCANdle(int state) {
