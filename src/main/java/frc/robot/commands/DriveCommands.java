@@ -37,7 +37,7 @@ public class DriveCommands {
   private static final double DRIVE_KD = 0;
   private static final double DRIVE_MAX_VELOCITY = 4.5;
   private static final double DRIVE_MAX_ACCELERATION = 25;
-  private static final double DRIVE_TOLERANCE = 0.03; // meters
+  private static final double DRIVE_TOLERANCE = 0.02; // meters
 
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
@@ -141,20 +141,6 @@ public class DriveCommands {
 
               double driveY = driveYController.calculate(drive.getPose().getY(), pose.get().getY());
 
-              boolean nearX =
-                  Math.abs(drive.getPose().getX() - pose.get().getX()) <= DRIVE_TOLERANCE;
-              boolean nearY =
-                  Math.abs(drive.getPose().getY() - pose.get().getY()) <= DRIVE_TOLERANCE;
-              boolean nearTheta =
-                  Math.abs(
-                          drive.getPose().getRotation().getRadians()
-                              - pose.get().getRotation().getRadians())
-                      <= ANGLE_TOLERANCE;
-              // Convert to field relative speeds & send command
-
-              if (nearX) driveX = 0;
-              if (nearY) driveY = 0;
-              if (nearTheta) omega = 0;
               ChassisSpeeds speeds = new ChassisSpeeds(driveX, driveY, omega);
               drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(speeds, drive.getRotation()));
             },

@@ -17,15 +17,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.25
+            "name": "L2Score"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "CoralScore"
+            "name": "SetNeutral"
           }
         },
         {
@@ -41,12 +41,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Source-Score2"
@@ -55,7 +49,7 @@
         {
           "type": "named",
           "data": {
-            "name": "L2Prep"
+            "name": "L4Prep"
           }
         },
         {
@@ -67,7 +61,55 @@
         {
           "type": "named",
           "data": {
-            "name": "CoralScore"
+            "name": "L4Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetNeutral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score2-Source"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source-Score3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Prep"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetNeutral"
           }
         }
       ]

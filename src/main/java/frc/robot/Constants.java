@@ -71,8 +71,8 @@ public final class Constants {
 
     public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
 
-    public static final double STATOR_LIMIT = 60;
-    public static final double SUPPLY_LIMIT = 60;
+    public static final double STATOR_LIMIT = 90;
+    public static final double SUPPLY_LIMIT = 90;
 
     public static final double GEAR_RATIO = 4;
   }
@@ -96,10 +96,10 @@ public final class Constants {
 
     public static final InvertedValue PIVOT_INVERTED = InvertedValue.CounterClockwise_Positive;
 
-    public static final double PIVOT_STATOR_LIMIT = 0;
-    public static final double PIVOT_SUPPLY_LIMIT = 0;
+    public static final double PIVOT_STATOR_LIMIT = 100;
+    public static final double PIVOT_SUPPLY_LIMIT = 100;
 
-    public static final double PIVOT_GEAR_RATIO = 0;
+    public static final double PIVOT_GEAR_RATIO = 206.18181818;
 
     public static final double PIVOT_MOTION_MAGIC_CRUISE_VELOCITY = 10000.0;
     public static final double PIVOT_MOTION_MAGIC_ACCELERATION = 10000.0;
@@ -110,7 +110,7 @@ public final class Constants {
             .withKG(0.0)
             .withKV(0.0)
             .withKA(0.0)
-            .withKP(0.0)
+            .withKP(10.0)
             .withKI(0.0)
             .withKD(0.0)
             .withGravityType(GravityTypeValue.Arm_Cosine);
@@ -124,7 +124,7 @@ public final class Constants {
 
     public static final SensorDirectionValue ENCODER_INVERTED =
         SensorDirectionValue.CounterClockwise_Positive;
-    public static final double ENCODER_OFFSET_RADIANS = -0.053689327;
+    public static final double ENCODER_OFFSET_RADIANS = 4.1325439;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 

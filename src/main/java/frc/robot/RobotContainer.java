@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ManualExtensionCommand;
-import frc.robot.commands.test.ClimberTestCommand;
+import frc.robot.commands.test.ClimberTestDownCommand;
+import frc.robot.commands.test.ClimberTestUpCommand;
 import frc.robot.commands.test.ElevatorDutyCycleCommand;
+import frc.robot.commands.test.TuneClimberCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
 import frc.robot.subsystems.Superstructure;
@@ -118,8 +120,10 @@ public class RobotContainer {
     // // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    NamedCommands.registerCommand("L4Prep", superstructure.setL2Coral());
-    NamedCommands.registerCommand("L4Score", manipulator.ejectCommand());
+    NamedCommands.registerCommand("L4Prep", superstructure.autoSetL4Coral());
+    NamedCommands.registerCommand("L4Score", manipulator.L4ejectCommand());
+    NamedCommands.registerCommand("L2Prep", superstructure.autoSetL2Coral());
+    NamedCommands.registerCommand("L2Score", manipulator.ejectCommand());
     NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
     NamedCommands.registerCommand("SetNeutral", superstructure.setNeutral());
 
@@ -128,7 +132,8 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
     autoChooser.addOption("Drive a foot", new PathPlannerAuto("Taxi"));
-    autoChooser.addOption("L4 abcdef", new PathPlannerAuto("abcdef", false));
+    autoChooser.addOption("3Piece Right", new PathPlannerAuto("3Piece", false));
+    autoChooser.addOption("3Piece Left", new PathPlannerAuto("3Piece", true));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -145,7 +150,19 @@ public class RobotContainer {
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
     SmartDashboard.putData(new TuneWristCommand(wrist));
     SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
-    SmartDashboard.putData(new ClimberTestCommand(climber, testController));
+    SmartDashboard.putData(new TuneClimberCommand(climber));
+
+    operator.rightBumper().whileTrue(manipulator.slowSpitCommand());
+
+    operator.a().onTrue(climber.deployClimber());
+    operator
+        .rightTrigger(0.15)
+        .and(operator.y())
+        .onTrue(new ClimberTestUpCommand(climber, operator));
+    operator
+        .leftTrigger(0.15)
+        .and(operator.y())
+        .onTrue(new ClimberTestDownCommand(climber, operator));
 
     driver
         .y()
@@ -161,14 +178,14 @@ public class RobotContainer {
                                                     .nearest(Arrays.asList(scoringPositions))
                                                     .getX()
                                                 - drive.getPose().getX())
-                                        <= 0.03
+                                        <= 0.035
                                     || Math.abs(
                                             drive
                                                     .getPose()
                                                     .nearest(Arrays.asList(scoringPositions))
                                                     .getY()
                                                 - drive.getPose().getY())
-                                        <= 0.03
+                                        <= 0.035
                                     || Math.abs(
                                             drive
                                                     .getPose()
@@ -192,14 +209,14 @@ public class RobotContainer {
                                                     .nearest(Arrays.asList(scoringPositions))
                                                     .getX()
                                                 - drive.getPose().getX())
-                                        <= 0.03
+                                        <= 0.035
                                     || Math.abs(
                                             drive
                                                     .getPose()
                                                     .nearest(Arrays.asList(scoringPositions))
                                                     .getY()
                                                 - drive.getPose().getY())
-                                        <= 0.03
+                                        <= 0.035
                                     || Math.abs(
                                             drive
                                                     .getPose()
@@ -223,14 +240,14 @@ public class RobotContainer {
                                                     .nearest(Arrays.asList(scoringPositions))
                                                     .getX()
                                                 - drive.getPose().getX())
-                                        <= 0.03
+                                        <= 0.035
                                     || Math.abs(
                                             drive
                                                     .getPose()
                                                     .nearest(Arrays.asList(scoringPositions))
                                                     .getY()
                                                 - drive.getPose().getY())
-                                        <= 0.03
+                                        <= 0.035
                                     || Math.abs(
                                             drive
                                                     .getPose()
@@ -257,8 +274,9 @@ public class RobotContainer {
         DriveCommands.joystickDrive(
             drive, () -> -driver.getLeftY(), () -> -driver.getLeftX(), () -> -driver.getRightX()));
 
-    // // Switch to X pattern when start button is pressed
-    driver.start().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    // // // Switch to X pattern when start button is pressed
+    // driver.start().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driver.start().onTrue(manipulator.ejectCommand());
 
     // // Reset gyro to 0° when B button is pressed
     driver

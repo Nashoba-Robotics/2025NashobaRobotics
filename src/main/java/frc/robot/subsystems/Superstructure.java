@@ -68,7 +68,8 @@ public class Superstructure extends SubsystemBase {
     return new SequentialCommandGroup(
         new ParallelCommandGroup(elevator.runNeutralPrep(), wrist.runAngleCommand(goal.angleRads)),
         elevator.runSetpointCommand(goal.extensionMeters),
-        new ParallelCommandGroup(hopper.intakeCommand(), manipulator.coralIntakeCommand()));
+        new ParallelCommandGroup(
+            hopper.intakeCommand().until(() -> hasCoral()), manipulator.coralIntakeCommand()));
   }
 
   public Command setL4Coral() {
@@ -110,8 +111,9 @@ public class Superstructure extends SubsystemBase {
   public Command setBargeAlgae() {
     goal = SuperstructureGoal.BARGEALGAE;
     return new SequentialCommandGroup(
-        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        elevator.runNeutralPrep(),
         wrist.runAngleCommand(goal.angleRads),
+        elevator.runSetpointCommand(goal.extensionMeters),
         new WaitUntilCommand(() -> score.getAsBoolean()),
         manipulator.ejectCommand());
   }
@@ -146,5 +148,16 @@ public class Superstructure extends SubsystemBase {
     return new SequentialCommandGroup(
         elevator.runExtensionCommand(goal.extensionMeters, 0.275),
         wrist.runAngleCommand(goal.angleRads));
+  }
+
+  public Command autoSetL2Coral() {
+    goal = SuperstructureGoal.L2CORAL;
+    return new SequentialCommandGroup(
+        elevator.runExtensionCommand(goal.extensionMeters, 0.275),
+        wrist.runAngleCommand(goal.angleRads));
+  }
+
+  public boolean hasCoral() {
+    return manipulator.isCoralPresent();
   }
 }

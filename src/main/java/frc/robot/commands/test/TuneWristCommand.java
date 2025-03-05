@@ -20,9 +20,9 @@ public class TuneWristCommand extends Command {
 
   @Override
   public void initialize() {
-    lastkV = Constants.Elevator.PID.kV;
-    lastkP = Constants.Elevator.PID.kP;
-    lastkD = Constants.Elevator.PID.kD;
+    lastkV = Constants.Wrist.PID.kV;
+    lastkP = Constants.Wrist.PID.kP;
+    lastkD = Constants.Wrist.PID.kD;
   }
 
   @Override

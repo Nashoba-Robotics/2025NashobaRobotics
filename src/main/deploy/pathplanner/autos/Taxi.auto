@@ -9,6 +9,30 @@
           "data": {
             "pathName": "Taxi"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Prep"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetNeutral"
+          }
         }
       ]
     }

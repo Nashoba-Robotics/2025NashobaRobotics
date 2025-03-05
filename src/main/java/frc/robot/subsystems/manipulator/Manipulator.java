@@ -46,11 +46,11 @@ public class Manipulator extends SubsystemBase {
         .andThen(
             Commands.waitUntil(() -> inputs.velocityRadPerSec >= -20),
             new SuppliedWaitCommand(() -> 0.2))
-        .finallyDo(() -> runPercentOutput(-0.4));
+        .finallyDo(() -> runPercentOutput(-0.5));
   }
 
   public Command ejectCommand() {
-    return run(() -> runPercentOutput(0.8))
+    return run(() -> runPercentOutput(0.60))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
         .finallyDo(() -> stop());
   }
@@ -73,14 +73,14 @@ public class Manipulator extends SubsystemBase {
         .finallyDo(() -> stop());
   }
 
-  public Command L1ejectCommand() {
-    return run(() -> runPercentOutput(0.8))
-        .raceWith(new SuppliedWaitCommand(() -> 0.5))
-        .finallyDo(() -> stop());
+  public Command slowSpitCommand() {
+    return run(() -> runPercentOutput(-0.05)).finallyDo(() -> stop());
   }
 
-  public Command toNeutralAid() {
-    return runOnce(() -> runPercentOutput(-0.05));
+  public Command L1ejectCommand() {
+    return run(() -> runPercentOutput(0.6))
+        .raceWith(new SuppliedWaitCommand(() -> 0.5))
+        .finallyDo(() -> stop());
   }
 
   public Command stopCommand() {
