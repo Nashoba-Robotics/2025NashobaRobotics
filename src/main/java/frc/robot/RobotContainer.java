@@ -23,6 +23,7 @@ import frc.robot.commands.test.ElevatorDutyCycleCommand;
 import frc.robot.commands.test.TuneClimberCommand;
 import frc.robot.commands.test.TuneElevatorCommand;
 import frc.robot.commands.test.TuneWristCommand;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.climber.Climber;
 import frc.robot.subsystems.drive.Drive;
@@ -51,8 +52,9 @@ public class RobotContainer {
   private final Manipulator manipulator;
   private final Hopper hopper;
   private final Climber climber;
+  private final LEDSubsystem leds;
 
-  private final Superstructure superstructure;
+  public final Superstructure superstructure;
 
   // // Controller
   public static final CommandXboxController driver = new CommandXboxController(0);
@@ -71,6 +73,8 @@ public class RobotContainer {
     climber = new Climber();
 
     superstructure = new Superstructure(elevator, wrist, manipulator, hopper, climber);
+
+    leds = new LEDSubsystem(superstructure);
 
     switch (Constants.currentMode) {
       case REAL:
@@ -137,6 +141,8 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+
+    DriverStation.silenceJoystickConnectionWarning(true);
   }
 
   /**
@@ -152,7 +158,11 @@ public class RobotContainer {
     SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
     SmartDashboard.putData(new TuneClimberCommand(climber));
 
+    testController.a().onTrue(superstructure.setL2Coral());
+    testController.b().onTrue(superstructure.setL3Coral());
+
     operator.rightBumper().whileTrue(manipulator.slowSpitCommand());
+    operator.leftBumper().whileTrue(manipulator.slowIntakeCommand());
 
     operator.a().onTrue(climber.deployClimber());
     operator
@@ -258,7 +268,7 @@ public class RobotContainer {
                                         <= 0.05)
                         .andThen(superstructure.setL2Coral())));
 
-    driver.rightBumper().whileTrue(superstructure.setL1Coral());
+    driver.rightBumper().onTrue(superstructure.setL1Coral());
     driver.rightStick().onTrue(manipulator.spitCommand());
 
     driver.povUp().onTrue(superstructure.setBargeAlgae());
@@ -267,6 +277,7 @@ public class RobotContainer {
     driver.povLeft().onTrue(superstructure.setProcessor());
 
     driver.leftTrigger(0.65).whileTrue(superstructure.setIntake());
+    driver.leftTrigger(0.65).onFalse(superstructure.setNeutral());
     driver.leftBumper().onTrue(superstructure.setNeutral());
 
     // // // Default command, normal field-relative drive

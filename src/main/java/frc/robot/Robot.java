@@ -97,6 +97,7 @@ public class Robot extends LoggedRobot {
   @Override
   public void robotPeriodic() {
     Logger.recordOutput("MatchTime", DriverStation.getMatchTime());
+    Logger.recordOutput("SuperstructureGoal", robotContainer.superstructure.getGoal());
     // Switch thread to high priority to improve loop timing
     // Threads.setCurrentThreadPriority(true, 99);
 
