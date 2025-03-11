@@ -40,6 +40,17 @@ public class Manipulator extends SubsystemBase {
         () -> isCoralPresent());
   }
 
+  public Command autoIntakeCommand() {
+    return new ConditionalCommand(
+        Commands.none(),
+        run(
+            () -> {
+              if (isCoralPresent()) stop();
+              else runPercentOutput(0.45);
+            }),
+        () -> isCoralPresent());
+  }
+
   public Command algaeIntakeCommand() {
     return run(() -> runPercentOutput(-1))
         .raceWith(new SuppliedWaitCommand(() -> 0.15))
@@ -62,8 +73,8 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Command L4ejectCommand() {
-    return run(() -> runPercentOutput(-0.8))
-        .raceWith(new SuppliedWaitCommand(() -> 0.3))
+    return run(() -> runPercentOutput(-0.9))
+        .raceWith(new SuppliedWaitCommand(() -> 0.75))
         .finallyDo(() -> stop());
   }
 
@@ -82,7 +93,7 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Command L1ejectCommand() {
-    return run(() -> runPercentOutput(0.6))
+    return run(() -> runPercentOutput(0.4))
         .raceWith(new SuppliedWaitCommand(() -> 0.5))
         .finallyDo(() -> stop());
   }

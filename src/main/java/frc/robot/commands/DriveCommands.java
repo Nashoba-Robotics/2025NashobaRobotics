@@ -33,9 +33,9 @@ public class DriveCommands {
   private static final double ANGLE_MAX_ACCELERATION = 30.0;
   private static final double ANGLE_TOLERANCE = 0.05; // radians
 
-  private static final double DRIVE_KP = 5;
+  private static final double DRIVE_KP = 3.5;
   private static final double DRIVE_KD = 0;
-  private static final double DRIVE_MAX_VELOCITY = 4.5;
+  private static final double DRIVE_MAX_VELOCITY = 3.5;
   private static final double DRIVE_MAX_ACCELERATION = 25;
   private static final double DRIVE_TOLERANCE = 0.02; // meters
 

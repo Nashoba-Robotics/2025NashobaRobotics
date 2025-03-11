@@ -130,14 +130,40 @@ public class RobotContainer {
     NamedCommands.registerCommand("L2Score", manipulator.ejectCommand());
     NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
     NamedCommands.registerCommand("SetNeutral", superstructure.setNeutral());
+    NamedCommands.registerCommand("UnendingIntake", superstructure.autoIntake());
+    NamedCommands.registerCommand(
+        "AutoDrive",
+        DriveCommands.driveToPose(
+                drive, () -> drive.getPose().nearest(Arrays.asList(scoringPositions)))
+            .until(
+                () ->
+                    Math.abs(
+                                drive.getPose().nearest(Arrays.asList(scoringPositions)).getX()
+                                    - drive.getPose().getX())
+                            <= 0.03
+                        || Math.abs(
+                                drive.getPose().nearest(Arrays.asList(scoringPositions)).getY()
+                                    - drive.getPose().getY())
+                            <= 0.03
+                        || Math.abs(
+                                drive
+                                        .getPose()
+                                        .nearest(Arrays.asList(scoringPositions))
+                                        .getRotation()
+                                        .getRadians()
+                                    - drive.getPose().getRotation().getRadians())
+                            <= 0.060));
 
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
     autoChooser.addOption("Drive a foot", new PathPlannerAuto("Taxi"));
-    autoChooser.addOption("3Piece Right", new PathPlannerAuto("3Piece", false));
-    autoChooser.addOption("3Piece Left", new PathPlannerAuto("3Piece", true));
+    autoChooser.addOption("Old3Piece Right", new PathPlannerAuto("Old3Piece", false));
+    autoChooser.addOption("Old3Piece Left", new PathPlannerAuto("Old3Piece", true));
+    autoChooser.addOption("New3Piece Right", new PathPlannerAuto("New3Piece", false));
+    autoChooser.addOption("New3Piece Left", new PathPlannerAuto("New3Piece", true));
+    autoChooser.addOption("TuneAuto", new PathPlannerAuto("TuneDrive", true));
 
     // Configure the button bindings
     configureButtonBindings();

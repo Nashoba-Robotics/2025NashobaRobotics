@@ -80,8 +80,8 @@ public class Elevator extends SubsystemBase {
   public Command runNeutralPrep() {
     return new InstantCommand(
         () -> {
-          if (getPositionMeters() >= 0.1) {
-            runExtension(0.275);
+          if (getPositionMeters() >= 0.55) {
+            runExtension(0.55);
           }
         },
         this);
