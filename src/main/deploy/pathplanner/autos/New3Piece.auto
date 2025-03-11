@@ -15,6 +15,31 @@
           "data": {
             "name": "AutoDrive"
           }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score1-Source-Score2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoDrive"
+          }
         }
       ]
     }

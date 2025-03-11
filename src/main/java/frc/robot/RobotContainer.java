@@ -140,11 +140,11 @@ public class RobotContainer {
                     Math.abs(
                                 drive.getPose().nearest(Arrays.asList(scoringPositions)).getX()
                                     - drive.getPose().getX())
-                            <= 0.03
+                            <= 0.02
                         || Math.abs(
                                 drive.getPose().nearest(Arrays.asList(scoringPositions)).getY()
                                     - drive.getPose().getY())
-                            <= 0.03
+                            <= 0.02
                         || Math.abs(
                                 drive
                                         .getPose()
@@ -152,7 +152,7 @@ public class RobotContainer {
                                         .getRotation()
                                         .getRadians()
                                     - drive.getPose().getRotation().getRadians())
-                            <= 0.060));
+                            <= 0.05));
 
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
