@@ -134,8 +134,7 @@ public class DriveCommands {
               // Calculate angular speed
               double omega =
                   angleController.calculate(
-                      drive.getRotation().getRadians(),
-                      (pose.get().getRotation().getRadians() + Math.PI));
+                      drive.getRotation().getRadians(), pose.get().getRotation().getRadians());
 
               double driveX = driveXController.calculate(drive.getPose().getX(), pose.get().getX());
 
@@ -207,6 +206,32 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
+
+  // public static Command pathFindToReef(Drive drive, Supplier<Pose2d> goalPose) {
+  //   return new InstantCommand(
+  //           () -> {
+  //             PathConstraints constraints =
+  //                 new PathConstraints(
+  //                     3.5, 4.5, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+  //             // Since AutoBuilder is configured, we can use it to build pathfinding commands
+  //             Command pathfindingCommand =
+  //                 AutoBuilder.pathfindToPose(
+  //                     goalPose.get(), constraints, 0.0 // Goal end velocity in meters/sec
+  //                     );
+
+  //             CommandScheduler.getInstance().schedule(pathfindingCommand);
+  //           })
+  //       .andThen(
+  //           new WaitUntilCommand(
+  //               () -> {
+  //                 return drive
+  //                         .getPose()
+  //                         .getTranslation()
+  //                         .getDistance(goalPose.get().getTranslation())
+  //                     < 0.03;
+  //               }));
+  // }
 
   /**
    * Measures the velocity feedforward constants for the drive motors.
