@@ -35,6 +35,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "SetNeutral"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -62,6 +68,12 @@
         {
           "type": "named",
           "data": {
+            "name": "SetIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "L4Prep"
           }
         },
@@ -75,6 +87,12 @@
           "type": "named",
           "data": {
             "name": "L4Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetNeutral"
           }
         },
         {
@@ -100,6 +118,12 @@
           "type": "named",
           "data": {
             "name": "AutoDrive"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetIntake"
           }
         },
         {

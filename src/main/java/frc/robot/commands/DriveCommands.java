@@ -37,7 +37,7 @@ public class DriveCommands {
   private static final double DRIVE_KD = 0;
   private static final double DRIVE_MAX_VELOCITY = 3.5;
   private static final double DRIVE_MAX_ACCELERATION = 25;
-  private static final double DRIVE_TOLERANCE = 0.02; // meters
+  private static final double DRIVE_TOLERANCE = 0.025; // meters
 
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
@@ -150,7 +150,10 @@ public class DriveCommands {
               angleController.reset(drive.getRotation().getRadians());
               driveXController.reset(drive.getPose().getX());
               driveYController.reset(drive.getPose().getY());
-            });
+            })
+        .until(
+            () ->
+                drive.getPose().getTranslation().getDistance(pose.get().getTranslation()) < 0.025);
   }
 
   /**

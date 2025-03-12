@@ -89,7 +89,7 @@ public class VisionConstants {
       Units.inchesToMeters(6.469); // offset Y setpoint by distance from tag to reefpost
   public static double adjustYLeftPole = Units.inchesToMeters(6.420);
   public static double adjustX =
-      Units.inchesToMeters(37.5 / 2); // offset X setpoint by center of robot to bumber
+      Units.inchesToMeters(38.0 / 2); // offset X setpoint by center of robot to bumber
 
   public static final Pose2d[] scoringPositions =
       new Pose2d[] {
