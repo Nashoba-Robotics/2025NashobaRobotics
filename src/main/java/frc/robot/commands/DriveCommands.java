@@ -33,11 +33,11 @@ public class DriveCommands {
   private static final double ANGLE_MAX_ACCELERATION = 30.0;
   private static final double ANGLE_TOLERANCE = 0.05; // radians
 
-  private static final double DRIVE_KP = 5;
+  private static final double DRIVE_KP = 3.5;
   private static final double DRIVE_KD = 0;
-  private static final double DRIVE_MAX_VELOCITY = 4.5;
+  private static final double DRIVE_MAX_VELOCITY = 3.5;
   private static final double DRIVE_MAX_ACCELERATION = 25;
-  private static final double DRIVE_TOLERANCE = 0.02; // meters
+  private static final double DRIVE_TOLERANCE = 0.025; // meters
 
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/Sec
@@ -134,8 +134,7 @@ public class DriveCommands {
               // Calculate angular speed
               double omega =
                   angleController.calculate(
-                      drive.getRotation().getRadians(),
-                      (pose.get().getRotation().getRadians() + Math.PI));
+                      drive.getRotation().getRadians(), pose.get().getRotation().getRadians());
 
               double driveX = driveXController.calculate(drive.getPose().getX(), pose.get().getX());
 
@@ -151,7 +150,10 @@ public class DriveCommands {
               angleController.reset(drive.getRotation().getRadians());
               driveXController.reset(drive.getPose().getX());
               driveYController.reset(drive.getPose().getY());
-            });
+            })
+        .until(
+            () ->
+                drive.getPose().getTranslation().getDistance(pose.get().getTranslation()) < 0.025);
   }
 
   /**
@@ -207,6 +209,32 @@ public class DriveCommands {
         // Reset PID controller when command starts
         .beforeStarting(() -> angleController.reset(drive.getRotation().getRadians()));
   }
+
+  // public static Command pathFindToReef(Drive drive, Supplier<Pose2d> goalPose) {
+  //   return new InstantCommand(
+  //           () -> {
+  //             PathConstraints constraints =
+  //                 new PathConstraints(
+  //                     3.5, 4.5, Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+  //             // Since AutoBuilder is configured, we can use it to build pathfinding commands
+  //             Command pathfindingCommand =
+  //                 AutoBuilder.pathfindToPose(
+  //                     goalPose.get(), constraints, 0.0 // Goal end velocity in meters/sec
+  //                     );
+
+  //             CommandScheduler.getInstance().schedule(pathfindingCommand);
+  //           })
+  //       .andThen(
+  //           new WaitUntilCommand(
+  //               () -> {
+  //                 return drive
+  //                         .getPose()
+  //                         .getTranslation()
+  //                         .getDistance(goalPose.get().getTranslation())
+  //                     < 0.03;
+  //               }));
+  // }
 
   /**
    * Measures the velocity feedforward constants for the drive motors.

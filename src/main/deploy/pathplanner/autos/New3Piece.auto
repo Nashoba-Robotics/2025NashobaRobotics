@@ -7,43 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start-Score1"
+            "pathName": "Start-Score1'"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "L2Prep"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "L2Score"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetNeutral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Score1-Source"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "SetIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source-Score2"
+            "name": "AutoDrive"
           }
         },
         {
@@ -55,7 +25,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.1
           }
         },
         {
@@ -71,21 +41,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "Score2-Source"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score1-Source-Score2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoDrive"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "SetIntake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Source-Score3"
           }
         },
         {
@@ -97,7 +80,62 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.25
+            "waitTime": 0.1
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Score"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetNeutral"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetIntake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score2-Source-Score3"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "AutoDrive"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SetIntake"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4Prep"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.1
           }
         },
         {

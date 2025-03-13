@@ -105,7 +105,7 @@ public class Superstructure extends SubsystemBase {
   public Command setL1Coral() {
     return new SequentialCommandGroup(
         runOnce(() -> goal = SuperstructureGoal.L1CORAL),
-        elevator.runExtensionCommand(Presets.L1CORAL.extensionMeters, 0.275),
+        elevator.runExtensionCommand(Presets.L1CORAL.extensionMeters, 0.05),
         wrist.runAngleCommand(Presets.L1CORAL.angleRads),
         new WaitUntilCommand(() -> score.getAsBoolean()),
         manipulator.L1ejectCommand());
@@ -158,6 +158,10 @@ public class Superstructure extends SubsystemBase {
         runOnce(() -> goal = SuperstructureGoal.L2CORAL),
         elevator.runExtensionCommand(Presets.L2CORAL.extensionMeters, 0.275),
         wrist.runAngleCommand(Presets.L2CORAL.angleRads));
+  }
+
+  public Command autoIntake() {
+    return new ParallelCommandGroup(manipulator.autoIntakeCommand(), hopper.intakeCommand());
   }
 
   public boolean hasCoral() {
