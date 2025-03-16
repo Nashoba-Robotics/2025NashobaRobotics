@@ -1,8 +1,8 @@
 package frc.robot;
 
 public enum Presets {
-  NEUTRAL(0, 0.00),
-  INTAKE(0, 0.00),
+  NEUTRAL(0, 0.05),
+  INTAKE(0, 0.05),
 
   L4CORAL(1.3, -3.4),
   L3CORAL(1.025, 0.05),

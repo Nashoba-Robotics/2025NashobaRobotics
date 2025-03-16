@@ -94,7 +94,7 @@ public final class Constants {
     public static final int LEADER_ID = 14;
     public static final int FOLLOWER_ID = 15;
 
-    public static final InvertedValue PIVOT_INVERTED = InvertedValue.CounterClockwise_Positive;
+    public static final InvertedValue PIVOT_INVERTED = InvertedValue.Clockwise_Positive;
 
     public static final double PIVOT_STATOR_LIMIT = 100;
     public static final double PIVOT_SUPPLY_LIMIT = 100;
@@ -137,7 +137,7 @@ public final class Constants {
     public static final Rotation2d MOTION_MAGIC_CRUISE_VELOCITY = Rotation2d.fromRadians(625);
     public static final Rotation2d MOTION_MAGIC_ACCELERATION = Rotation2d.fromRadians(625);
 
-    public static final Rotation2d WRIST_TOLERANCE = Rotation2d.fromRadians(0.150);
+    public static final Rotation2d WRIST_TOLERANCE = Rotation2d.fromRadians(0.1);
     public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
     public static final Rotation2d REVERSE_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
 

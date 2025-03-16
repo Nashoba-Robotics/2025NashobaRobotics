@@ -3,7 +3,9 @@ package frc.robot.subsystems.manipulator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.util.SuppliedWaitCommand;
 import org.littletonrobotics.junction.Logger;
 
@@ -36,7 +38,10 @@ public class Manipulator extends SubsystemBase {
   public Command coralIntakeCommand() {
     return new ConditionalCommand(
         Commands.none(),
-        run(() -> runPercentOutput(0.45)).until(() -> isCoralPresent()).finallyDo(() -> stop()),
+        new SequentialCommandGroup(
+                run(() -> runPercentOutput(0.25)).until(() -> isCoralPresent()),
+                new WaitCommand(0.05))
+            .finallyDo(() -> stop()),
         () -> isCoralPresent());
   }
 
@@ -85,16 +90,16 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Command slowSpitCommand() {
-    return run(() -> runPercentOutput(-0.05)).finallyDo(() -> stop());
+    return run(() -> runPercentOutput(-0.15)).finallyDo(() -> stop());
   }
 
   public Command slowIntakeCommand() {
-    return run(() -> runPercentOutput(-0.05)).finallyDo(() -> stop());
+    return run(() -> runPercentOutput(0.15)).finallyDo(() -> stop());
   }
 
   public Command L1ejectCommand() {
-    return run(() -> runPercentOutput(0.4))
-        .raceWith(new SuppliedWaitCommand(() -> 0.5))
+    return run(() -> runPercentOutput(0.35))
+        .raceWith(new SuppliedWaitCommand(() -> 0.7))
         .finallyDo(() -> stop());
   }
 

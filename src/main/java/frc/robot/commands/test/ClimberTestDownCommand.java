@@ -16,6 +16,7 @@ public class ClimberTestDownCommand extends Command {
     this.climber = climber;
     this.controller = controller;
     addRequirements(climber);
+    lastClimberPose = climber.getAngleRads();
   }
 
   @Override

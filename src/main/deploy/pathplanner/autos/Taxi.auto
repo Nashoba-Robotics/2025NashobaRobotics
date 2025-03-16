@@ -13,7 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "L4Prep"
+            "name": "AutoDrive"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "L4PrepPreload"
           }
         },
         {
