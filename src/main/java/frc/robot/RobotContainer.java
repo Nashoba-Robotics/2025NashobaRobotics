@@ -86,7 +86,7 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVision(camera0Name, robotToCamera0),
+                // new VisionIOPhotonVision(camera0Name, robotToCamera0),
                 new VisionIOPhotonVision(camera1Name, robotToCamera1));
         break;
 
@@ -127,32 +127,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("L2Prep", superstructure.autoSetL2Coral());
     NamedCommands.registerCommand("L2Score", manipulator.ejectCommand());
     NamedCommands.registerCommand("SetIntake", superstructure.setIntake());
-    NamedCommands.registerCommand("TimeoutIntake", superstructure.setIntake().withTimeout(1.75));
+    NamedCommands.registerCommand("TimeoutIntake", superstructure.setIntake().withTimeout(0.75));
     NamedCommands.registerCommand("SetNeutral", superstructure.setNeutral());
     NamedCommands.registerCommand(
         "AutoDrive",
         DriveCommands.driveToPose(
                 drive, () -> drive.getPose().nearest(Arrays.asList(scoringPositions)))
-            .until(
-                () ->
-                    Math.abs(
-                                drive.getPose().nearest(Arrays.asList(scoringPositions)).getX()
-                                    - drive.getPose().getX())
-                            <= 0.025
-                        && Math.abs(
-                                drive.getPose().nearest(Arrays.asList(scoringPositions)).getY()
-                                    - drive.getPose().getY())
-                            <= 0.025
-                        && Math.abs(
-                                drive
-                                        .getPose()
-                                        .nearest(Arrays.asList(scoringPositions))
-                                        .getRotation()
-                                        .getRadians()
-                                    - drive.getPose().getRotation().getRadians())
-                            <= 0.15)
-            .withTimeout(0.75)
-            .finallyDo(() -> drive.stop()));
+            .withTimeout(0.75));
 
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
@@ -162,6 +143,8 @@ public class RobotContainer {
     autoChooser.addOption("New3Piece Right", new PathPlannerAuto("New3Piece", false));
     autoChooser.addOption("New3Piece Left", new PathPlannerAuto("New3Piece", true));
     autoChooser.addOption("TuneAuto", new PathPlannerAuto("TuneDrive", true));
+    autoChooser.addOption("Right 4Piece", new PathPlannerAuto("4Piece", false));
+    autoChooser.addOption("Left 4Piece", new PathPlannerAuto("4Piece", true));
 
     // SmartDashboard.putData(new TuneElevatorCommand(elevator));
     // SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
@@ -213,30 +196,16 @@ public class RobotContainer {
                 .alongWith(
                     Commands.waitUntil(
                             () ->
-                                Math.abs(
+                                drive
+                                        .getPose()
+                                        .getTranslation()
+                                        .getDistance(
                                             drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getX()
-                                                - drive.getPose().getX())
-                                        <= 0.045
-                                    && Math.abs(
-                                            drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getY()
-                                                - drive.getPose().getY())
-                                        <= 0.045
-                                    && Math.abs(
-                                            drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getRotation()
-                                                    .getRadians()
-                                                - drive.getPose().getRotation().getRadians())
-                                        <= 0.15)
+                                                .getPose()
+                                                .nearest(Arrays.asList(scoringPositions))
+                                                .getTranslation())
+                                    <= 0.05)
                         .withTimeout(1.25)
-                        .finallyDo(() -> drive.stop())
                         .andThen(superstructure.setL4Coral())));
     driver
         .b()
@@ -246,30 +215,16 @@ public class RobotContainer {
                 .alongWith(
                     Commands.waitUntil(
                             () ->
-                                Math.abs(
+                                drive
+                                        .getPose()
+                                        .getTranslation()
+                                        .getDistance(
                                             drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getX()
-                                                - drive.getPose().getX())
-                                        <= 0.045
-                                    && Math.abs(
-                                            drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getY()
-                                                - drive.getPose().getY())
-                                        <= 0.045
-                                    && Math.abs(
-                                            drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getRotation()
-                                                    .getRadians()
-                                                - drive.getPose().getRotation().getRadians())
-                                        <= 0.15)
+                                                .getPose()
+                                                .nearest(Arrays.asList(scoringPositions))
+                                                .getTranslation())
+                                    <= 0.5)
                         .withTimeout(1.25)
-                        .finallyDo(() -> drive.stop())
                         .andThen(superstructure.setL3Coral())));
     driver
         .a()
@@ -279,30 +234,16 @@ public class RobotContainer {
                 .alongWith(
                     Commands.waitUntil(
                             () ->
-                                Math.abs(
+                                drive
+                                        .getPose()
+                                        .getTranslation()
+                                        .getDistance(
                                             drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getX()
-                                                - drive.getPose().getX())
-                                        <= 0.045
-                                    && Math.abs(
-                                            drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getY()
-                                                - drive.getPose().getY())
-                                        <= 0.045
-                                    && Math.abs(
-                                            drive
-                                                    .getPose()
-                                                    .nearest(Arrays.asList(scoringPositions))
-                                                    .getRotation()
-                                                    .getRadians()
-                                                - drive.getPose().getRotation().getRadians())
-                                        <= 0.15)
+                                                .getPose()
+                                                .nearest(Arrays.asList(scoringPositions))
+                                                .getTranslation())
+                                    <= 0.5)
                         .withTimeout(1.25)
-                        .finallyDo(() -> drive.stop())
                         .andThen(superstructure.setL2Coral())));
 
     driver.rightBumper().onTrue(superstructure.setL1Coral());

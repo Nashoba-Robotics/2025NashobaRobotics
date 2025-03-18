@@ -137,7 +137,7 @@ public final class Constants {
     public static final Rotation2d MOTION_MAGIC_CRUISE_VELOCITY = Rotation2d.fromRadians(625);
     public static final Rotation2d MOTION_MAGIC_ACCELERATION = Rotation2d.fromRadians(625);
 
-    public static final Rotation2d WRIST_TOLERANCE = Rotation2d.fromRadians(0.1);
+    public static final Rotation2d WRIST_TOLERANCE = Rotation2d.fromRadians(0.05);
     public static final Rotation2d FORWARD_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
     public static final Rotation2d REVERSE_SOFT_LIMIT = Rotation2d.fromRadians(0.0);
 

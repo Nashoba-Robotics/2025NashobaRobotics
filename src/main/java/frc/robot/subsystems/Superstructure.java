@@ -151,10 +151,10 @@ public class Superstructure extends SubsystemBase {
   public Command preloadSetL4Coral() {
     return new SequentialCommandGroup(
         runOnce(() -> goal = SuperstructureGoal.L4CORAL),
+        elevator.runExtensionCommand(Presets.L4CORAL.extensionMeters, 0.275),
         new ParallelCommandGroup(
-            elevator.runExtensionCommand(Presets.L4CORAL.extensionMeters, 0.275),
-            wrist.runAngleCommand(Presets.L4CORAL.angleRads)),
-        Commands.waitUntil(() -> elevator.getPositionMeters() >= 1.25));
+            wrist.runAngleCommand(Presets.L4CORAL.angleRads),
+            elevator.runSetpointCommand(Presets.L4CORAL.extensionMeters)));
   }
 
   public Command autoSetL4Coral() {
