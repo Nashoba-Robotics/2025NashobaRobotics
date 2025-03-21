@@ -29,7 +29,7 @@ public class VisionConstants {
 
   // Camera names, must match names configured on coprocessor
   public static String camera0Name = "FrontLeft";
-  public static String camera1Name = "FrontRight";
+  public static String camera1Name = "NewFrontRight";
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
@@ -37,20 +37,20 @@ public class VisionConstants {
       new Transform3d(
           0.1651,
           0.175, // 0.1778
-          0.206375,
+          0.200025,
           new Rotation3d(
               0.0,
               Rotation2d.fromDegrees(-30).getRadians(),
               Rotation2d.fromDegrees(-20).getRadians()));
   public static Transform3d robotToCamera1 =
       new Transform3d(
-          0.1651,
-          -0.175, // -0.1778
-          0.206375,
+          0.2699,
+          -0.2794, // -0.1778
+          0.29845,
           new Rotation3d(
               0.0,
-              Rotation2d.fromDegrees(-30).getRadians(),
-              Rotation2d.fromDegrees(20).getRadians()));
+              Rotation2d.fromDegrees(0).getRadians(),
+              Rotation2d.fromDegrees(45).getRadians()));
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.05;
@@ -58,8 +58,8 @@ public class VisionConstants {
 
   // Standard deviation baselines, for 1 meter distance and 1 tag
   // (Adjusted automatically based on distance and # of tags)
-  public static double linearStdDevBaseline = 0.02; // Meters
-  public static double angularStdDevBaseline = 0.16; // Radians
+  public static double linearStdDevBaseline = 0.01; // Meters
+  public static double angularStdDevBaseline = 0.08; // Radians
 
   // Standard deviation multipliers for each camera
   // (Adjust to trust some cameras more than others)
@@ -85,61 +85,60 @@ public class VisionConstants {
         aprilTagLayout.getTagPose(22).get().toPose2d(),
       };
 
-  public static double adjustYRightPole =
-      Units.inchesToMeters(6.469); // offset Y setpoint by distance from tag to reefpost
+  // offset Y setpoint by distance from tag to reefpost
   public static double adjustYLeftPole = Units.inchesToMeters(6.420);
   public static double adjustX =
-      Units.inchesToMeters(38.0 / 2); // offset X setpoint by center of robot to bumber
+      Units.inchesToMeters(33.75 / 2); // offset X setpoint by center of robot to bumber
 
   public static final Pose2d[] scoringPositions =
       new Pose2d[] {
         centerFaces[0].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[0].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[1].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[1].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[2].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[2].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[3].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[3].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[4].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[4].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[5].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[5].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[6].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[6].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[7].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[7].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[8].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[8].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[9].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[9].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[10].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[10].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[11].transformBy(
             new Transform2d(adjustX, adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
         centerFaces[11].transformBy(
-            new Transform2d(adjustX, -adjustYRightPole, Rotation2d.fromRadians(Math.PI))),
+            new Transform2d(adjustX, -adjustYLeftPole, Rotation2d.fromRadians(Math.PI))),
       };
 }

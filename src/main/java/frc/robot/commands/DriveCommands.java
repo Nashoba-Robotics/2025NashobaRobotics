@@ -152,8 +152,8 @@ public class DriveCommands {
               driveYController.reset(drive.getPose().getY());
             })
         .until(
-            () ->
-                drive.getPose().getTranslation().getDistance(pose.get().getTranslation()) < 0.025);
+            () -> drive.getPose().getTranslation().getDistance(pose.get().getTranslation()) < 0.025)
+        .finallyDo(drive::stop);
   }
 
   /**
