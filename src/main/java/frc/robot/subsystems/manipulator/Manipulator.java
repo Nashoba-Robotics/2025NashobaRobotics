@@ -40,7 +40,7 @@ public class Manipulator extends SubsystemBase {
         Commands.none(),
         new SequentialCommandGroup(
                 run(() -> runPercentOutput(0.25)).until(() -> isCoralPresent()),
-                new WaitCommand(0.0875))
+                new WaitCommand(0.09))
             .finallyDo(() -> stop()),
         () -> isCoralPresent());
   }
