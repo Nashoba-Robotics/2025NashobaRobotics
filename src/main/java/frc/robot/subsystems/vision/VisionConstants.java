@@ -36,7 +36,7 @@ public class VisionConstants {
   public static Transform3d robotToCamera0 =
       new Transform3d(
           0.27305,
-          0.27305,
+          0.2794,
           0.2746375,
           new Rotation3d(
               0.0,
