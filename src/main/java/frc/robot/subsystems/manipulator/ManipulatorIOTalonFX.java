@@ -27,7 +27,7 @@ public class ManipulatorIOTalonFX implements ManipulatorIO {
     sensor = new LaserCan(Constants.Manipulator.SENSOR_ID);
     try {
       sensor.setRangingMode(LaserCan.RangingMode.SHORT);
-      sensor.setRegionOfInterest(new LaserCan.RegionOfInterest(2, 6, 6, 6));
+      sensor.setRegionOfInterest(new LaserCan.RegionOfInterest(2, 12, 6, 6));
       sensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
     } catch (ConfigurationFailedException e) {
       System.out.println("Configuration failed! " + e);

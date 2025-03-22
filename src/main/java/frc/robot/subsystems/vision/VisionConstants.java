@@ -28,25 +28,25 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
   // Camera names, must match names configured on coprocessor
-  public static String camera0Name = "FrontLeft";
+  public static String camera0Name = "NewFrontLeft";
   public static String camera1Name = "NewFrontRight";
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
   public static Transform3d robotToCamera0 =
       new Transform3d(
-          0.1651,
-          0.175, // 0.1778
-          0.200025,
+          0.27305,
+          0.27305,
+          0.2746375,
           new Rotation3d(
               0.0,
-              Rotation2d.fromDegrees(-30).getRadians(),
-              Rotation2d.fromDegrees(-20).getRadians()));
+              Rotation2d.fromDegrees(0).getRadians(),
+              Rotation2d.fromDegrees(315).getRadians()));
   public static Transform3d robotToCamera1 =
       new Transform3d(
-          0.2699,
-          -0.2794, // -0.1778
-          0.29845,
+          0.27305,
+          -0.2794,
+          0.2746375,
           new Rotation3d(
               0.0,
               Rotation2d.fromDegrees(0).getRadians(),
@@ -59,7 +59,7 @@ public class VisionConstants {
   // Standard deviation baselines, for 1 meter distance and 1 tag
   // (Adjusted automatically based on distance and # of tags)
   public static double linearStdDevBaseline = 0.01; // Meters
-  public static double angularStdDevBaseline = 0.08; // Radians
+  public static double angularStdDevBaseline = 0.04; // Radians
 
   // Standard deviation multipliers for each camera
   // (Adjust to trust some cameras more than others)
