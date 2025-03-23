@@ -133,7 +133,7 @@ public class RobotContainer {
         "AutoDrive",
         DriveCommands.driveToPose(
                 drive, () -> drive.getPose().nearest(Arrays.asList(scoringPositions)))
-            .withTimeout(0.75));
+            .withTimeout(1.0));
 
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
