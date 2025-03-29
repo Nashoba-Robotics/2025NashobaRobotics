@@ -207,9 +207,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "SetNeutral"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetNeutral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score4-Source"
+                }
+              }
+            ]
           }
         }
       ]
