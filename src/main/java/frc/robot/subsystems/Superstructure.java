@@ -29,7 +29,8 @@ public class Superstructure extends SubsystemBase {
     BARGEALGAE(1.4, 2.5),
     L3ALGAE(0.85, 0.75),
     L2ALGAE(0.45, 0.75),
-    PROCESSORALGAE(0.15, 0.);
+    PROCESSORALGAE(0.15, 0.),
+    FLOORALGAE(0, 0);
 
     private double extensionMeters;
     private double angleRads;
@@ -64,7 +65,8 @@ public class Superstructure extends SubsystemBase {
         runOnce(() -> goal = SuperstructureGoal.NEUTRAL),
         new ParallelCommandGroup(
             elevator.runNeutralPrep(), wrist.runAngleCommand(Presets.NEUTRAL.angleRads)),
-        elevator.runSetpointCommand(Presets.NEUTRAL.extensionMeters));
+        elevator.runSetpointCommand(Presets.NEUTRAL.extensionMeters),
+        manipulator.stopCommand());
   }
 
   public Command setIntake() {
@@ -146,6 +148,15 @@ public class Superstructure extends SubsystemBase {
         wrist.runAngleCommand(Presets.PROCESSORALGAE.angleRads),
         new WaitUntilCommand(() -> score.getAsBoolean()),
         manipulator.ejectCommand());
+  }
+
+  public Command groundIntakeAlgae() {
+    return new SequentialCommandGroup(
+        runOnce(() -> goal = SuperstructureGoal.FLOORALGAE),
+        elevator.runSetpointCommand(0.075),
+        wrist.runAngleCommand(0.425),
+        elevator.runSetpointCommand(0.0),
+        manipulator.algaeIntakeCommand());
   }
 
   public Command preloadSetL4Coral() {

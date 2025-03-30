@@ -16,8 +16,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ManualExtensionCommand;
 import frc.robot.commands.test.ClimberTestDownCommand;
 import frc.robot.commands.test.ClimberTestUpCommand;
+import frc.robot.commands.test.ElevatorDutyCycleCommand;
+import frc.robot.commands.test.TuneClimberCommand;
+import frc.robot.commands.test.TuneElevatorCommand;
+import frc.robot.commands.test.TuneWristCommand;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.Superstructure;
 import frc.robot.subsystems.climber.Climber;
@@ -146,11 +151,11 @@ public class RobotContainer {
     autoChooser.addOption("Right 4Piece", new PathPlannerAuto("4Piece", false));
     autoChooser.addOption("Left 4Piece", new PathPlannerAuto("4Piece", true));
 
-    // SmartDashboard.putData(new TuneElevatorCommand(elevator));
-    // SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
-    // SmartDashboard.putData(new TuneWristCommand(wrist));
-    // SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
-    // SmartDashboard.putData(new TuneClimberCommand(climber));
+    SmartDashboard.putData(new TuneElevatorCommand(elevator));
+    SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
+    SmartDashboard.putData(new TuneWristCommand(wrist));
+    SmartDashboard.putData(new ManualExtensionCommand(operator, elevator, wrist));
+    SmartDashboard.putData(new TuneClimberCommand(climber));
     SmartDashboard.putData("poseEstimatorField", drive.getPoseEstimatorField());
 
     // Configure the button bindings
@@ -188,6 +193,7 @@ public class RobotContainer {
         .and(operator.y())
         .onTrue(new ClimberTestDownCommand(climber, operator));
 
+    driver.x().onTrue(superstructure.groundIntakeAlgae());
     driver
         .y()
         .whileTrue(
