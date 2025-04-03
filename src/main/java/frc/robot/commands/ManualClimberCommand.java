@@ -24,21 +24,29 @@ public class ManualClimberCommand extends Command {
 
   @Override
   public void execute() {
-    double joystick = -operator.getLeftY();
-    joystick = MathUtil.applyDeadband(joystick, 0.1);
+    double leftDownTrigger = -operator.getLeftTriggerAxis();
+    double rightUpTrigger = operator.getRightTriggerAxis();
+    MathUtil.applyDeadband(leftDownTrigger, 0.1);
+    MathUtil.applyDeadband(rightUpTrigger, 0.1);
 
-    joystick = Math.pow(joystick, 2) * Math.signum(joystick);
-    if (joystick == 0) { // If there isn't any input, maintain the position
+    leftDownTrigger = Math.pow(leftDownTrigger, 2) * Math.signum(leftDownTrigger);
+    rightUpTrigger = Math.pow(rightUpTrigger, 2) * Math.signum(rightUpTrigger);
+    if (leftDownTrigger == 0
+        && rightUpTrigger == 0) { // If there isn't any input, maintain the position
       climber.runSetpoint(lastClimberPose);
-    } else if (Math.abs(joystick) >= 0.075) {
-      climber.runDutyCycle(joystick);
+    } else if (leftDownTrigger <= -0.1) {
+
+      climber.runDutyCycle(leftDownTrigger);
+      lastClimberPose = climber.getAngleRads();
+    } else {
+      climber.runDutyCycle(rightUpTrigger);
       lastClimberPose = climber.getAngleRads();
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    climber.stop();
+    climber.runSetpoint(lastClimberPose);
   }
 
   @Override
