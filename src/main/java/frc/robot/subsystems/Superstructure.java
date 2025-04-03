@@ -147,7 +147,7 @@ public class Superstructure extends SubsystemBase {
         elevator.runSetpointCommand(Presets.PROCESSORALGAE.extensionMeters),
         wrist.runAngleCommand(Presets.PROCESSORALGAE.angleRads),
         new WaitUntilCommand(() -> score.getAsBoolean()),
-        manipulator.ejectCommand());
+        manipulator.processorEjectCommand());
   }
 
   public Command groundIntakeAlgae() {

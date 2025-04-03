@@ -69,7 +69,7 @@
   "eventMarkers": [
     {
       "name": "SetIntake",
-      "waypointRelativePos": 0.7,
+      "waypointRelativePos": 0.6543209876543187,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -80,7 +80,7 @@
     },
     {
       "name": "SetIntake",
-      "waypointRelativePos": 1.05,
+      "waypointRelativePos": 0.7796771130104557,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
@@ -91,7 +91,18 @@
     },
     {
       "name": "SetIntake",
-      "waypointRelativePos": 1.1,
+      "waypointRelativePos": 1.1709401709401754,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "SetIntake"
+        }
+      }
+    },
+    {
+      "name": "SetIntake",
+      "waypointRelativePos": 1.4102564102564106,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
