@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 1.2946721311475409,
-        "y": 0.8122950819672121
+        "x": 1.315,
+        "y": 0.885
       },
       "prevControl": {
-        "x": 1.4625000000067032,
-        "y": 0.6085040983545321
+        "x": 1.4828278688591623,
+        "y": 0.68120901638732
       },
       "nextControl": {
-        "x": 1.1357453179313286,
-        "y": 1.0052776408707023
+        "x": 1.1560731867837877,
+        "y": 1.0779825589034904
       },
       "isLocked": false,
       "linkedName": "Source"
@@ -95,7 +95,7 @@
     },
     {
       "name": "SetIntake",
-      "waypointRelativePos": 1.8319088319088315,
+      "waypointRelativePos": 1.7027540360873754,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",

@@ -87,6 +87,10 @@ public class Elevator extends SubsystemBase {
         this);
   }
 
+  public Command stopCommand() {
+    return runOnce(() -> stop());
+  }
+
   public void setPID(double kV, double kP, double kD) {
     io.setkV(kV);
     io.setkP(kP);

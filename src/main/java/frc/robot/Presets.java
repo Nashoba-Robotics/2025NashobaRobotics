@@ -12,7 +12,7 @@ public enum Presets {
   BARGEALGAE(1.4, 2.5),
   L3ALGAE(0.85, 0.75),
   L2ALGAE(0.45, 0.75),
-  PROCESSORALGAE(0.15, 0.0);
+  PROCESSORALGAE(0.18, 0.10);
 
   public double extensionMeters;
   public double angleRads;
