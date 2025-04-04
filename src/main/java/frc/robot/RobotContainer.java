@@ -173,9 +173,7 @@ public class RobotContainer {
     testController.a().onTrue(superstructure.setL2Coral());
     testController.b().onTrue(superstructure.setL3Coral());
 
-    operator
-        .rightBumper()
-        .whileTrue(manipulator.slowSpitCommand().alongWith(hopper.intakeCommand()));
+    operator.rightBumper().whileTrue(manipulator.slowSpitCommand());
     operator
         .leftBumper()
         .whileTrue(manipulator.slowIntakeCommand().alongWith(hopper.intakeCommand()));
