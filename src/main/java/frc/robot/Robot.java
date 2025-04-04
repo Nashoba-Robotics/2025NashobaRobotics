@@ -79,7 +79,7 @@ public class Robot extends LoggedRobot {
 
     SignalLogger.enableAutoLogging(false);
 
-    //disable loop overrun warning
+    // disable loop overrun warning
     try {
       Field watchdogField = IterativeRobotBase.class.getDeclaredField("m_watchdog");
       watchdogField.setAccessible(true);

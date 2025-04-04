@@ -18,12 +18,10 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
@@ -52,12 +50,12 @@ public class VisionIOPhotonVision implements VisionIO {
     List<PoseObservation> poseObservations = new LinkedList<>();
     List<PhotonPipelineResult> allUnreadResults = camera.getAllUnreadResults();
 
-    if (camera.getAllUnreadResults().size() > 8) {
-      System.err.print(
-          "ERROR: allUnreadResults too long: allUnreadResults.length = " + allUnreadResults);
-      allUnreadResults = Collections.emptyList();
-      Logger.recordOutput("Ton of visionposes flag", true);
-    }
+    // if (camera.getAllUnreadResults().size() > 8) {
+    //   System.err.print(
+    //       "ERROR: allUnreadResults too long: allUnreadResults.length = " + allUnreadResults);
+    //   allUnreadResults = Collections.emptyList();
+    //   Logger.recordOutput("Ton of camera results flag", true);
+    // }
 
     for (var result : allUnreadResults) {
       // Update latest target observation
