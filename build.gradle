@@ -50,7 +50,10 @@ deploy {
                     directory = '/home/lvuser/deploy'
                     // Change to true to delete files on roboRIO that no
                     // longer exist in deploy directory on roboRIO
-                    deleteOldFiles = false
+
+                    // Recommended set to true in order to keep in sync with git
+                    // https://pathplanner.dev/pplib-build-an-auto.html#create-a-sendablechooser-with-all-autos-in-project
+                    deleteOldFiles = true;
                 }
             }
         }
