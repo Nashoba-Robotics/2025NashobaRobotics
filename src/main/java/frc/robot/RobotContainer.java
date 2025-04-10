@@ -197,7 +197,7 @@ public class RobotContainer {
                                                 .getPose()
                                                 .nearest(Arrays.asList(scoringPositions))
                                                 .getTranslation())
-                                    <= 0.05)
+                                    <= 0.25)
                         .withTimeout(1.25)
                         .andThen(superstructure.setL4Coral())));
     driver
@@ -216,7 +216,7 @@ public class RobotContainer {
                                                 .getPose()
                                                 .nearest(Arrays.asList(scoringPositions))
                                                 .getTranslation())
-                                    <= 0.5)
+                                    <= 0.6)
                         .withTimeout(1.25)
                         .andThen(superstructure.setL3Coral())));
     driver
@@ -235,7 +235,7 @@ public class RobotContainer {
                                                 .getPose()
                                                 .nearest(Arrays.asList(scoringPositions))
                                                 .getTranslation())
-                                    <= 0.5)
+                                    <= 0.7)
                         .withTimeout(1.25)
                         .andThen(superstructure.setL2Coral())));
 

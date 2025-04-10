@@ -52,7 +52,7 @@ public class ClimberIOTalonFX implements ClimberIO {
     inputs.leaderConnected = leader.isConnected();
     inputs.leaderPositionRad = Units.rotationsToRadians(leader.getPosition().getValueAsDouble());
     inputs.leaderVelocityRadPerSec =
-        Units.rotationsToRadians(leader.getPosition().getValueAsDouble());
+        Units.rotationsToRadians(leader.getVelocity().getValueAsDouble());
     inputs.leaderAppliedVolts = leader.getMotorVoltage().getValueAsDouble();
     inputs.leaderSupplyCurrentAmps = leader.getSupplyCurrent().getValueAsDouble();
     inputs.leaderStatorCurrentAmps = leader.getStatorCurrent().getValueAsDouble();
