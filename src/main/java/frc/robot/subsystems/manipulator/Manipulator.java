@@ -104,8 +104,8 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Command L1ejectCommand() {
-    return run(() -> runPercentOutput(0.35))
-        .raceWith(new SuppliedWaitCommand(() -> 0.7))
+    return run(() -> runPercentOutput(0.325))
+        .raceWith(new SuppliedWaitCommand(() -> 0.9))
         .finallyDo(() -> stop());
   }
 

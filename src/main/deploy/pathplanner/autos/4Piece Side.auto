@@ -99,7 +99,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Score2-Source-Score3"
+                  "pathName": "Score2-Source-Score3'"
                 }
               },
               {
@@ -156,7 +156,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Score3-Source-Score4"
+                  "pathName": "Score3-Source-Score4'"
                 }
               },
               {

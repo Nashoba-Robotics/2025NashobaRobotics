@@ -143,11 +143,12 @@ public class RobotContainer {
     autoChooser.addOption(
         "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
     autoChooser.addOption("Drive a foot", new PathPlannerAuto("Taxi"));
-    autoChooser.addOption("New3Piece Right", new PathPlannerAuto("New3Piece", false));
-    autoChooser.addOption("New3Piece Left", new PathPlannerAuto("New3Piece", true));
     autoChooser.addOption("TuneAuto", new PathPlannerAuto("TuneDrive", true));
-    autoChooser.addOption("Right 4Piece", new PathPlannerAuto("4Piece", false));
-    autoChooser.addOption("Left 4Piece", new PathPlannerAuto("4Piece", true));
+
+    autoChooser.addOption("Right 4Piece Front", new PathPlannerAuto("4Piece Front", false));
+    autoChooser.addOption("Left 4Piece Front", new PathPlannerAuto("4Piece Front", true));
+    autoChooser.addOption("Right 4Piece Side", new PathPlannerAuto("4Piece Side", false));
+    autoChooser.addOption("Left 4Piece Side", new PathPlannerAuto("4Piece Side", true));
 
     SmartDashboard.putData(new TuneElevatorCommand(elevator));
     SmartDashboard.putData(new ElevatorDutyCycleCommand(elevator));
@@ -197,7 +198,7 @@ public class RobotContainer {
                                                 .getPose()
                                                 .nearest(Arrays.asList(scoringPositions))
                                                 .getTranslation())
-                                    <= 0.25)
+                                    <= 0.4)
                         .withTimeout(1.25)
                         .andThen(superstructure.setL4Coral())));
     driver

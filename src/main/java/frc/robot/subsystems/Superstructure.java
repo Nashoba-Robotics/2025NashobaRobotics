@@ -66,7 +66,8 @@ public class Superstructure extends SubsystemBase {
         new ParallelCommandGroup(
             elevator.runNeutralPrep(), wrist.runAngleCommand(Presets.NEUTRAL.angleRads)),
         elevator.runSetpointCommand(Presets.NEUTRAL.extensionMeters),
-        manipulator.stopCommand());
+        manipulator.stopCommand(),
+        elevator.stopCommand());
   }
 
   public Command setIntake() {
@@ -75,6 +76,7 @@ public class Superstructure extends SubsystemBase {
         new ParallelCommandGroup(
             elevator.runNeutralPrep(), wrist.runAngleCommand(Presets.INTAKE.angleRads)),
         elevator.runSetpointCommand(Presets.INTAKE.extensionMeters),
+        elevator.stopCommand(),
         new ParallelCommandGroup(
             hopper.intakeCommand().until(() -> hasCoral()), manipulator.coralIntakeCommand()));
   }
@@ -153,7 +155,7 @@ public class Superstructure extends SubsystemBase {
   public Command groundIntakeAlgae() {
     return new SequentialCommandGroup(
         runOnce(() -> goal = SuperstructureGoal.FLOORALGAE),
-        elevator.runSetpointCommand(0.075),
+        elevator.runSetpointCommand(0.275),
         wrist.runAngleCommand(0.425),
         elevator.runSetpointCommand(0.0),
         manipulator.algaeIntakeCommand());
