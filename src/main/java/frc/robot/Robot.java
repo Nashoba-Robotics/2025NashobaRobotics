@@ -1,15 +1,19 @@
 package frc.robot;
 
 import au.grapplerobotics.CanBridge;
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.DriveMotorArrangement;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants.SteerMotorArrangement;
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.IterativeRobotBase;
+import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.drive.generated.TunerConstants;
+import java.lang.reflect.Field;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
@@ -24,6 +28,7 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
  * project.
  */
 public class Robot extends LoggedRobot {
+  private static final double loopOverrunWarningTimeout = 0.2;
   private Command autonomousCommand;
   private RobotContainer robotContainer;
 
@@ -71,6 +76,19 @@ public class Robot extends LoggedRobot {
 
     // Start AdvantageKit logger
     Logger.start();
+
+    SignalLogger.enableAutoLogging(false);
+
+    // disable loop overrun warning
+    try {
+      Field watchdogField = IterativeRobotBase.class.getDeclaredField("m_watchdog");
+      watchdogField.setAccessible(true);
+      Watchdog watchdog = (Watchdog) watchdogField.get(this);
+      watchdog.setTimeout(loopOverrunWarningTimeout);
+    } catch (Exception e) {
+      DriverStation.reportWarning("failed to disable loop overrun warnings", false);
+    }
+    CommandScheduler.getInstance().setPeriod(loopOverrunWarningTimeout);
 
     // Check for valid swerve config
     var modules =

@@ -34,7 +34,8 @@ public class ManualClimberCommand extends Command {
     if (leftDownTrigger == 0
         && rightUpTrigger == 0) { // If there isn't any input, maintain the position
       climber.runSetpoint(lastClimberPose);
-    } else if (leftDownTrigger >= 0.1) {
+    } else if (leftDownTrigger <= -0.1) {
+
       climber.runDutyCycle(leftDownTrigger);
       lastClimberPose = climber.getAngleRads();
     } else {
@@ -45,7 +46,7 @@ public class ManualClimberCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    climber.stop();
+    climber.runSetpoint(lastClimberPose);
   }
 
   @Override

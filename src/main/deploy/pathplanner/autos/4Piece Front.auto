@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Start-Score1'"
+            "pathName": "Start-Score1"
           }
         },
         {
@@ -207,15 +207,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "SetNeutral"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "SetNeutral"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Score4-Source"
+                }
+              }
+            ]
           }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }

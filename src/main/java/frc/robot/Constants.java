@@ -124,7 +124,7 @@ public final class Constants {
 
     public static final SensorDirectionValue ENCODER_INVERTED =
         SensorDirectionValue.CounterClockwise_Positive;
-    public static final double ENCODER_OFFSET_RADIANS = 4.14635;
+    public static final double ENCODER_OFFSET_RADIANS = 4.1156704539;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 

@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 
 /** IO implementation for real PhotonVision hardware. */
 public class VisionIOPhotonVision implements VisionIO {
@@ -47,7 +48,16 @@ public class VisionIOPhotonVision implements VisionIO {
     // Read new camera observations
     Set<Short> tagIds = new HashSet<>();
     List<PoseObservation> poseObservations = new LinkedList<>();
-    for (var result : camera.getAllUnreadResults()) {
+    List<PhotonPipelineResult> allUnreadResults = camera.getAllUnreadResults();
+
+    // if (camera.getAllUnreadResults().size() > 8) {
+    //   System.err.print(
+    //       "ERROR: allUnreadResults too long: allUnreadResults.length = " + allUnreadResults);
+    //   allUnreadResults = Collections.emptyList();
+    //   Logger.recordOutput("Ton of camera results flag", true);
+    // }
+
+    for (var result : allUnreadResults) {
       // Update latest target observation
       if (result.hasTargets()) {
         inputs.latestTargetObservation =
@@ -88,6 +98,20 @@ public class VisionIOPhotonVision implements VisionIO {
 
       } else if (!result.targets.isEmpty()) { // Single tag result
         var target = result.targets.get(0);
+        int targetID = result.targets.get(0).fiducialId;
+
+        if (targetID == 1
+            || targetID == 2
+            || targetID == 3
+            || targetID == 4
+            || targetID == 5
+            || targetID == 12
+            || targetID == 13
+            || targetID == 14
+            || targetID == 15
+            || targetID == 16) {
+          continue;
+        }
 
         // Calculate robot pose
         var tagPose = aprilTagLayout.getTagPose(target.fiducialId);
@@ -101,7 +125,6 @@ public class VisionIOPhotonVision implements VisionIO {
 
           // Add tag ID
           tagIds.add((short) target.fiducialId);
-
           // Add observation
           poseObservations.add(
               new PoseObservation(

@@ -40,7 +40,7 @@ public class Manipulator extends SubsystemBase {
         Commands.none(),
         new SequentialCommandGroup(
                 run(() -> runPercentOutput(0.25)).until(() -> isCoralPresent()),
-                new WaitCommand(0.05))
+                new WaitCommand(0.0775))
             .finallyDo(() -> stop()),
         () -> isCoralPresent());
   }
@@ -51,22 +51,28 @@ public class Manipulator extends SubsystemBase {
         run(
             () -> {
               if (isCoralPresent()) stop();
-              else runPercentOutput(0.45);
+              else runPercentOutput(0.35);
             }),
         () -> isCoralPresent());
   }
 
   public Command algaeIntakeCommand() {
-    return run(() -> runPercentOutput(-1))
+    return run(() -> runPercentOutput(-0.8))
         .raceWith(new SuppliedWaitCommand(() -> 0.15))
         .andThen(
             Commands.waitUntil(() -> inputs.velocityRadPerSec >= -20),
             new SuppliedWaitCommand(() -> 0.2))
-        .finallyDo(() -> runPercentOutput(-0.5));
+        .finallyDo(() -> runPercentOutput(-0.4));
   }
 
   public Command ejectCommand() {
-    return run(() -> runPercentOutput(0.60))
+    return run(() -> runPercentOutput(0.40))
+        .raceWith(new SuppliedWaitCommand(() -> 0.3))
+        .finallyDo(() -> stop());
+  }
+
+  public Command processorEjectCommand() {
+    return run(() -> runPercentOutput(0.2))
         .raceWith(new SuppliedWaitCommand(() -> 0.3))
         .finallyDo(() -> stop());
   }
@@ -78,7 +84,7 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Command L4ejectCommand() {
-    return run(() -> runPercentOutput(-0.65))
+    return run(() -> runPercentOutput(-0.75))
         .raceWith(new SuppliedWaitCommand(() -> 0.2))
         .finallyDo(() -> stop());
   }
@@ -98,8 +104,8 @@ public class Manipulator extends SubsystemBase {
   }
 
   public Command L1ejectCommand() {
-    return run(() -> runPercentOutput(0.3))
-        .raceWith(new SuppliedWaitCommand(() -> 0.7))
+    return run(() -> runPercentOutput(0.325))
+        .raceWith(new SuppliedWaitCommand(() -> 0.9))
         .finallyDo(() -> stop());
   }
 
