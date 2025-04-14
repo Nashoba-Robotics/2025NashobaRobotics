@@ -57,6 +57,9 @@ public class VisionIOPhotonVision implements VisionIO {
     //   Logger.recordOutput("Ton of camera results flag", true);
     // }
 
+    int unReadResultsSize = allUnreadResults.size();
+    int numResultsRead = 0;
+
     for (var result : allUnreadResults) {
       // Update latest target observation
       if (result.hasTargets()) {
@@ -135,6 +138,16 @@ public class VisionIOPhotonVision implements VisionIO {
                   cameraToTarget.getTranslation().getNorm(), // Average tag distance
                   PoseObservationType.PHOTONVISION)); // Observation type
         }
+      }
+
+      numResultsRead++;
+      if (numResultsRead > MAX_READS_PER_ITERATION) {
+        System.err.println(
+            "WARN: Did not process allUnreadResults: numResultsRead = "
+                + numResultsRead
+                + "/"
+                + unReadResultsSize);
+        break;
       }
     }
 

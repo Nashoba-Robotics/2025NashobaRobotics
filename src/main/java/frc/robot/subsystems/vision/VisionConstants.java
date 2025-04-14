@@ -69,6 +69,10 @@ public class VisionConstants {
         1.0 // Camera 1
       };
 
+  // Maximum reads per robot periodic loop
+  // (This ensures we dont loop override while processing tags)
+  public static int MAX_READS_PER_ITERATION = 5;
+
   public static final Pose2d[] centerFaces =
       new Pose2d[] {
         aprilTagLayout.getTagPose(6).get().toPose2d(),
