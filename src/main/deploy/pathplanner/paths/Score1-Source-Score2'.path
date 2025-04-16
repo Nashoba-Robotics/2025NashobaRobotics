@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.30603036558278,
-        "y": 2.9815362773043375
+        "x": 5.2807397227937285,
+        "y": 2.9711677823498195
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.1220267671483395,
-        "y": 1.9107883576003168
+        "x": 4.096736124359287,
+        "y": 1.9004198626457989
       },
       "isLocked": false,
-      "linkedName": "Score1"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,12 +20,12 @@
         "y": 0.775
       },
       "prevControl": {
-        "x": 1.8651687317709837,
-        "y": -0.008846197847741322
+        "x": 1.794,
+        "y": 0.1639999999999998
       },
       "nextControl": {
-        "x": 1.2796094887837552,
-        "y": 1.2480751820419151
+        "x": 1.2737104654611269,
+        "y": 1.245281991847794
       },
       "isLocked": false,
       "linkedName": "Source"
@@ -48,10 +48,6 @@
     {
       "waypointRelativePos": 0.8384251968503872,
       "rotationDegrees": 55.0
-    },
-    {
-      "waypointRelativePos": 1.4946021591363463,
-      "rotationDegrees": 45.0
     }
   ],
   "constraintZones": [
