@@ -91,10 +91,10 @@ public final class Constants {
 
   public static final class Climber {
     public static final String CANBUS = "CANivore";
-    public static final int LEADER_ID = 14;
-    public static final int FOLLOWER_ID = 15;
+    public static final int LEADER_ID = 15;
+    public static final int FOLLOWER_ID = 14;
 
-    public static final InvertedValue PIVOT_INVERTED = InvertedValue.Clockwise_Positive;
+    public static final InvertedValue PIVOT_INVERTED = InvertedValue.CounterClockwise_Positive;
 
     public static final double PIVOT_STATOR_LIMIT = 100;
     public static final double PIVOT_SUPPLY_LIMIT = 100;
@@ -124,7 +124,7 @@ public final class Constants {
 
     public static final SensorDirectionValue ENCODER_INVERTED =
         SensorDirectionValue.CounterClockwise_Positive;
-    public static final double ENCODER_OFFSET_RADIANS = 0.980213723459;
+    public static final double ENCODER_OFFSET_RADIANS = 0.983281685035;
 
     public static final InvertedValue INVERTED = InvertedValue.Clockwise_Positive;
 
