@@ -86,10 +86,10 @@ public class VisionConstants {
       };
 
   // offset Y setpoint by distance from tag to reefpost
-  public static double adjustY = Units.inchesToMeters(6.2); // 6.420
+  public static double adjustY = Units.inchesToMeters(6.400); // 6.420
   public static double adjustX =
-      Units.inchesToMeters(33.25 / 2); // offset X setpoint by center of robot to bumber 33.75
-  public static double rightPoleAdjust = Units.inchesToMeters(0.300);
+      Units.inchesToMeters(32.75 / 2); // offset X setpoint by center of robot to bumber 33.75
+  public static double rightPoleAdjust = Units.inchesToMeters(0.100);
 
   public static final Pose2d[] bargeLines =
       new Pose2d[] {
