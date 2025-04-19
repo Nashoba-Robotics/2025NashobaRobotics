@@ -98,20 +98,6 @@ public class VisionIOPhotonVision implements VisionIO {
 
       } else if (!result.targets.isEmpty()) { // Single tag result
         var target = result.targets.get(0);
-        int targetID = result.targets.get(0).fiducialId;
-
-        if (targetID == 1
-            || targetID == 2
-            || targetID == 3
-            || targetID == 4
-            || targetID == 5
-            || targetID == 12
-            || targetID == 13
-            || targetID == 14
-            || targetID == 15
-            || targetID == 16) {
-          continue;
-        }
 
         // Calculate robot pose
         var tagPose = aprilTagLayout.getTagPose(target.fiducialId);
