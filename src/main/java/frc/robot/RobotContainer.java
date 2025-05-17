@@ -136,7 +136,7 @@ public class RobotContainer {
         "AutoDrive",
         DriveCommands.driveToPose(
                 drive, () -> drive.getPose().nearest(Arrays.asList(scoringPositions)))
-            .withTimeout(1.0));
+            .withTimeout(2.0));
 
     autoChooser.addOption(
         "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
@@ -239,6 +239,7 @@ public class RobotContainer {
                                     <= 0.7)
                         .withTimeout(1.25)
                         .andThen(superstructure.setL2Coral())));
+
 
     driver.rightBumper().onTrue(superstructure.setL1Coral());
     driver.rightStick().onTrue(manipulator.spitCommand());

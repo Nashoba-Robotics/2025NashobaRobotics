@@ -31,7 +31,7 @@ public class LEDSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (DriverStation.isDisabled()) setAnimation(disabled);
+    if (DriverStation.isDisabled()) setAnimation(rainbow);
     else {
       if (DriverStation.isAutonomous()) setAnimation(rainbow);
       else {
