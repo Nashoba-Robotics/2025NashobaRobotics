@@ -25,7 +25,7 @@ import edu.wpi.first.math.util.Units;
 public class VisionConstants {
   // AprilTag layout
   public static AprilTagFieldLayout aprilTagLayout =
-      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
 
   // Camera names, must match names configured on coprocessor
   public static String camera0Name = "NewFrontLeft";
@@ -88,7 +88,7 @@ public class VisionConstants {
   // offset Y setpoint by distance from tag to reefpost
   public static double adjustY = Units.inchesToMeters(6.400); // 6.420
   public static double adjustX =
-      Units.inchesToMeters(32.75 / 2); // offset X setpoint by center of robot to bumber 33.75
+      Units.inchesToMeters(32.5 / 2); // offset X setpoint by center of robot to bumber 33.75
   public static double rightPoleAdjust = Units.inchesToMeters(0.100);
 
   public static final Pose2d[] bargeLines =
