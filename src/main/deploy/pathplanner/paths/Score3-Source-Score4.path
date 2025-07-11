@@ -16,28 +16,28 @@
     },
     {
       "anchor": {
-        "x": 1.4864754098360655,
-        "y": 0.6264856557377039
+        "x": 1.5584016393442621,
+        "y": 0.722387295081968
       },
       "prevControl": {
-        "x": 1.2587090163934422,
-        "y": 0.8063012295081958
+        "x": 1.3306352459016388,
+        "y": 0.9022028688524599
       },
       "nextControl": {
-        "x": 1.8824963614198165,
-        "y": 0.3138375360663232
+        "x": 1.9544225909280133,
+        "y": 0.40973917541058735
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.7759525516048598,
-        "y": 2.3869999999999982
+        "x": 3.7761270491803276,
+        "y": 2.4486168032786884
       },
       "prevControl": {
-        "x": 3.401797595849888,
-        "y": 1.7389446067287015
+        "x": 3.4019720934253557,
+        "y": 1.8005614100073917
       },
       "nextControl": null,
       "isLocked": false,
@@ -69,30 +69,8 @@
   "eventMarkers": [
     {
       "name": "SetIntake",
-      "waypointRelativePos": 0.6505223171889797,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SetIntake"
-        }
-      }
-    },
-    {
-      "name": "SetIntake",
-      "waypointRelativePos": 1.376068376068372,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SetIntake"
-        }
-      }
-    },
-    {
-      "name": "SetIntake",
-      "waypointRelativePos": 1.698955365622028,
-      "endWaypointRelativePos": null,
+      "waypointRelativePos": 0.7796771130104426,
+      "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",
         "data": {

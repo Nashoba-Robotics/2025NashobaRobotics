@@ -98,9 +98,9 @@ public final class Constants {
 
     public static final double PIVOT_STATOR_LIMIT = 100;
     public static final double PIVOT_SUPPLY_LIMIT = 100;
-    //Secret Message
+    // Secret Message
 
-    //Not so secret if I found it
+    // Not so secret if I found it
 
     public static final double PIVOT_GEAR_RATIO = 206.18181818;
 
