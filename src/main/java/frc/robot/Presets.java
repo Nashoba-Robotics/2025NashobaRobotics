@@ -7,7 +7,7 @@ public enum Presets {
   L4CORAL(1.3, -3.40),
   L3CORAL(1.035, 0.05),
   L2CORAL(0.645, 0.05),
-  L1CORAL(0.315, 0.38),
+  L1CORAL(0.1, 1.0),
 
   BARGEALGAE(1.4, 2.5),
   L3ALGAE(0.85, 0.75),
