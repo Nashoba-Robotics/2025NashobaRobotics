@@ -157,7 +157,7 @@ public class Superstructure extends SubsystemBase {
         runOnce(() -> goal = SuperstructureGoal.FLOORALGAE),
         elevator.runSetpointCommand(0.275),
         wrist.runAngleCommand(0.425),
-        elevator.runSetpointCommand(0.0),
+        elevator.runSetpointCommand(0.1),
         manipulator.algaeIntakeCommand());
   }
 

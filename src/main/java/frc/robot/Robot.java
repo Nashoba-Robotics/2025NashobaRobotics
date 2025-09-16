@@ -106,6 +106,8 @@ public class Robot extends LoggedRobot {
       }
     }
 
+    // RobotController.setBrownoutVoltage(6.0);
+
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();

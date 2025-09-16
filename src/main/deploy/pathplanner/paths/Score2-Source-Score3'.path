@@ -16,28 +16,28 @@
     },
     {
       "anchor": {
-        "x": 1.3785860655737705,
-        "y": 0.6984118852459017
+        "x": 1.67827868852459,
+        "y": 0.7703381147540983
       },
       "prevControl": {
-        "x": 0.994162505854969,
-        "y": 1.0760859557771494
+        "x": 1.2938551288057885,
+        "y": 1.1480121852853458
       },
       "nextControl": {
-        "x": 1.8613363817827735,
-        "y": 0.22413742322732444
+        "x": 2.161029004733593,
+        "y": 0.29606365273552104
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.8104048598905775,
-        "y": 2.4037206443718673
+        "x": 3.9079918032786884,
+        "y": 2.3647028688524587
       },
       "prevControl": {
-        "x": 3.300071773360667,
-        "y": 1.7955293550801548
+        "x": 3.397658716748778,
+        "y": 1.7565115795607462
       },
       "nextControl": null,
       "isLocked": false,
@@ -54,9 +54,9 @@
     {
       "name": "Constraints Zone",
       "minWaypointRelativePos": 0.8860398860398855,
-      "maxWaypointRelativePos": 1.05,
+      "maxWaypointRelativePos": 1.14434947768281,
       "constraints": {
-        "maxVelocity": 2.75,
+        "maxVelocity": 2.5,
         "maxAcceleration": 4.0,
         "maxAngularVelocity": 650.0,
         "maxAngularAcceleration": 650.0,
@@ -69,41 +69,8 @@
   "eventMarkers": [
     {
       "name": "SetIntake",
-      "waypointRelativePos": 0.6543209876543187,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SetIntake"
-        }
-      }
-    },
-    {
-      "name": "SetIntake",
-      "waypointRelativePos": 0.7796771130104557,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SetIntake"
-        }
-      }
-    },
-    {
-      "name": "SetIntake",
-      "waypointRelativePos": 1.1709401709401754,
-      "endWaypointRelativePos": null,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "SetIntake"
-        }
-      }
-    },
-    {
-      "name": "SetIntake",
-      "waypointRelativePos": 1.5204178537511857,
-      "endWaypointRelativePos": null,
+      "waypointRelativePos": 0.7530864197530837,
+      "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",
         "data": {
